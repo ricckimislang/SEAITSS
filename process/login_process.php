@@ -1,14 +1,16 @@
-/*************  ✨ Codeium Command 🌟  *************/
 <?php
 session_start();
 
 if (isset($_POST['username']) && isset($_POST['password'])) {
     $username = $_POST['username'];
     $password = md5($_POST['password']);
-    $password = $_POST['password'];
 
-    if ($username == 'admin' && $password == '21232f297a57a5a743894a0e4a801fc3') {
-    if ($username == 'admin' && $password == 'admin') {
+
+
+    $user = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
+    $result = mysqli_query($conn, $user);
+    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    if ($row) {
         $_SESSION['username'] = $username;
         header('Location: survey.php');
         exit;
@@ -18,4 +20,3 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     }
 }
 
-/******  44dda82e-8d46-49f2-97a4-7206ed8c52b9  *******/
