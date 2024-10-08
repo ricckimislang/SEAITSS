@@ -142,3 +142,16 @@ body::before {
   margin-top: 3rem;
   width: 150px;
 }
+
+
+/* homepage css*/
+
+.survey-list {
+  margin: 20px;
+  margin-bottom: 30px; 
+}
+
+
+.list-group-item transparent-card li{
+  border-radius: 20px;
+}

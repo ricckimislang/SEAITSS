@@ -145,3 +145,41 @@ body {
   font-weight: 500;
   text-align: justify;
 }
+
+/* For WebKit browsers */
+::-webkit-scrollbar {
+    width: 12px; /* width of the scrollbar */
+    height: 12px; /* height of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* background of the track */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888; /* color of the scrollbar thumb */
+    border-radius: 10px; /* roundness of the scrollbar thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555; /* color of the scrollbar thumb on hover */
+}
+
+/* For Firefox */
+* {
+    scrollbar-width: thin; /* "auto" or "thin" */
+    scrollbar-color: #888 #f1f1f1; /* thumb and track color */
+}
+/* form.css */
+
+/* Style for focused input fields */
+.form-control:focus {
+  border-color: #007bff; /* Change border color to primary */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add shadow effect */
+  outline: none; /* Remove default outline */
+}
+
+/* Style for radio buttons */
+.form-check-input {
+  margin-right: 8px; /* Space between radio and label */
+}

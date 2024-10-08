@@ -27,7 +27,7 @@
                             <option>EDUCATION OFFICE</option>
                         </select>
                     </div>
-                    <a href="form.php"> <button type="button" class="btn btn-next btn-primary">start now</button></a>
+                    <a href="homepage.php"> <button type="button" class="btn btn-next btn-primary">Proceed</button></a>
                 </div>
 
             </div>
