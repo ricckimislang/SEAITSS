@@ -2,195 +2,181 @@
 <?php include 'includes/dbconn.php'; ?>
 
 <?php
-// Check if the form is submitted
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Check if the survey is anonymous
-    $survey_id = 1; // Example survey ID, adjust based on the survey
-    $is_anonymous = isset($_POST['is_anonymous']) ? $_POST['is_anonymous'] : 1;
+$survey_id = $_GET['survey_id'];
 
-    if ($is_anonymous == 1) {
-        // Anonymous survey: No personal data to capture
-        $name = NULL;
-        $course = NULL;
-        $year_level = NULL;
-        $gender = NULL;
+// Get the current page from the URL, default to 1
+$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+$limit = 5; // Questions per page
+$offset = ($page - 1) * $limit;
 
-        // Insert into surveyresponses (anonymous)
-        $query = "INSERT INTO surveyresponses (survey_id, user_id, name, course, year_level, gender, submitted_at) 
-                  VALUES ($survey_id, NULL, NULL, NULL, NULL, NULL, NOW())";
-    } else {
-        // Non-anonymous survey: Capture full user details
-        $name = isset($_POST['name']) ? mysqli_real_escape_string($conn, $_POST['name']) : NULL;
-        $course = isset($_POST['course']) ? mysqli_real_escape_string($conn, $_POST['course']) : NULL;
-        $year_level = isset($_POST['year-level']) ? mysqli_real_escape_string($conn, $_POST['year-level']) : NULL;
-        $gender = isset($_POST['gender']) ? mysqli_real_escape_string($conn, $_POST['gender']) : NULL;
-
-        // Insert into surveyresponses (non-anonymous)
-        $query = "INSERT INTO surveyresponses (survey_id, user_id, name, course, year_level, gender, submitted_at) 
-                  VALUES ($survey_id, NULL, '$name', '$course', '$year_level', '$gender', NOW())";
-    }
-
-    // Execute the insertion query
-    if (mysqli_query($conn, $query)) {
-        $response_id = mysqli_insert_id($conn); // Get the last inserted response_id
-
-        // Fetch questions from the database
-        $query = "SELECT * FROM surveyquestions WHERE survey_id = $survey_id";
-        $result = mysqli_query($conn, $query);
-
-        // Loop through the questions and insert each response into responsedetails table
-        while ($row = mysqli_fetch_assoc($result)) {
-            $question_id = $row['question_id'];
-            if (isset($_POST['answer'][$question_id])) {
-                $response_text = mysqli_real_escape_string($conn, $_POST['answer'][$question_id]);
-                $query = "INSERT INTO responsedetails (response_id, question_id, response_text) 
-                          VALUES ($response_id, $question_id, '$response_text')";
-                mysqli_query($conn, $query);
-            }
-        }
-
-        // Show SweetAlert success message
-        echo "
-        <script>
-        Swal.fire({
-            title: 'Thank you!',
-            text: 'Your responses have been submitted successfully.',
-            icon: 'success',
-            confirmButtonText: 'OK'
-        }).then(function() {
-            window.location = 'survey.php'; // Redirect after the alert is closed
-        });
-        </script>";
-    } else {
-        // Show SweetAlert error message
-        $error_message = mysqli_error($conn);
-        echo "
-        <script>
-        Swal.fire({
-            title: 'Error!',
-            text: 'There was an error submitting your responses: $error_message',
-            icon: 'error',
-            confirmButtonText: 'Try Again'
-        });
-        </script>";
-    }
-}
-?>
-
-<?php
-// Fetch questions from the database based on survey_id
-$query = "SELECT * FROM surveyquestions WHERE survey_id = 1"; // Adjust survey_id as necessary
+// Fetch questions from the database with pagination
+$query = "SELECT * FROM surveyquestions WHERE survey_id = $survey_id LIMIT $limit OFFSET $offset";
 $result = mysqli_query($conn, $query);
 
-// Prepare questions in an array
-$questions = [];
-while ($row = mysqli_fetch_assoc($result)) {
-    $questions[] = $row;
-}
+// Fetch total question count for pagination
+$total_query = "SELECT COUNT(*) AS total FROM surveyquestions WHERE survey_id = $survey_id";
+$total_result = mysqli_query($conn, $total_query);
+$total_row = mysqli_fetch_assoc($total_result);
+$total_questions = $total_row['total'];
+$total_pages = ceil($total_questions / $limit);
 ?>
 
 <link rel="stylesheet" href="css/survey.css">
 <link rel="stylesheet" href="css/radio-button.css">
-
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <form method="POST" action="survey.php" id="survey-form">
+        <form id="surveyForm">
+            <input type="text" value="<?php echo $survey_id; ?>" name="survey_id" id="survey_id">
+
             <div class="e-card">
                 <div class="form-title">Office Satisfaction Survey</div> <!-- OFFICE NAME -->
-                <div class="bg-white w-[90vw] md:w-[50vw] p-6 rounded-lg shadow-md form-container" id="question-container">
-                    <!-- Questions will be dynamically loaded here -->
-                </div>
+                <div class="form-container">
+                    <?php while ($row = mysqli_fetch_assoc($result)) {
+                        $question_text = $row['question_text'];
+                        $question_id = $row['question_id'];
+                        $question_type = $row['question_type']; ?>
 
-                <input type="hidden" name="is_anonymous"
-                    value="<?php echo isset($_POST['is_anonymous']) ? $_POST['is_anonymous'] : 1; ?>">
-                <div class="form-group buttons">
-                    <button type="button" class="btn btn-primary" id="back-button" style="display: none;">Back</button>
-                    <button type="button" class="btn btn-primary" id="next-button">Next</button>
-                    <button type="submit" class="btn btn-success" id="submit-button" style="display: none;">Submit</button>
+                        <div class="form-group">
+                            <label for="question_<?php echo $question_id; ?>"><?php echo $question_text; ?></label>
+
+                            <?php
+                            if ($question_type == 'input') {
+                                // Show a text input
+                                echo "<input type='text' class='form-control' id='question_$question_id' name='answer[$question_id]' required>";
+                            } elseif ($question_type == 'rating') {
+                                // Show radio button options
+                                echo "<div class='form-check radio'>";
+                                for ($i = 1; $i <= 5; $i++) {
+                                    echo "<input label='$i' type='radio' name='answer[$question_id]' value='$i' required><br>";
+                                }
+                                echo "</div>";
+                            }
+                            ?>
+                        </div>
+                    <?php } ?>
+
+                    <input type="hidden" name="is_anonymous"
+                        value="<?php echo isset($_POST['is_anonymous']) ? $_POST['is_anonymous'] : 1; ?>">
+
+                    <div class="form-group buttons">
+                        <?php if ($page > 1): ?>
+                            <button type="button" class="btn btn-primary" id="prevBtn">Back</button>
+                        <?php endif; ?>
+
+                        <?php if ($page < $total_pages): ?>
+                            <button type="button" class="btn btn-primary" id="nextBtn">Next</button>
+                        <?php else: ?>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </form>
     </div>
 </div>
 
+<?php include 'includes/footer.php'; ?>
+
 <script>
-    let currentQuestionIndex = 0;
-    const questions = <?php echo json_encode($questions); ?>;
-    const questionsPerPage = 5;
-    const answers = {}; // Object to store the user's answers
+    $(document).ready(function () {
+        let answers = {}; // To store answers
 
-    function loadQuestions() {
-        const questionContainer = document.getElementById('question-container');
-        questionContainer.innerHTML = ''; // Clear previous questions
-
-        const start = currentQuestionIndex * questionsPerPage;
-        const end = start + questionsPerPage;
-
-        for (let i = start; i < end && i < questions.length; i++) {
-            const question = questions[i];
-            let questionHTML = `<div class="form-group">
-            <label class='block text-gray-700 text-sm font-bold mb-2' for="question_${question.question_id}">${question.question_text}</label>`;
-
-            // Load saved answers if available
-            const savedAnswer = answers[question.question_id] || '';
-            if (question.question_type === 'input') {
-                questionHTML += `<input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline form-control" id="question_${question.question_id}" name="answer[${question.question_id}]" value="${savedAnswer}" required>`;
-            } else if (question.question_type === 'rating') {
-                questionHTML += `<div class="form-check radio">`;
-                for (let j = 1; j <= 5; j++) {
-                    const checked = savedAnswer == j ? 'checked' : '';
-                    questionHTML += `<input class='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' label='${j}' type='radio' name='answer[${question.question_id}]' value='${j}' ${checked} required><br>`;
-                }
-                questionHTML += `</div>`;
-            }
-
-            questionHTML += `</div>`;
-            questionContainer.innerHTML += questionHTML;
+        // Load existing answers from localStorage if available
+        if (localStorage.getItem('answers')) {
+            answers = JSON.parse(localStorage.getItem('answers'));
         }
 
-        // Show or hide buttons based on current index
-        document.getElementById('next-button').style.display = (end < questions.length) ? 'block' : 'none';
-        document.getElementById('back-button').style.display = (currentQuestionIndex > 0) ? 'block' : 'none';
-        document.getElementById('submit-button').style.display = (end >= questions.length) ? 'block' : 'none'; // Show submit button when on last question
-    }
+        // Save answers on each input change
+        $('input').on('change', function () {
+            let questionId = $(this).attr('name').replace('answer[', '').replace(']', '');
+            answers[questionId] = $(this).val();
+            localStorage.setItem('answers', JSON.stringify(answers));
+        });
 
-    function saveAnswers() {
-        const answerInputs = document.querySelectorAll('input[name^="answer"]');
-        answerInputs.forEach(input => {
-            const questionId = input.name.split('[')[1].split(']')[0]; // Extract question_id
-            if (input.type === 'radio') {
-                if (input.checked) {
-                    answers[questionId] = input.value;
+        // Pre-fill answers if available
+        $.each(answers, function (questionId, answer) {
+            $(`input[name="answer[${questionId}]"][value="${answer}"]`).prop('checked', true);
+            $(`#question_${questionId}`).val(answer);
+        });
+
+        // Validate the current page fields before moving to the next page
+        function validatePage() {
+            let isValid = true;
+
+            // Check only the visible inputs on the current page
+            $('.form-group:visible input[required]').each(function () {
+                if ($(this).is(':radio')) {
+                    let radioGroupName = $(this).attr('name');
+                    if (!$(`input[name="${radioGroupName}"]:checked`).length) {
+                        isValid = false;
+                        $(this).closest('.form-group').find('label').css('color', 'red'); // Highlight missing field
+                    } else {
+                        $(this).closest('.form-group').find('label').css('color', ''); // Reset label color
+                    }
+                } else if ($(this).is(':text') && $(this).val().trim() === '') {
+                    isValid = false;
+                    $(this).closest('.form-group').find('label').css('color', 'red'); // Highlight missing field
+                } else {
+                    $(this).closest('.form-group').find('label').css('color', ''); // Reset label color
                 }
+            });
+
+            return isValid;
+        }
+
+        // Handle Next button click with validation
+        $('#nextBtn').click(function (e) {
+            e.preventDefault(); // Prevent default behavior
+
+            // Perform validation before moving to the next page
+            if (validatePage()) {
+                // Validation passed, move to next page
+                let url = window.location.href;
+                url = url.replace(/(&|\?)page=\d+/, ''); // Remove existing page number
+                window.location.href = url + '&page=<?php echo $page + 1; ?>';
             } else {
-                answers[questionId] = input.value;
+                alert('Please fill out all required fields before proceeding.');
             }
         });
-    }
 
-    document.getElementById('next-button').addEventListener('click', function () {
-        saveAnswers(); // Save current answers before proceeding
+        // Handle Back button click
+        $('#prevBtn').click(function (e) {
+            e.preventDefault(); // Prevent default behavior
+            let url = window.location.href;
+            url = url.replace(/(&|\?)page=\d+/, ''); // Remove existing page number
+            window.location.href = url + '&page=<?php echo $page - 1; ?>';
+        });
 
-        // Check if there are more questions to show
-        if (currentQuestionIndex * questionsPerPage + questionsPerPage < questions.length) {
-            currentQuestionIndex++;
-            loadQuestions();
-        } else {
-            // If no more questions, submit the form
-            document.getElementById('survey-form').submit();
-        }
+        // Submit form with AJAX
+        $('#surveyForm').submit(function (e) {
+            e.preventDefault();
+
+            if (validatePage()) {
+                // Collect answers from localStorage before submission
+                if (localStorage.getItem('answers')) {
+                    answers = JSON.parse(localStorage.getItem('answers'));
+                }
+
+                // Append answers to the form data
+                let formData = $(this).serializeArray();
+                $.each(answers, function (questionId, answer) {
+                    formData.push({ name: `answer[${questionId}]`, value: answer });
+                });
+
+                // Perform the AJAX submission if the current page is valid
+                $.ajax({
+                    url: 'process/take_respondent_survey.php',
+                    type: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        // Display the response (answers) in the body of the page
+                        localStorage.removeItem('answers'); // Clear answers after submission
+                    }
+                });
+            } else {
+                alert('Please fill out all required fields before submitting.');
+            }
+        });
     });
 
-    document.getElementById('back-button').addEventListener('click', function () {
-        saveAnswers(); // Save current answers before going back
-        if (currentQuestionIndex > 0) {
-            currentQuestionIndex--;
-            loadQuestions();
-        }
-    });
-
-    // Load the first set of questions on page load
-    loadQuestions();
 </script>
-
-<?php include 'includes/footer.php'; ?>

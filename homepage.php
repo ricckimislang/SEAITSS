@@ -1,6 +1,6 @@
-<?php 
-include 'includes/header.php'; 
-include 'includes/dbconn.php'; 
+<?php
+include 'includes/header.php';
+include 'includes/dbconn.php';
 
 // Prepare the query to fetch surveys
 $query = "SELECT * FROM surveys WHERE is_published = 1";
@@ -32,7 +32,8 @@ $surveys = $result->fetch_all(MYSQLI_ASSOC);
                                 <h5><?php echo htmlspecialchars($survey['title']); ?></h5>
                                 <p><?php echo htmlspecialchars($survey['objective']); ?></p>
                                 <!-- Redirect based on the is_anonymous field -->
-                                <a href="<?php echo $survey['is_anonymous'] == 1 ? 'survey.php' : 'form.php'; ?>" class="btn btn-primary">
+                                <a href="<?php echo $survey['is_anonymous'] == 1 ? 'survey.php?survey_id=' . $survey['survey_id'] : 'form.php'; ?>"
+                                    class="btn btn-primary">
                                     Take Survey
                                 </a>
                             </li>
