@@ -1,7 +1,7 @@
 body {
   margin: 0; /* Remove default body margin */
-  height: 100vh; /* Full height of the viewport */
-  overflow: hidden; /* Prevent scrolling */
+  height: auto; /* Full height of the viewport */
+  overflow-y: auto; /* Prevent scrolling */
   position: relative; /* Position for the pseudo-element */
 }
 
@@ -65,5 +65,24 @@ body::before {
   font-size: 1.5em;
   font-weight: 600;
   color: #474747;
-  background-color: rgb(114, 221, 221);
+  background-color: rgb(250, 141, 68);
+}
+
+#anonymous{
+  margin: 0 1px;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+#publish{
+  margin: 0 1px;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+input, select{
+  border: 1px solid rgba(0, 0, 0, 0.4) !important;
+}
+
+textarea{
+  overflow-y: auto;
+  height: 150px !important;
 }

@@ -105,7 +105,7 @@ $result = mysqli_query($conn, $query);
                             if ($question_type == 'input') {
                                 // Show a text input
                                 echo "<input type='text' class='form-control' id='question_$question_id' name='answer[$question_id]' required>";
-                            } elseif ($question_type == 'radio') {
+                            } elseif ($question_type == 'rating') {
                                 // Show radio button options
                                 echo "<div class='form-check radio'>";
                                 for ($i = 1; $i <= 5; $i++) {

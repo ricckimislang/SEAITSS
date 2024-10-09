@@ -99,46 +99,7 @@ body {
     text-transform: uppercase;
   }
   
-  .wave:nth-child(2),
-  .wave:nth-child(3) {
-    top: 210px;
-  }
   
-  .playing .wave {
-    border-radius: 40%;
-    animation: wave 3000ms infinite linear;
-  }
-  
-  .wave {
-    border-radius: 40%;
-    animation: wave 55s infinite linear;
-  }
-  
-  .playing .wave:nth-child(2) {
-    animation-duration: 4000ms;
-  }
-  
-  .wave:nth-child(2) {
-    animation-duration: 50s;
-  }
-  
-  .playing .wave:nth-child(3) {
-    animation-duration: 5000ms;
-  }
-  
-  .wave:nth-child(3) {
-    animation-duration: 45s;
-  }
-  
-  @keyframes wave {
-    0% {
-      transform: rotate(0deg);
-    }
-  
-    100% {
-      transform: rotate(360deg);
-    }
-  }
   
 .instruction{
   font-size: 13px;
