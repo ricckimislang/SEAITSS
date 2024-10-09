@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
 body {
   margin: 0; /* Remove default body margin */
   height: auto; /* Full height of the viewport */
@@ -18,71 +20,4 @@ body::before {
   background-size: cover; /* Make it cover the area */
   filter: blur(3px); /* Apply the blur effect */
   z-index: -1; /* Ensure it stays behind everything else */
-}
-
-.e-card {
-  margin: 10px auto;
-  box-shadow: 0px 8px 28px -9px rgba(0, 0, 0, 0.45);
-  position: relative;
-  width: 80vw;
-  height: 80vh;
-  border-radius: 16px;
-  overflow: hidden;
-  z-index: 10; /* Ensure the card is on top */
-}
-
-.background-image {
-  background-size: cover;
-  position: absolute;
-  object-fit: cover;
-  height: 100%;
-  width: 100%;
-  z-index: -1;
-}
-
-.form-container {
-  height: 100% !important;
-  overflow: hidden;
-}
-.form-controloffice {
-  height: calc(1.5em + 0.75rem + 2px);
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #495057;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-
-.form-title {
-  width: 100%;
-  padding: 0.5rem;
-  text-align: center;
-  font-size: 1.5em;
-  font-weight: 600;
-  color: #474747;
-  background-color: rgb(250, 141, 68);
-}
-
-#anonymous{
-  margin: 0 1px;
-  border: 1px solid rgba(0, 0, 0, 0.4);
-}
-
-#publish{
-  margin: 0 1px;
-  border: 1px solid rgba(0, 0, 0, 0.4);
-}
-
-input, select{
-  border: 1px solid rgba(0, 0, 0, 0.4) !important;
-}
-
-textarea{
-  overflow-y: auto;
-  height: 150px !important;
 }

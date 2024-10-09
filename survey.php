@@ -97,7 +97,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         <form method="POST" action="survey.php" id="survey-form">
             <div class="e-card">
                 <div class="form-title">Office Satisfaction Survey</div> <!-- OFFICE NAME -->
-                <div class="form-container" id="question-container">
+                <div class="bg-white w-[90vw] md:w-[50vw] p-6 rounded-lg shadow-md form-container" id="question-container">
                     <!-- Questions will be dynamically loaded here -->
                 </div>
 
@@ -129,17 +129,17 @@ while ($row = mysqli_fetch_assoc($result)) {
         for (let i = start; i < end && i < questions.length; i++) {
             const question = questions[i];
             let questionHTML = `<div class="form-group">
-            <label for="question_${question.question_id}">${question.question_text}</label>`;
+            <label class='block text-gray-700 text-sm font-bold mb-2' for="question_${question.question_id}">${question.question_text}</label>`;
 
             // Load saved answers if available
             const savedAnswer = answers[question.question_id] || '';
             if (question.question_type === 'input') {
-                questionHTML += `<input type="text" class="form-control" id="question_${question.question_id}" name="answer[${question.question_id}]" value="${savedAnswer}" required>`;
+                questionHTML += `<input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline form-control" id="question_${question.question_id}" name="answer[${question.question_id}]" value="${savedAnswer}" required>`;
             } else if (question.question_type === 'rating') {
                 questionHTML += `<div class="form-check radio">`;
                 for (let j = 1; j <= 5; j++) {
                     const checked = savedAnswer == j ? 'checked' : '';
-                    questionHTML += `<input label='${j}' type='radio' name='answer[${question.question_id}]' value='${j}' ${checked} required><br>`;
+                    questionHTML += `<input class='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' label='${j}' type='radio' name='answer[${question.question_id}]' value='${j}' ${checked} required><br>`;
                 }
                 questionHTML += `</div>`;
             }
