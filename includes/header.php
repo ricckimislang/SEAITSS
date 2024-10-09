@@ -3,16 +3,6 @@
 <?php session_start();
 include_once 'includes/dbconn.php';
 
-$username = $_SESSION['username'];
-
-if (!isset($_SESSION['username'])) {
-    header("location: ../index.php");
-}
-$check = "SELECT * FROM users WHERE username = '$username'";
-$checkresult = mysqli_query($conn, $check);
-$checkrow = mysqli_fetch_assoc($checkresult);
-$_SESSION['user_id'] = $checkrow['user_id'];
-
 ?>
 
 <head>

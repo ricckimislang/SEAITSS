@@ -1,4 +1,14 @@
-<?php include 'includes/header.php'; ?>
+<?php include 'includes/header.php';
+
+$username = $_SESSION['username'];
+
+$check = "SELECT * FROM users WHERE username = '$username'";
+$checkresult = mysqli_query($conn, $check);
+$checkrow = mysqli_fetch_assoc($checkresult);
+$_SESSION['user_id'] = $checkrow['user_id'];
+
+?>
+
 <link rel="stylesheet" href="css/index-card.css">
 <div class="container mt-5">
     <div class="row justify-content-center">
