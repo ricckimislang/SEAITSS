@@ -10,9 +10,9 @@
             </div>
             <div class="modal-body">
                 <form id="updateSurveyForm">
-                    <!-- Hidden input for user_id and survey_id -->
                     <input type="hidden" name="user_id" id="user_id" value="<?php echo $_SESSION['user_id']; ?>">
-                    <input type="hidden" name="survey_id" id="survey_id"> <!-- row id -->
+                    <input type="hidden" name="survey_id" id="survey_id">
+
                     <div class="form-group">
                         <label for="office">Select Office</label>
                         <select class="form-control" id="office" name="office">
@@ -58,66 +58,17 @@
                         <input type="date" class="form-control" id="end_date" name="end_date" required>
                     </div>
 
+                    <!-- Questions Section -->
+                    <div id="questionsContainer"></div>
 
-
-                    <?php
-                    $query = "SELECT * FROM surveyquestions WHERE survey_id = ?";
-                    if ($stmt = mysqli_prepare($conn, $query)) {
-                        mysqli_stmt_bind_param($stmt, "i", $survey_id);
-                        mysqli_stmt_execute($stmt);
-                        $result = mysqli_stmt_get_result($stmt);
-
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            $question_id = $row['question_id'];
-                            $question_text = $row['question_text'];
-                            $question_type = $row['question_type'];
-                            echo "
-                            <div class='form-group'>
-                                <label for='question_text_$question_id'>Question $question_id</label>
-                                <input type='text' class='form-control' id='question_text_$question_id' name='questions[$question_id][question_text]' value='$question_text' required>
-                            </div>
-
-                            <div class='form-group'>
-                                <label for='question_type_$question_id'>Question Type</label>
-                                <select class='form-control' id='question_type_$question_id' name='questions[$question_id][question_type]' required>
-                                    <option value='input' " . ($question_type == 'input' ? 'selected' : '') . ">Input</option>
-                                    <option value='rating' " . ($question_type == 'rating' ? 'selected' : '') . ">Rating</option>
-                                </select>
-                            </div>
-                            ";
-                        }
-
-                        mysqli_stmt_close($stmt);
-                    } else {
-                        echo 'SQL error: Failed to prepare question statement';
-                    }
-                    ?>
-
-                    <!-- questions -->
+                    <!-- Navigation buttons -->
                     <div class="form-group">
-                        <label for="question_number">Question Number</label>
-                        <input type="number" class="form-control" id="question_number" name="question_number" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="question_text">Question Text</label>
-                        <textarea class="form-control" id="question_text" name="question_text" rows="3"
-                            required></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="question_type">Select Type</label>
-                        <select class="form-control" id="question_type" name="question_type" required>
-                            <option value="input">Input</option>
-                            <option value="rating">Rating</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <button type="button" class="btn btn-info btn-sm" id="prevQuestionBtn"><i
-                                class="fa fa-arrow-left"></i> Back</button>
-                        <button type="button" class="btn btn-info btn-sm" id="nextQuestionBtn">Next <i
-                                class="fa fa-arrow-right"></i></button>
+                        <button type="button" class="btn btn-info btn-sm" id="prevQuestionBtn" style="display:none;">
+                            <i class="fa fa-arrow-left"></i> Back
+                        </button>
+                        <button type="button" class="btn btn-info btn-sm" id="nextQuestionBtn">Next
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
                     </div>
 
                     <div class="modal-footer">
@@ -129,3 +80,95 @@
         </div>
     </div>
 </div>
+
+<script>
+    let questions = [];
+    let currentQuestionIndex = 0;
+
+    // Function to load questions into the modal
+    function loadQuestions(surveyId) {
+        $.ajax({
+            type: 'GET',
+            url: 'process/get_questions.php', // PHP script to fetch questions
+            data: { survey_id: surveyId },
+            dataType: 'json',
+            success: function (data) {
+                questions = data;
+                renderQuestion(currentQuestionIndex);
+            },
+            error: function () {
+                alert('Failed to load questions.');
+            }
+        });
+    }
+
+    // Function to render the current question
+    function renderQuestion(index) {
+        const questionContainer = $('#questionsContainer');
+        questionContainer.empty(); // Clear previous questions
+
+        if (questions.length > 0) {
+            const question = questions[index];
+
+            questionContainer.append(`
+                <div class='form-group'>
+                    <label for='question_text_${question.question_id}'>Question ${index + 1}</label>
+                    <input type='text' class='form-control' id='question_text_${question.question_id}' name='questions[${question.question_id}][question_text]' value='${question.question_text}' required>
+                </div>
+                <div class='form-group'>
+                    <label for='question_type_${question.question_id}'>Question Type</label>
+                    <select class='form-control' id='question_type_${question.question_id}' name='questions[${question.question_id}][question_type]' required>
+                        <option value='input' ${question.question_type === 'input' ? 'selected' : ''}>Input</option>
+                        <option value='rating' ${question.question_type === 'rating' ? 'selected' : ''}>Rating</option>
+                    </select>
+                </div>
+            `);
+        }
+
+        // Toggle navigation buttons
+        $('#prevQuestionBtn').toggle(index > 0);
+        $('#nextQuestionBtn').toggle(index < questions.length - 1);
+    }
+
+    // Next button click
+    $('#nextQuestionBtn').on('click', function () {
+        if (currentQuestionIndex < questions.length - 1) {
+            currentQuestionIndex++;
+            renderQuestion(currentQuestionIndex);
+        }
+    });
+
+    // Previous button click
+    $('#prevQuestionBtn').on('click', function () {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            renderQuestion(currentQuestionIndex);
+        }
+    });
+
+    // Form submission handling
+    $('#updateSurveyForm').on('submit', function (event) {
+        event.preventDefault();
+
+        // Use AJAX to send form data to the PHP update script
+        $.ajax({
+            type: 'POST',
+            url: 'process/update_survey.php', // PHP script to handle the update
+            data: $(this).serialize(), // Serialize form data
+            success: function (response) {
+                $('#updateSurveyModal').modal('hide'); // Hide the modal
+                location.reload(); // Reload the page to reflect the updates
+            },
+            error: function (error) {
+                alert('Error updating survey. Please try again.');
+            }
+        });
+    });
+
+    // Call this function to load questions when the modal is opened
+    $('#updateSurveyModal').on('show.bs.modal', function (event) {
+        const surveyId = $(event.relatedTarget).data('survey-id'); // Get survey ID from the button that triggered the modal
+        currentQuestionIndex = 0; // Reset index
+        loadQuestions(surveyId); // Load questions
+    });
+</script>

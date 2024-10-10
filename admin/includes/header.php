@@ -13,6 +13,8 @@ include_once 'includes/dbconn.php';
 
 <link rel="stylesheet" href="../css/bootstrap.min.css">
 <link rel="stylesheet" href="../css/jgrowl.min.css" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
 
 <body>
