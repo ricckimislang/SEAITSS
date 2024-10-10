@@ -87,3 +87,7 @@ body::before {
   background-color: #0056b3; /* Darker shade on hover */
   border-color: #0056b3; /* Border color on hover */
 }
+
+.modal-header {
+  background-color: orange !important;
+}

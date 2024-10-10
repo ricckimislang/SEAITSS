@@ -10,13 +10,13 @@
             <li class="nav-item active">
                 <a class="nav-link" href="home.php">Home <span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="create_form.php">Create Survey</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="#">Survey List</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="#">Form</a>
             </li>
         </ul>

@@ -146,6 +146,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                     <tr>
                                         <th>Office</th>
                                         <th>Title</th>
+                                        <th>Objective</th>
                                         <th>Start Date</th>
                                         <th>End Date</th>
                                         <th>Anonymous</th>
@@ -160,6 +161,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                         <tr>
                                             <td><?php echo $surveyrow['office']; ?></td>
                                             <td><?php echo $surveyrow['title']; ?></td>
+                                            <td><?php echo $surveyrow['objective']; ?></td>
                                             <td><?php echo $surveyrow['start_date']; ?></td>
                                             <td><?php echo $surveyrow['end_date']; ?></td>
                                             <td>
@@ -188,8 +190,13 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                                 ?>
                                             </td>
                                             <td>
-                                                <a href="edit_survey.php?survey_id=<?php echo $surveyrow['survey_id']; ?>" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>
-                                                <button class="btn btn-sm btn-danger" onclick="deleteSurvey(<?php echo $surveyrow['survey_id']; ?>)"><i class="fas fa-trash"></i></button>
+                                                <button href="#" class="btn btn-sm btn-primary"
+                                                    onclick="openEditModal(<?php echo $surveyrow['survey_id']; ?>, '<?php echo addslashes($surveyrow['office']); ?>', '<?php echo addslashes($surveyrow['title']); ?>', '<?php echo addslashes($surveyrow['objective']); ?>', '<?php echo $surveyrow['start_date']; ?>', '<?php echo $surveyrow['end_date']; ?>')"><i
+                                                        class="fas fa-edit"></i></button>
+
+                                                <button class="btn btn-sm btn-danger"
+                                                    onclick="deleteSurvey(<?php echo $surveyrow['survey_id']; ?>)"><i
+                                                        class="fas fa-trash"></i></button>
                                             </td>
                                         </tr>
                                     <?php } ?>
@@ -202,9 +209,9 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
         </div>
     </div>
 
+    <?php include 'modal/update_survey_modal.php'; ?>
 
     <?php include 'includes/footer.php'; ?>
-
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function () {
@@ -217,4 +224,39 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                 "info": true              // Show table information
             });
         });
+
+        function openEditModal(surveyId, office, title, objective, startDate, endDate) {
+            // Set the values in the modal form
+            $('#updateSurveyForm #survey_id').val(surveyId);
+            $('#updateSurveyForm #office').val(office).trigger('change');
+            $('#updateSurveyForm #title').val(title);
+            $('#updateSurveyForm #objective').val(objective);
+            $('#updateSurveyForm #start_date').val(startDate);
+            $('#updateSurveyForm #end_date').val(endDate);
+
+            // Show the modal
+            $('#updateSurveyModal').modal('show');
+        }
+
+        // Submit form handling
+        $('#updateSurveyBtn').on('click', function (event) {
+            event.preventDefault();
+
+            // Use AJAX to send form data to your PHP update script
+            $.ajax({
+                type: 'POST',
+                url: 'process/update_survey.php', // Your PHP update script
+                data: $('#updateSurveyForm').serialize(),
+                success: function (response) {
+                    // Handle success response (e.g., show a success message, refresh table)
+                    $('#updateSurveyModal').modal('hide');
+                    location.reload(); // Reload the page to see updates
+                },
+                error: function (error) {
+                    // Handle error response
+                    alert('Error updating survey. Please try again.');
+                }
+            });
+        });
+
     </script>
