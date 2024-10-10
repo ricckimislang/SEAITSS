@@ -151,6 +151,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                         <th>Anonymous</th>
                                         <th>Published</th>
                                         <th>Responses</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
 
@@ -185,6 +186,10 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                                 $stmt->close();
                                                 echo mysqli_num_rows($surveyresponsesresult);
                                                 ?>
+                                            </td>
+                                            <td>
+                                                <a href="edit_survey.php?survey_id=<?php echo $surveyrow['survey_id']; ?>" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>
+                                                <button class="btn btn-sm btn-danger" onclick="deleteSurvey(<?php echo $surveyrow['survey_id']; ?>)"><i class="fas fa-trash"></i></button>
                                             </td>
                                         </tr>
                                     <?php } ?>
