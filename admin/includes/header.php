@@ -11,8 +11,8 @@ include_once 'includes/dbconn.php';
     <title>SEAIT SATISFACTION SURVERY</title>
 </head>
 
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<link rel="stylesheet" href="css/jgrowl.min.css" />
+<link rel="stylesheet" href="../css/bootstrap.min.css">
+<link rel="stylesheet" href="../css/jgrowl.min.css" />
 
 
 <body>

@@ -26,10 +26,11 @@ body::before {
   margin: 10px auto;
   box-shadow: 0px 8px 28px -9px rgba(0, 0, 0, 0.45);
   position: relative;
-  width: 80vw;
-  border-radius: 16px;
+  border-radius: 12px;
   overflow: hidden;
+  height: auto;
   z-index: 10; /* Ensure the card is on top */
+  min-width: 30vw;
 }
 
 .background-image {
@@ -43,6 +44,7 @@ body::before {
 
 .form-container {
   height: auto !important;
+  width: auto;
   overflow: auto;
   background-color: rgba(255, 255, 255, 1) !important;
   padding: 50px;
@@ -89,15 +91,14 @@ select {
 
 textarea {
   overflow-y: auto;
-  height: 150px !important;
 }
 label {
   font-family: "Nunito", sans-serif;
   font-weight: 700;
-  font-size: 0.9rem !important;
+  font-size: 0.7rem !important;
 }
 
-.buttons{
+.buttons {
   margin-top: 100px !important;
   float: right;
 }

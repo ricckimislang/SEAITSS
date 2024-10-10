@@ -2,12 +2,12 @@
 
 ?>
 
-<link rel="stylesheet" href="css/index-card.css">
+<link rel="stylesheet" href="../css/index-card.css">
 <div class="container mt-5">
     <div class="row justify-content-center">
         <form id="login-form">
             <div class="e-card playing">
-                <div class="background-image" style="background-image: url(assets/image/seait.jpg)">
+                <div class="background-image" style="background-image: url(../assets/image/seait.jpg)">
                 </div>
                 <!-- Waves and content -->
                 <div class="wave"></div>
@@ -15,7 +15,7 @@
 
                 <!-- Info overlay -->
                 <div class="infotop">
-                    <img class="seait-logo" src="assets/image/logo.png" alt="SEAIT Logo"><br>
+                    <img class="seait-logo" src="../assets/image/logo.png" alt="SEAIT Logo"><br>
                     WELCOME TO SEAIT SATISFACTION SURVEY
                     <br>
                     <div class="name">SOUTH EAST ASIAN INSTITUTE OF TECHNOLOGY</div>
@@ -46,7 +46,7 @@
             e.preventDefault();
             $.ajax({
                 type: 'POST',
-                url: 'process/login_process.php',
+                url: '../process/login_process.php',
                 data: $(this).serialize(),
                 success: function (data) {
                     console.log(data); // This will print the response to the browser's console

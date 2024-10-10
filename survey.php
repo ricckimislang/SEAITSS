@@ -26,7 +26,7 @@ $total_pages = ceil($total_questions / $limit);
 <div class="container mt-5">
     <div class="row justify-content-center">
         <form id="surveyForm">
-            <input type="text" value="<?php echo $survey_id; ?>" name="survey_id" id="survey_id">
+            <input type="hidden" value="<?php echo $survey_id; ?>" name="survey_id" id="survey_id">
 
             <div class="e-card">
                 <div class="form-title">Office Satisfaction Survey</div> <!-- OFFICE NAME -->
@@ -168,9 +168,19 @@ $total_pages = ceil($total_questions / $limit);
                     url: 'process/take_respondent_survey.php',
                     type: 'POST',
                     data: formData,
-                    success: function (response) {
-                        // Display the response (answers) in the body of the page
-                        localStorage.removeItem('answers'); // Clear answers after submission
+                    success: function (data) {
+                        let response = JSON.parse(data);
+                        if (response.status === 'success') {
+                            $.jGrowl(response.message, { theme: "alert alert-success", life: 2000 });
+                            setTimeout(function () {
+                                window.location.href = "thank_you_page.php";
+                            }, 2000);
+                        } else {
+                            $.jGrowl(response.message, { theme: "alert alert-danger", life: 3000 });
+                        }
+                    },
+                    error: function () {
+                        $.jGrowl('An unexpected error occurred. Please try again.', { theme: "alert alert-danger", life: 4000 });
                     }
                 });
             } else {
