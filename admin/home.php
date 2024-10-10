@@ -6,6 +6,20 @@ $check = "SELECT * FROM users WHERE username = '$username'";
 $checkresult = mysqli_query($conn, $check);
 $checkrow = mysqli_fetch_assoc($checkresult);
 $_SESSION['user_id'] = $checkrow['user_id'];
+
+
+
+//survey table query
+
+$surveytable = "SELECT * FROM surveys";
+if ($stmt = mysqli_prepare($conn, $surveytable)) {
+    mysqli_stmt_execute($stmt);
+    $surveyresult = mysqli_stmt_get_result($stmt);
+    mysqli_stmt_close($stmt);
+}
+
+
+
 ?>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
@@ -18,7 +32,9 @@ $_SESSION['user_id'] = $checkrow['user_id'];
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Surveys</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">5</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                <?php echo mysqli_num_rows($surveyresult); ?>
+                            </div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-poll fa-2x text-gray-300"></i>
@@ -26,7 +42,7 @@ $_SESSION['user_id'] = $checkrow['user_id'];
                     </div>
                 </div>
                 <div class="card-footer py-3">
-                    <a href="users.php" class="btn btn-primary btn-block">View</a>
+                    <a href="" class="btn btn-primary btn-block">View</a>
                 </div>
             </div>
         </div>
@@ -37,7 +53,17 @@ $_SESSION['user_id'] = $checkrow['user_id'];
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Active Surveys
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">5</div>
+                            <?php
+                            $activesurveys = "SELECT * FROM surveys WHERE end_date > NOW() OR is_published = 0";
+                            if ($stmt = mysqli_prepare($conn, $activesurveys)) {
+                                mysqli_stmt_execute($stmt);
+                                $activesurveyresult = mysqli_stmt_get_result($stmt);
+                                mysqli_stmt_close($stmt);
+                            }
+                            ?>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                <?php echo mysqli_num_rows($activesurveyresult); ?>
+                            </div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-poll fa-2x text-gray-300"></i>
@@ -45,7 +71,7 @@ $_SESSION['user_id'] = $checkrow['user_id'];
                     </div>
                 </div>
                 <div class="card-footer py-3">
-                    <a href="categories.php" class="btn btn-success btn-block">View</a>
+                    <a href="" class="btn btn-success btn-block">View</a>
                 </div>
             </div>
         </div>
@@ -55,7 +81,17 @@ $_SESSION['user_id'] = $checkrow['user_id'];
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Completed Surveys</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">5</div>
+                            <?php
+                            $completeurveys = "SELECT * FROM surveys WHERE end_date < NOW() AND is_published = 1";
+                            if ($stmt = mysqli_prepare($conn, $completeurveys)) {
+                                mysqli_stmt_execute($stmt);
+                                $completeurveyresult = mysqli_stmt_get_result($stmt);
+                                mysqli_stmt_close($stmt);
+                            }
+                            ?>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                <?php echo mysqli_num_rows($completeurveyresult); ?>
+                            </div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-check-square fa-2x text-gray-300"></i>
@@ -63,7 +99,7 @@ $_SESSION['user_id'] = $checkrow['user_id'];
                     </div>
                 </div>
                 <div class="card-footer py-3">
-                    <a href="posts.php" class="btn btn-info btn-block">View</a>
+                    <a href="" class="btn btn-info btn-block">View</a>
                 </div>
             </div>
         </div>
@@ -73,7 +109,18 @@ $_SESSION['user_id'] = $checkrow['user_id'];
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Total Responses</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">5</div>
+                            <?php
+                            $surveyresponses = "SELECT COUNT(*) AS total_responses FROM surveyresponses";
+                            if ($stmt = mysqli_prepare($conn, $surveyresponses)) {
+                                mysqli_stmt_execute($stmt);
+                                $surveyresponsesresult = mysqli_stmt_get_result($stmt);
+                                $surveyresponsesrow = mysqli_fetch_assoc($surveyresponsesresult);
+                                mysqli_stmt_close($stmt);
+                            }
+                            ?>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                <?php echo $surveyresponsesrow['total_responses']; ?>
+                            </div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-users fa-2x text-gray-300"></i>
@@ -81,67 +128,88 @@ $_SESSION['user_id'] = $checkrow['user_id'];
                     </div>
                 </div>
                 <div class="card-footer py-3">
-                    <a href="comments.php" class="btn btn-warning btn-block">View</a>
+                    <a href="" class="btn btn-warning btn-block">View</a>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
-    <div class="col-xl-12 col-md-6 mb-4">
-        <div class="card border-left-warning shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center w-100">
-                    <div class="col-12">
-                        <!-- Table structure -->
-                        <table id="surveyTable" class="display" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Survey ID</th>
-                                    <th>Title</th>
-                                    <th>Start Date</th>
-                                    <th>End Date</th>
-                                    <th>Responses</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Example table data. You can dynamically populate this with PHP -->
-                                <tr>
-                                    <td>1</td>
-                                    <td>Satisfaction Survey</td>
-                                    <td>2024-01-15</td>
-                                    <td>2024-02-15</td>
-                                    <td>120</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Office Survey</td>
-                                    <td>2024-01-20</td>
-                                    <td>2024-02-20</td>
-                                    <td>90</td>
-                                </tr>
-                                <!-- More rows as needed -->
-                            </tbody>
-                        </table>
+        <div class="col-xl-12 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center w-100">
+                        <div class="col-12">
+                            <!-- Table structure -->
+
+                            <table id="surveyTable" class="display" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Office</th>
+                                        <th>Title</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Anonymous</th>
+                                        <th>Published</th>
+                                        <th>Responses</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <?php while ($surveyrow = mysqli_fetch_assoc($surveyresult)) { ?>
+                                        <tr>
+                                            <td><?php echo $surveyrow['office']; ?></td>
+                                            <td><?php echo $surveyrow['title']; ?></td>
+                                            <td><?php echo $surveyrow['start_date']; ?></td>
+                                            <td><?php echo $surveyrow['end_date']; ?></td>
+                                            <td>
+                                                <button
+                                                    class="btn btn-sm btn-<?php echo $surveyrow['is_anonymous'] == 1 ? 'success' : 'danger'; ?>"
+                                                    onclick="changeAnonymous(<?php echo $surveyrow['survey_id']; ?>, <?php echo $surveyrow['is_anonymous']; ?>)">
+                                                    <?php echo $surveyrow['is_anonymous'] == 1 ? 'Anonymous' : 'Not Anonymous'; ?>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button
+                                                    class="btn btn-sm btn-<?php echo $surveyrow['is_published'] == 1 ? 'success' : 'danger'; ?>"
+                                                    onclick="changePublished(<?php echo $surveyrow['survey_id']; ?>, <?php echo $surveyrow['is_published']; ?>)">
+                                                    <?php echo $surveyrow['is_published'] == 1 ? 'Published' : 'Not published'; ?>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <?php
+                                                $surveyresponses = "SELECT * FROM surveyresponses WHERE survey_id = ?";
+                                                $stmt = $conn->prepare($surveyresponses);
+                                                $stmt->bind_param("i", $surveyrow['survey_id']);
+                                                $stmt->execute();
+                                                $surveyresponsesresult = $stmt->get_result();
+                                                $stmt->close();
+                                                echo mysqli_num_rows($surveyresponsesresult);
+                                                ?>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 
     <?php include 'includes/footer.php'; ?>
 
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script>
-    $(document).ready(function() {
-        $('#surveyTable').DataTable({
-            "paging": true,           // Enable pagination
-            "searching": true,        // Enable search functionality
-            "pageLength": 10,         // Show 10 rows per page
-            "lengthChange": true,    // Disable the option to change number of rows per page
-            "ordering": true,         // Enable column sorting
-            "info": true              // Show table information
+        $(document).ready(function () {
+            $('#surveyTable').DataTable({
+                "paging": true,           // Enable pagination
+                "searching": true,        // Enable search functionality
+                "pageLength": 10,         // Show 10 rows per page
+                "lengthChange": true,    // Disable the option to change number of rows per page
+                "ordering": true,         // Enable column sorting
+                "info": true              // Show table information
+            });
         });
-    });
-</script>
+    </script>

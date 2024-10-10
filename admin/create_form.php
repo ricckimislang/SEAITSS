@@ -215,18 +215,10 @@ $_SESSION['user_id'] = $checkrow['user_id'];
                     questions: JSON.stringify(questions)  // Send questions as a JSON array
                 },
                 success: function (data) {
-                    let response = JSON.parse(data);
-                    if (response.status === 'success') {
-                        $.jGrowl(response.message, { theme: "alert alert-success", life: 2000 });
-                        setTimeout(function () {
-                            window.location.href = "create_form.php";
-                        }, 2000);
-                    } else {
-                        $.jGrowl(response.message, { theme: "alert alert-danger", life: 4000 });
-                    }
-                },
-                error: function () {
-                    $.jGrowl('An unexpected error occurred. Please try again.', { theme: "alert alert-danger", life: 4000 });
+                    $.jGrowl(data, { theme: "alert alert-success", life: 2000 });
+                    setTimeout(function () {
+                        window.location.href = "create_form.php";
+                    }, 2000);
                 }
             });
         });

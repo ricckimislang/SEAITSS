@@ -1,6 +1,6 @@
 <?php include 'includes/header.php'; ?>
 
-<link rel="stylesheet" href="css/home.css">
+<link rel="stylesheet" href="css/ty.css">
 
 <div class="container mt-5">
     <div class="row justify-content-center">

@@ -5,6 +5,7 @@ body {
   height: auto; /* Full height of the viewport */
   overflow-y: auto; /* Prevent scrolling */
   position: relative; /* Position for the pseudo-element */
+  font-family: "Nunito", sans-serif; /* Apply custom font */
 }
 
 body::before {
@@ -23,10 +24,66 @@ body::before {
 }
 
 .container {
-  background-color: #fff;
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.9
+  ); /* Slight transparency for the container */
   width: 100%;
   height: 90vh;
   max-height: 100vh;
   max-width: 95vw;
   overflow: hidden;
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  padding: 20px; /* Inner padding */
+}
+
+.card {
+  border: none; /* Remove the default border */
+}
+
+#surveyTable {
+  width: 100%; /* Full width */
+  border-collapse: collapse; /* Collapse borders for cleaner look */
+}
+
+#surveyTable thead {
+  background-color: #007bff; /* Bootstrap primary color */
+  color: white; /* White text for contrast */
+}
+
+#surveyTable th,
+#surveyTable td {
+  padding: 12px; /* Padding for cells */
+  text-align: left; /* Left-aligned text */
+  border: 1px solid #007bff; /* Light grey border */
+}
+
+#surveyTable tr:hover {
+  background-color: #62b3ff; /* Light grey background on hover */
+}
+
+.dataTables_wrapper .dataTables_paginate {
+  margin-top: 20px; /* Space above pagination */
+}
+
+.dataTables_wrapper .dataTables_info {
+  padding: 10px 0; /* Space above and below table info */
+}
+
+.dataTables_wrapper .dataTables_length select {
+  width: auto; /* Auto width for dropdown */
+  margin-left: 10px; /* Space from the label */
+}
+
+.btn-primary {
+  background-color: #007bff; /* Bootstrap primary color */
+  border-color: #007bff; /* Border color */
+}
+
+.btn-primary:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+  border-color: #0056b3; /* Border color on hover */
 }

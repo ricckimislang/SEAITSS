@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+body {
+  margin: 0; /* Remove default body margin */
+  height: auto; /* Full height of the viewport */
+  overflow-y: auto; /* Prevent scrolling */
+  position: relative; /* Position for the pseudo-element */
+}
+
+body::before {
+  content: ""; /* Create a pseudo-element */
+  position: fixed; /* Fix the element to the viewport */
+  top: 0; /* Cover the top */
+  left: 0; /* Cover the left */
+  width: 100%; /* Cover the full width */
+  height: 100%; /* Cover the full height */
+  background-image: url("../assets/image/bgsur.jpg"); /* Your background image */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover; /* Make it cover the area */
+  filter: blur(3px); /* Apply the blur effect */
+  z-index: -1; /* Ensure it stays behind everything else */
+}
