@@ -10,8 +10,8 @@
             </div>
             <div class="modal-body">
                 <form id="viewSurveyForm">
-                    <input type="text" id="surveyID">
-                    <input type="text" id="responseID">
+                    <input type="hidden" name="responseID" id="responseID">
+                    <input type="hidden" name="responseID" id="surveyID">
 
                     <p><strong>Total Responses:</strong> <span id="modalTotalResponses"></span></p>
                     <p><strong>Overall Satisfaction:</strong>
@@ -22,17 +22,16 @@
                         <i class="fas fa-star" data-star="4"></i>
                         <i class="fas fa-star" data-star="5"></i>
                     </p>
+
                     <div class="table-responsive">
                         <table class="table table-bordered" id="surveyResponseTable" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>Question Number</th>
-                                    <th>Description</th>
+                                    <th>Question</th>
+                                    <th>Feedback</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <td></td>
-                                <td></td>
                             </tbody>
                         </table>
                     </div>

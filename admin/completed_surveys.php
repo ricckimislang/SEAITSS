@@ -8,6 +8,9 @@ $stmt = mysqli_prepare($conn, $query);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 
+// Initialize an array to hold response IDs
+$response_ids = [];
+
 ?>
 
 <!-- Include Bootstrap CSS -->
@@ -42,33 +45,32 @@ $result = mysqli_stmt_get_result($stmt);
                                         <td><?php echo htmlspecialchars($completerow['end_date']); ?></td>
                                         <td>
                                             <?php
-                                            // Initialize an array to store response IDs
-                                            $response_ids = array();
-
-                                            // Query to get responses for the current survey
-                                            $totalrespo = "SELECT response_id FROM surveyresponses WHERE survey_id = ?";
+                                            $totalrespo = "SELECT * FROM surveyresponses WHERE survey_id = ?";
                                             $stmtrespo = $conn->prepare($totalrespo);
                                             $stmtrespo->bind_param("i", $completerow['survey_id']);
                                             $stmtrespo->execute();
                                             $totalresporesult = $stmtrespo->get_result();
 
-                                            // Loop through the responses and store each response_id in the array
+                                            // Fetch all response IDs and store them in the array
                                             while ($responserow = $totalresporesult->fetch_assoc()) {
                                                 $response_ids[] = $responserow['response_id'];
                                             }
-
-                                            // Display total number of responses
-                                            echo count($response_ids);
+                                            $totalresponses = mysqli_num_rows($totalresporesult);
+                                            echo $totalresponses;
                                             ?>
                                         </td>
                                         <td>
-                                            <!-- Pass response IDs array to JavaScript when the button is clicked -->
-                                            <button type="button" class="btn btn-sm btn-primary view-results-btn"
-                                                onclick="openResultModal(<?php echo json_encode($response_ids); ?>, '<?php echo $completerow['survey_id']; ?>')">
-                                                <i class="fas fa-eye"></i>&nbsp;View Results
-                                            </button>
+                                            <button type="button" href="#" class="btn btn-sm btn-primary view-results-btn"
+                                                onclick="openResultModal('<?php echo addslashes($completerow['survey_id']); ?>', [<?php echo implode(',', $response_ids); ?>], '<?php echo addslashes($totalresponses); ?>')"><i
+                                                    class="fas fa-eye"></i>&nbsp;View
+                                                Results</button>
+
                                         </td>
                                     </tr>
+                                    <?php
+                                    // Reset the response_ids array for the next survey
+                                    $response_ids = [];
+                                    ?>
                                 <?php } ?>
                             </tbody>
                         </table>
@@ -82,4 +84,5 @@ $result = mysqli_stmt_get_result($stmt);
 <?php include 'modal/view_survey_result.php'; ?>
 <?php include 'includes/footer.php'; ?>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
 <script src="js/view_result.js"></script>
