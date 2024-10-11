@@ -41,9 +41,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                         </div>
                     </div>
                 </div>
-                <div class="card-footer py-3">
-                    <a href="" class="btn btn-primary btn-block">View</a>
-                </div>
+
             </div>
         </div>
         <div class="col-xl-3 col-md-6 mb-4">
@@ -69,9 +67,6 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                             <i class="fas fa-poll fa-2x text-gray-300"></i>
                         </div>
                     </div>
-                </div>
-                <div class="card-footer py-3">
-                    <a href="" class="btn btn-success btn-block">View</a>
                 </div>
             </div>
         </div>
@@ -151,6 +146,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                         <th>End Date</th>
                                         <th>Anonymous</th>
                                         <th>Published</th>
+                                        <th>Status</th>
                                         <th>Responses</th>
                                         <th>Action</th>
                                     </tr>
@@ -164,19 +160,74 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                             <td><?php echo $surveyrow['objective']; ?></td>
                                             <td><?php echo $surveyrow['start_date']; ?></td>
                                             <td><?php echo $surveyrow['end_date']; ?></td>
-                                            <td>
+                                            <td id="anonymous_status_<?php echo $surveyrow['survey_id']; ?>">
                                                 <button
                                                     class="btn btn-sm btn-<?php echo $surveyrow['is_anonymous'] == 1 ? 'success' : 'danger'; ?>"
                                                     onclick="changeAnonymous(<?php echo $surveyrow['survey_id']; ?>, <?php echo $surveyrow['is_anonymous']; ?>)">
                                                     <?php echo $surveyrow['is_anonymous'] == 1 ? 'Anonymous' : 'Not Anonymous'; ?>
                                                 </button>
+
+                                                <script>
+                                                    function changeAnonymous(survey_id, current_is_anonymous) {
+                                                        var new_is_anonymous = current_is_anonymous ? 0 : 1;
+                                                        $.ajax({
+                                                            url: "process/update_anonymous.php",
+                                                            method: "GET",
+                                                            data: {
+                                                                survey_id: survey_id,
+                                                                is_anonymous: new_is_anonymous
+                                                            },
+                                                            dataType: "json",
+                                                            success: function (response) {
+                                                                if (response.is_anonymous !== undefined) {
+                                                                    $('#anonymous_status_' + survey_id).html(
+                                                                        `<button class="btn btn-sm btn-${response.is_anonymous == 1 ? 'success' : 'danger'}" onclick="changeAnonymous(${survey_id}, ${response.is_anonymous})">${response.is_anonymous == 1 ? 'Anonymous' : 'Not Anonymous'}</button>`
+                                                                    );
+                                                                } else {
+                                                                    console.error("Unexpected response:", response);
+                                                                }
+                                                            },
+                                                            error: function (xhr, status, error) {
+                                                                console.error("AJAX Error:", error);
+                                                            }
+                                                        });
+                                                    }
+                                                </script>
                                             </td>
-                                            <td>
+
+                                            <td id="published_status_<?php echo $surveyrow['survey_id']; ?>">
                                                 <button
                                                     class="btn btn-sm btn-<?php echo $surveyrow['is_published'] == 1 ? 'success' : 'danger'; ?>"
                                                     onclick="changePublished(<?php echo $surveyrow['survey_id']; ?>, <?php echo $surveyrow['is_published']; ?>)">
                                                     <?php echo $surveyrow['is_published'] == 1 ? 'Published' : 'Not published'; ?>
                                                 </button>
+
+                                                <script>
+                                                    function changePublished(survey_id, current_is_published) {
+                                                        var new_is_published = current_is_published ? 0 : 1;
+                                                        $.ajax({
+                                                            url: "process/update_publish.php",
+                                                            method: "GET",
+                                                            data: {
+                                                                survey_id: survey_id,
+                                                                is_published: new_is_published
+                                                            },
+                                                            dataType: "json",
+                                                            success: function (response) {
+                                                                if (response.is_published !== undefined) {
+                                                                    $('#published_status_' + survey_id).html(
+                                                                        `<button class="btn btn-sm btn-${response.is_published == 1 ? 'success' : 'danger'}" onclick="changePublished(${survey_id}, ${response.is_published})">${response.is_published == 1 ? 'Published' : 'Not Published'}</button>`
+                                                                    );
+                                                                } else {
+                                                                    console.error("Unexpected response:", response);
+                                                                }
+                                                            },
+                                                            error: function (xhr, status, error) {
+                                                                console.error("AJAX Error:", error);
+                                                            }
+                                                        });
+                                                    }
+                                                </script>
                                             </td>
                                             <td>
                                                 <?php
@@ -188,6 +239,13 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                                 $stmt->close();
                                                 echo mysqli_num_rows($surveyresponsesresult);
                                                 ?>
+                                            </td>
+                                            <td>
+                                                <button
+                                                    class="btn btn-sm btn-<?php echo $surveyrow['end_date'] < date('Y-m-d') ? 'danger' : 'success'; ?>"
+                                                    onclick="changeOpen(<?php echo $surveyrow['survey_id']; ?>, <?php echo $surveyrow['end_date'] < date('Y-m-d') ? 1 : 0; ?>)">
+                                                    <?php echo $surveyrow['end_date'] < date('Y-m-d') ? 'CLOSED' : 'OPEN'; ?>
+                                                </button>
                                             </td>
                                             <td>
                                                 <button href="#" class="btn btn-sm btn-primary"
