@@ -1,3 +1,6 @@
+<?php 
+include 'includes/session.php';
+?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">SEAIT Survey System</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -23,5 +26,6 @@
                 <a class="nav-link" href="#">Form</a>
             </li>
         </ul>
+        <a href="logout.php" class="btn btn-sm btn-outline-secondary">Logout</a>
     </div>
 </nav>

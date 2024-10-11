@@ -81,6 +81,14 @@ $total_pages = ceil($total_questions / $limit);
     $(document).ready(function () {
         let answers = {}; // To store answers
 
+        // Clear answers if a new survey is started
+        let currentSurveyId = $('#survey_id').val();
+        let storedSurveyId = localStorage.getItem('survey_id');
+        if (storedSurveyId !== currentSurveyId) {
+            localStorage.clear(); // Clear all previous data
+            localStorage.setItem('survey_id', currentSurveyId); // Set current survey ID in storage
+        }
+
         // Load existing answers from localStorage if available
         if (localStorage.getItem('answers')) {
             answers = JSON.parse(localStorage.getItem('answers'));
@@ -172,6 +180,8 @@ $total_pages = ceil($total_questions / $limit);
                         let response = JSON.parse(data);
                         if (response.status === 'success') {
                             $.jGrowl(response.message, { theme: "alert alert-success", life: 2000 });
+                            // Clear localStorage after successful submission
+                            localStorage.clear();
                             setTimeout(function () {
                                 window.location.href = "thank_you_page.php";
                             }, 2000);
@@ -188,5 +198,4 @@ $total_pages = ceil($total_questions / $limit);
             }
         });
     });
-
 </script>

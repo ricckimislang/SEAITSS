@@ -22,8 +22,8 @@
                     <div class="form-groupoffice">
                         <label for="office">Select Office</label>
                         <select class="form-controloffice" id="office" name="office"> <!-- Added name attribute -->
-                            <option value="CICT" <?php if (isset($_GET['office']) && $_GET['office'] == 'CICT')
-                                echo 'selected'; ?>>CICT OFFICE</option>
+                            <option value="IT" <?php if (isset($_GET['office']) && $_GET['office'] == 'IT')
+                                echo 'selected'; ?>>IT OFFICE</option>
                             <option value="SAO" <?php if (isset($_GET['office']) && $_GET['office'] == 'SAO')
                                 echo 'selected'; ?>>SAO OFFICE</option>
                             <option value="EDUC" <?php if (isset($_GET['office']) && $_GET['office'] == 'EDUC')
