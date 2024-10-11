@@ -28,6 +28,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
 ?>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
 <link rel="stylesheet" href="../css/home.css">
 <div class="container-fluid mt-5">
     <div class="row">
@@ -137,7 +138,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                         <div class="col-12">
                             <!-- Table structure -->
                             <h2>Survey Table</h2>
-                            <table id="surveyTable" class="display" style="width:100%">
+                            <table id="surveyTable" class="display">
                                 <thead>
                                     <tr>
                                         <th>Office</th>
@@ -147,8 +148,8 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                         <th>End Date</th>
                                         <th>Anonymous</th>
                                         <th>Published</th>
-                                        <th>Status</th>
                                         <th>Responses</th>
+                                        <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -259,9 +260,10 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                                     onclick="openEditModal(<?php echo $surveyrow['survey_id']; ?>, '<?php echo addslashes($surveyrow['office']); ?>', '<?php echo addslashes($surveyrow['title']); ?>', '<?php echo addslashes($surveyrow['objective']); ?>', '<?php echo $surveyrow['start_date']; ?>', '<?php echo $surveyrow['end_date']; ?>')"><i
                                                         class="fas fa-edit"></i></button>
 
-                                                <button class="btn btn-sm btn-danger"
-                                                    onclick="deleteSurvey(<?php echo $surveyrow['survey_id']; ?>)"><i
-                                                        class="fas fa-trash"></i></button>
+                                                <button class="btn btn-sm btn-danger deleteSurveyBtn"
+                                                    data-survey-id="<?php echo $surveyrow['survey_id']; ?>">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
                                             </td>
                                         </tr>
                                     <?php } ?>
@@ -281,3 +283,59 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
 <script src="js/fetch_question.js"></script>
+<script>
+    $(document).ready(function () {
+        $(document).on('click', '.deleteSurveyBtn', function () {
+            var surveyId = $(this).data('survey-id');
+            var button = $(this);
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    button.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>'); // Show loading spinner
+
+                    $.ajax({
+                        url: 'process/delete_survey.php',
+                        type: 'POST',
+                        data: { survey_id: surveyId },
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.status === 'success') {
+                                Swal.fire(
+                                    'Deleted!',
+                                    'Your survey has been deleted.',
+                                    'success'
+                                );
+                                $('#surveyTable').DataTable().row(button.parents('tr')).remove().draw();
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    'Error deleting survey: ' + response.message,
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log("AJAX Error:", textStatus, errorThrown);
+                            Swal.fire(
+                                'Error!',
+                                'An error occurred while trying to delete the survey. Check console for details.',
+                                'error'
+                            );
+                        },
+                        complete: function () {
+                            button.prop('disabled', false).html('<i class="fas fa-trash"></i>'); // Reset button
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
