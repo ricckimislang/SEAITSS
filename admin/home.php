@@ -208,55 +208,11 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
             </div>
         </div>
     </div>
+</div>
 
-    <?php include 'modal/update_survey_modal.php'; ?>
+<?php include 'modal/update_survey_modal.php'; ?>
 
-    <?php include 'includes/footer.php'; ?>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#surveyTable').DataTable({
-                "paging": true,           // Enable pagination
-                "searching": true,        // Enable search functionality
-                "pageLength": 10,         // Show 10 rows per page
-                "lengthChange": true,    // Disable the option to change number of rows per page
-                "ordering": true,         // Enable column sorting
-                "info": true              // Show table information
-            });
-        });
+<?php include 'includes/footer.php'; ?>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
-        function openEditModal(surveyId, office, title, objective, startDate, endDate) {
-            // Set the values in the modal form
-            $('#updateSurveyForm #survey_id').val(surveyId);
-            $('#updateSurveyForm #office').val(office).trigger('change');
-            $('#updateSurveyForm #title').val(title);
-            $('#updateSurveyForm #objective').val(objective);
-            $('#updateSurveyForm #start_date').val(startDate);
-            $('#updateSurveyForm #end_date').val(endDate);
-
-            // Show the modal
-            $('#updateSurveyModal').modal('show');
-        }
-
-        // Submit form handling
-        $('#updateSurveyBtn').on('click', function (event) {
-            event.preventDefault();
-
-            // Use AJAX to send form data to your PHP update script
-            $.ajax({
-                type: 'POST',
-                url: 'process/update_survey.php', // Your PHP update script
-                data: $('#updateSurveyForm').serialize(),
-                success: function (response) {
-                    // Handle success response (e.g., show a success message, refresh table)
-                    $('#updateSurveyModal').modal('hide');
-                    location.reload(); // Reload the page to see updates
-                },
-                error: function (error) {
-                    // Handle error response
-                    alert('Error updating survey. Please try again.');
-                }
-            });
-        });
-
-    </script>
+<script src="js/fetch_question.js"></script>
