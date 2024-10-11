@@ -98,9 +98,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                         </div>
                     </div>
                 </div>
-                <div class="card-footer py-3">
-                    <a href="completed_surveys.php" class="btn btn-info btn-block">View</a>
-                </div>
+
             </div>
         </div>
         <div class="col-xl-3 col-md-6 mb-4">
@@ -127,9 +125,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                         </div>
                     </div>
                 </div>
-                <div class="card-footer py-3">
-                    <a href="#" class="btn btn-warning btn-block">View</a>
-                </div>
+
             </div>
         </div>
     </div>
