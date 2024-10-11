@@ -61,7 +61,7 @@
                     <!-- New Section for Dynamic Question Display -->
                     <div class="form-group">
                         <!-- Label that will be dynamically updated -->
-                        <label id="questionId">questionId </label>
+                        <label id="questionId" hidden>questionId </label>
                         <br>
                         <label id="questionLabel">Question</label> <!-- Dynamic question number label -->
                     </div>

@@ -1,4 +1,4 @@
-<?php 
+<?php
 include 'includes/session.php';
 ?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -16,15 +16,11 @@ include 'includes/session.php';
             <li class="nav-item active">
                 <a class="nav-link" href="create_form.php">Create Survey</a>
             </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Survey List</a>
-            </li>
+
             <li class="nav-item active">
                 <a class="nav-link" href="completed_surveys.php">Completed Survey</a>
             </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Form</a>
-            </li>
+
         </ul>
         <a href="logout.php" class="btn btn-sm btn-outline-secondary">Logout</a>
     </div>
