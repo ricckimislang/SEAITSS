@@ -17,6 +17,9 @@
                 <a class="nav-link" href="#">Survey List</a>
             </li>
             <li class="nav-item active">
+                <a class="nav-link" href="completed_surveys.php">Completed Survey</a>
+            </li>
+            <li class="nav-item active">
                 <a class="nav-link" href="#">Form</a>
             </li>
         </ul>

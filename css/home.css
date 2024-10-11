@@ -64,7 +64,9 @@ body::before {
 #surveyTable tr:hover {
   background-color: #62b3ff; /* Light grey background on hover */
 }
-
+table td {
+  text-transform: none; /* Make sure text transformation is set to none */
+}
 .dataTables_wrapper .dataTables_paginate {
   margin-top: 20px; /* Space above pagination */
 }

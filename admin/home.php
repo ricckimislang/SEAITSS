@@ -1,6 +1,8 @@
 <?php include 'includes/header.php';
 include 'includes/navtop.php';
 
+mysqli_set_charset($conn, "utf8");
+
 $username = $_SESSION['username'];
 $check = "SELECT * FROM users WHERE username = '$username'";
 $checkresult = mysqli_query($conn, $check);
@@ -10,12 +12,15 @@ $_SESSION['user_id'] = $checkrow['user_id'];
 
 
 //survey table query
-
 $surveytable = "SELECT * FROM surveys";
+
 if ($stmt = mysqli_prepare($conn, $surveytable)) {
     mysqli_stmt_execute($stmt);
     $surveyresult = mysqli_stmt_get_result($stmt);
+
     mysqli_stmt_close($stmt);
+} else {
+    echo "Failed to prepare statement: " . mysqli_error($conn);
 }
 
 
@@ -94,7 +99,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                     </div>
                 </div>
                 <div class="card-footer py-3">
-                    <a href="" class="btn btn-info btn-block">View</a>
+                    <a href="completed_surveys.php" class="btn btn-info btn-block">View</a>
                 </div>
             </div>
         </div>
@@ -123,7 +128,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                     </div>
                 </div>
                 <div class="card-footer py-3">
-                    <a href="" class="btn btn-warning btn-block">View</a>
+                    <a href="#" class="btn btn-warning btn-block">View</a>
                 </div>
             </div>
         </div>
@@ -135,7 +140,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                     <div class="row no-gutters align-items-center w-100">
                         <div class="col-12">
                             <!-- Table structure -->
-
+                            <h2>Survey Table</h2>
                             <table id="surveyTable" class="display" style="width:100%">
                                 <thead>
                                     <tr>
@@ -155,11 +160,17 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                 <tbody>
                                     <?php while ($surveyrow = mysqli_fetch_assoc($surveyresult)) { ?>
                                         <tr>
-                                            <td><?php echo $surveyrow['office']; ?></td>
-                                            <td><?php echo $surveyrow['title']; ?></td>
-                                            <td><?php echo $surveyrow['objective']; ?></td>
-                                            <td><?php echo $surveyrow['start_date']; ?></td>
-                                            <td><?php echo $surveyrow['end_date']; ?></td>
+                                            <td><?php echo htmlspecialchars($surveyrow['office'], ENT_QUOTES, 'UTF-8'); ?>
+                                            </td>
+                                            <td><?php echo htmlspecialchars($surveyrow['title'], ENT_QUOTES, 'UTF-8'); ?>
+                                            </td>
+                                            <td><?php echo htmlspecialchars($surveyrow['objective'], ENT_QUOTES, 'UTF-8'); ?>
+                                            </td>
+                                            <td><?php echo htmlspecialchars($surveyrow['start_date'], ENT_QUOTES, 'UTF-8'); ?>
+                                            </td>
+                                            <td><?php echo htmlspecialchars($surveyrow['end_date'], ENT_QUOTES, 'UTF-8'); ?>
+                                            </td>
+                                            <!-- Other table data goes here -->
                                             <td id="anonymous_status_<?php echo $surveyrow['survey_id']; ?>">
                                                 <button
                                                     class="btn btn-sm btn-<?php echo $surveyrow['is_anonymous'] == 1 ? 'success' : 'danger'; ?>"

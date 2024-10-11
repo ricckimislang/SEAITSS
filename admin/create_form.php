@@ -24,7 +24,7 @@ $_SESSION['user_id'] = $checkrow['user_id'];
                                 <input type="text" id="user_id" value="<?php echo $_SESSION['user_id']; ?>" hidden>
                                 <label class="col-lg-2 col-form-label" for="office">Select Office</label>
                                 <select class="col-lg-10 form-controloffice" id="office">
-                                    <option value="CICT">CICT OFFICE</option>
+                                    <option value="IT">IT OFFICE</option>
                                     <option value="SAO">SAO OFFICE</option>
                                     <option value="EDUC">EDUCATION OFFICE</option>
                                 </select>
