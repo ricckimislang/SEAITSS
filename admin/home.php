@@ -313,6 +313,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                     'Your survey has been deleted.',
                                     'success'
                                 );
+                                location.reload();
                                 $('#surveyTable').DataTable().row(button.parents('tr')).remove().draw();
                             } else {
                                 Swal.fire(

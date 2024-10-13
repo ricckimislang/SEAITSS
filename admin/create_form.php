@@ -58,14 +58,37 @@ $_SESSION['user_id'] = $checkrow['user_id'];
                             </div>
                             <div class="form-group row">
                                 <label class="col-lg-2 col-form-label" for="start_date">Start Date</label>
-                                <input class="col-lg-10 form-controloffice" type='date' name="start_date"
+                                <input class="col-lg-10 form-controloffice" type="date" name="start_date"
                                     id="start_date" required>
                             </div>
                             <div class="form-group row">
                                 <label class="col-lg-2 col-form-label" for="end_date">End Date</label>
-                                <input class="col-lg-10 form-controloffice" type='date' name="end_date" id="end_date"
+                                <input class="col-lg-10 form-controloffice" type="date" name="end_date" id="end_date"
                                     required>
                             </div>
+
+                            <script>
+    // Set today's date as the minimum for the start date input
+    document.addEventListener('DOMContentLoaded', function() {
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0]; // Format YYYY-MM-DD
+        document.getElementById('start_date').setAttribute('min', formattedDate);
+    });
+
+    document.getElementById('start_date').addEventListener('change', function() {
+        const startDate = new Date(this.value);
+        const endDateInput = document.getElementById('end_date');
+
+        // Set the min attribute of the end date input to the selected start date
+        endDateInput.min = this.value;
+
+        // If the selected end date is less than the start date, reset it
+        if (new Date(endDateInput.value) < startDate) {
+            endDateInput.value = '';
+        }
+    });
+</script>
+
                         </div>
                     </div>
 
@@ -221,11 +244,27 @@ $_SESSION['user_id'] = $checkrow['user_id'];
                     //questions: JSON.stringify(questions)  // Send questions as a JSON array
                 },
                 success: function (data) {
-                    $.jGrowl(data, { theme: "alert alert-success", life: 2000 });
-                    setTimeout(function () {
-                        window.location.href = "create_form.php";
-                    }, 2000);
+                    if (data.status === 'success') {
+                        $.jGrowl("Survey created successfully!", {
+                            theme: "alert alert-success",
+                            life: 2000
+                        });
+                        setTimeout(function () {
+                            window.location.href = "home.php";
+                        }, 2000);
+                    } else if (data.status === 'duplicate') {
+                        $.jGrowl("Error: Survey already exists in this Office!", {
+                            theme: "alert alert-danger",
+                            life: 2000
+                        });
+                    } else {
+                        $.jGrowl("Error: Unable to create survey.", {
+                            theme: "alert alert-danger",
+                            life: 2000
+                        });
+                    }
                 }
+
             });
         });
 
