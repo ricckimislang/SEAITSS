@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 10, 2024 at 09:14 AM
+-- Generation Time: Oct 13, 2024 at 07:46 AM
 -- Server version: 8.0.31
 -- PHP Version: 8.0.26
 
@@ -71,44 +71,79 @@ CREATE TABLE IF NOT EXISTS `responsedetails` (
   PRIMARY KEY (`response_detail_id`),
   KEY `response_id` (`response_id`),
   KEY `question_id` (`question_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=89 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `responsedetails`
 --
 
 INSERT INTO `responsedetails` (`response_detail_id`, `response_id`, `question_id`, `response_text`, `selected_option`, `rating`) VALUES
-(1, 2, 1, 'ENRIQUE SINGCO MISLANG', NULL, NULL),
-(2, 2, 2, '12', NULL, NULL),
-(3, 2, 3, NULL, '', 5),
-(4, 2, 4, NULL, NULL, 5),
-(5, 2, 5, 'None', NULL, NULL),
-(6, 2, 6, 'MARAMI', NULL, NULL),
-(7, 3, 1, 'ENRIQUE SINGCO MISLANG', NULL, NULL),
-(8, 3, 2, '12', NULL, NULL),
-(9, 3, 3, NULL, '', 5),
-(10, 3, 4, NULL, NULL, 5),
-(11, 3, 5, 'None', NULL, NULL),
-(12, 3, 6, 'Super', NULL, NULL),
-(13, 4, 1, 'ENRIQUE SINGCO MISLANG', NULL, NULL),
-(14, 4, 2, '12', NULL, NULL),
-(15, 4, 3, NULL, NULL, 5),
-(16, 4, 4, NULL, NULL, 5),
-(17, 4, 5, 'None', NULL, NULL),
-(18, 4, 6, 'Super', NULL, NULL),
-(19, 5, 1, 'ENRIQUE SINGCO MISLANG', NULL, NULL),
-(20, 5, 2, '12', NULL, NULL),
-(21, 5, 3, NULL, NULL, 5),
-(22, 5, 4, NULL, NULL, 5),
-(23, 5, 5, 'None', NULL, NULL),
-(24, 5, 6, 'Super', NULL, NULL),
-(25, 6, 1, 'ENRIQUE SINGCO MISLANG', NULL, NULL),
-(26, 6, 2, '12', NULL, NULL),
-(27, 6, 3, NULL, NULL, 5),
-(28, 6, 4, NULL, NULL, 5),
-(29, 6, 5, 'None', NULL, NULL),
-(30, 6, 6, 'Super', NULL, NULL),
-(31, 6, 7, 'asdasd', NULL, NULL);
+(43, 4, 32, 'Hire more more', NULL, NULL),
+(42, 4, 31, NULL, NULL, 1),
+(41, 4, 30, NULL, NULL, 1),
+(40, 4, 29, NULL, NULL, 1),
+(39, 4, 28, NULL, NULL, 1),
+(38, 4, 27, NULL, NULL, 5),
+(37, 4, 26, NULL, NULL, 5),
+(36, 4, 25, NULL, NULL, 5),
+(35, 4, 24, NULL, NULL, 5),
+(34, 4, 23, NULL, NULL, 5),
+(33, 3, 33, 'None', NULL, NULL),
+(32, 3, 32, 'Hire more more', NULL, NULL),
+(31, 3, 31, NULL, NULL, 5),
+(30, 3, 30, NULL, NULL, 3),
+(29, 3, 29, NULL, NULL, 5),
+(28, 3, 28, NULL, NULL, 1),
+(27, 3, 27, NULL, NULL, 5),
+(26, 3, 26, NULL, NULL, 5),
+(25, 3, 25, NULL, NULL, 5),
+(24, 3, 24, NULL, NULL, 5),
+(23, 3, 23, NULL, NULL, 5),
+(44, 4, 33, 'None', NULL, NULL),
+(45, 5, 23, NULL, NULL, 1),
+(46, 5, 24, NULL, NULL, 1),
+(47, 5, 25, NULL, NULL, 1),
+(48, 5, 26, NULL, NULL, 1),
+(49, 5, 27, NULL, NULL, 1),
+(50, 5, 28, NULL, NULL, 5),
+(51, 5, 29, NULL, NULL, 5),
+(52, 5, 30, NULL, NULL, 5),
+(53, 5, 31, NULL, NULL, 5),
+(54, 5, 32, 'Hire more more', NULL, NULL),
+(55, 5, 33, 'None', NULL, NULL),
+(56, 6, 23, NULL, NULL, 5),
+(57, 6, 24, NULL, NULL, 5),
+(58, 6, 25, NULL, NULL, 5),
+(59, 6, 26, NULL, NULL, 5),
+(60, 6, 27, NULL, NULL, 5),
+(61, 6, 28, NULL, NULL, 5),
+(62, 6, 29, NULL, NULL, 5),
+(63, 6, 30, NULL, NULL, 5),
+(64, 6, 31, NULL, NULL, 5),
+(65, 6, 32, 'Hire more more', NULL, NULL),
+(66, 6, 33, 'None', NULL, NULL),
+(67, 7, 23, NULL, NULL, 5),
+(68, 7, 24, NULL, NULL, 5),
+(69, 7, 25, NULL, NULL, 5),
+(70, 7, 26, NULL, NULL, 5),
+(71, 7, 27, NULL, NULL, 5),
+(72, 7, 28, NULL, NULL, 3),
+(73, 7, 29, NULL, NULL, 3),
+(74, 7, 30, NULL, NULL, 3),
+(75, 7, 31, NULL, NULL, 3),
+(76, 7, 32, 'Hire more more', NULL, NULL),
+(77, 7, 33, 'None', NULL, NULL),
+(78, 8, 23, NULL, NULL, 5),
+(79, 8, 24, NULL, NULL, 5),
+(80, 8, 25, NULL, NULL, 5),
+(81, 8, 26, NULL, NULL, 5),
+(82, 8, 27, NULL, NULL, 5),
+(83, 8, 28, NULL, NULL, 5),
+(84, 8, 29, NULL, NULL, 5),
+(85, 8, 30, NULL, NULL, 3),
+(86, 8, 31, NULL, NULL, 1),
+(87, 8, 32, 'Hire more more', NULL, NULL),
+(88, 8, 33, 'None', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -154,21 +189,24 @@ CREATE TABLE IF NOT EXISTS `surveyquestions` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`question_id`),
   KEY `survey_id` (`survey_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `surveyquestions`
 --
 
 INSERT INTO `surveyquestions` (`question_id`, `survey_id`, `question_text`, `question_type`, `created_at`) VALUES
-(1, 1, '1. What is your name', 'input', '2024-10-10 04:20:34'),
-(2, 1, '2. How old are you?', 'input', '2024-10-10 04:20:34'),
-(3, 1, '3. rate your experience here', 'rating', '2024-10-10 04:20:34'),
-(4, 1, '4. rate you teacher', 'rating', '2024-10-10 04:20:34'),
-(5, 1, '5. what do you recommend', 'input', '2024-10-10 04:20:34'),
-(6, 1, '6. what are your expectations', 'input', '2024-10-10 04:20:34'),
-(7, 2, '1. asdasd', 'input', '2024-10-10 05:55:47'),
-(8, 3, '1. asdasdasd', 'input', '2024-10-10 05:56:52');
+(23, 3, '1. How satisfied are you with the quality of services provided by this office/department?', 'rating', '2024-10-13 06:58:09'),
+(24, 3, '2. How effectively does the office/department handle your requests or concerns?', 'rating', '2024-10-13 06:58:09'),
+(25, 3, '3. How would you rate the professionalism and courtesy of the staff in this office/department?', 'rating', '2024-10-13 06:58:09'),
+(26, 3, '4. How easy is it to access the services or assistance you need from this office/department?', 'rating', '2024-10-13 06:58:09'),
+(27, 3, '5. How satisfied are you with the communication between you and the staff in this office/department?', 'rating', '2024-10-13 06:58:09'),
+(28, 3, '6. How would you rate the timeliness of the responses you receive from this office/department?', 'rating', '2024-10-13 06:58:09'),
+(29, 3, '7. How well does this office/department provide the necessary resources or information you require?', 'rating', '2024-10-13 06:58:09'),
+(30, 3, '8. How satisfied are you with the clarity and transparency of the processes in this office/department?', 'rating', '2024-10-13 06:58:09'),
+(31, 3, '9. How well does this office/department support your needs or objectives?', 'rating', '2024-10-13 06:58:09'),
+(32, 3, '10. What suggestions do you have for improving the department\'s programs and services?', 'input', '2024-10-13 06:58:09'),
+(33, 3, '11. Do you have complaints or concerns about this office/department? Enter None if none.', 'input', '2024-10-13 06:58:09');
 
 -- --------------------------------------------------------
 
@@ -180,24 +218,25 @@ DROP TABLE IF EXISTS `surveyresponses`;
 CREATE TABLE IF NOT EXISTS `surveyresponses` (
   `response_id` int NOT NULL AUTO_INCREMENT,
   `survey_id` int NOT NULL,
-  `user_id` int DEFAULT NULL,
+  `respondent_email` varchar(255) DEFAULT NULL,
+  `mac_address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `submitted_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`response_id`),
   KEY `survey_id` (`survey_id`),
-  KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `user_id` (`respondent_email`(250))
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `surveyresponses`
 --
 
-INSERT INTO `surveyresponses` (`response_id`, `survey_id`, `user_id`, `submitted_at`) VALUES
-(1, 1, NULL, '2024-10-10 04:21:29'),
-(2, 1, NULL, '2024-10-10 04:33:32'),
-(3, 1, NULL, '2024-10-10 04:48:36'),
-(4, 1, NULL, '2024-10-10 04:49:29'),
-(5, 1, NULL, '2024-10-10 04:49:31'),
-(6, 2, NULL, '2024-10-10 05:57:00');
+INSERT INTO `surveyresponses` (`response_id`, `survey_id`, `respondent_email`, `mac_address`, `submitted_at`) VALUES
+(4, 3, 'exbjunior@gmail.com', NULL, '2024-10-13 07:17:16'),
+(3, 3, 'riccki@gmail.com', NULL, '2024-10-13 07:13:44'),
+(5, 3, 'riccki@gmail.com', NULL, '2024-10-13 07:17:46'),
+(6, 3, 'riccki@gmail.com', NULL, '2024-10-13 07:18:38'),
+(7, 3, 'riccki@gmail.com', NULL, '2024-10-13 07:18:57'),
+(8, 3, 'riccki@gmail.com', NULL, '2024-10-13 07:21:47');
 
 -- --------------------------------------------------------
 
@@ -228,9 +267,7 @@ CREATE TABLE IF NOT EXISTS `surveys` (
 --
 
 INSERT INTO `surveys` (`survey_id`, `office`, `title`, `objective`, `is_anonymous`, `is_published`, `start_date`, `end_date`, `created_by`, `created_at`, `updated_at`, `is_complete`) VALUES
-(1, 'CICT', 'JORDIES SURVEY', 'to enhance security', 1, 1, '2024-10-01', '2024-10-31', 1, '2024-10-10 04:20:34', '2024-10-10 08:48:01', 0),
-(2, 'CICT', 'Monsion Survey', 'WHAT IS LOVE?', 0, 0, '2024-10-02', '2024-10-31', 1, '2024-10-10 05:55:47', '2024-10-10 08:49:20', 0),
-(3, 'EDUC', 'rose', 'rosie2', 1, 1, '2024-10-01', '2024-10-09', 1, '2024-10-10 05:56:52', '2024-10-10 06:02:28', 0);
+(3, 'SAO', 'SAO OFFICE SURVEY', 'to determine the quality service of SAO', 1, 1, '2024-10-14', '2024-11-01', 1, '2024-10-13 06:58:09', '2024-10-13 07:45:03', 1);
 
 -- --------------------------------------------------------
 
