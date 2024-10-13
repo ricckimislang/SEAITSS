@@ -77,10 +77,11 @@ $_SESSION['user_id'] = $checkrow['user_id'];
                                 <!-- Container for dynamic questions -->
                             </div>
                             <div class="form-group buttons">
-                                <button type="button" class="btn btn-secondary" id="back-question">Back
+                                <!-- <button type="button" class="btn btn-secondary" id="back-question">Back
                                     Question</button>
                                 <button type="button" class="btn btn-primary" id="next-question">Next
                                     Question</button>
+-->
                                 <button type="submit" class="btn btn-success" id="submit">Submit
                                     Survey</button>
                             </div>
@@ -99,6 +100,8 @@ $_SESSION['user_id'] = $checkrow['user_id'];
 
 <script>
     $(document).ready(function () {
+
+        /*
         let questions = [];
         let questionCount = 1;
 
@@ -184,12 +187,13 @@ $_SESSION['user_id'] = $checkrow['user_id'];
                 }
             }
         });
+        */
 
         // Handle the form submission
         $("#create-survey").submit(function (e) {
             e.preventDefault();
 
-            // Get the last question entered
+            /* Get the last question entered
             const questionText = $(`#question_text_${questionCount}`).val();
             const questionType = $(`#question_type_${questionCount}`).val();
 
@@ -201,19 +205,20 @@ $_SESSION['user_id'] = $checkrow['user_id'];
                 };
             }
 
+            */
+
             // Send the entire form, including questions, via AJAX
             $.ajax({
-                url: "../process/create_survey.php",
+                url: "../process/create_surveyV2.php",
                 type: "POST",
                 data: {
                     office: $("#office").val(),
                     survey_title: $("#survey_title").val(),
                     objective: $("#objective").val(),
-                    anonymous: $("input[name='anonymous']:checked").val(),
                     publish: $("input[name='publish']:checked").val(),
                     start_date: $("#start_date").val(),
                     end_date: $("#end_date").val(),
-                    questions: JSON.stringify(questions)  // Send questions as a JSON array
+                    //questions: JSON.stringify(questions)  // Send questions as a JSON array
                 },
                 success: function (data) {
                     $.jGrowl(data, { theme: "alert alert-success", life: 2000 });
