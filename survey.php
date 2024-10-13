@@ -3,6 +3,42 @@
 
 <?php
 $survey_id = $_GET['survey_id'];
+$email_address = $_GET['eAddress'] ?? '';
+
+// Check if the survey is published
+$status_query = "SELECT is_published FROM surveys WHERE survey_id = $survey_id";
+$status_result = mysqli_query($conn, $status_query);
+$status_row = mysqli_fetch_assoc($status_result);
+$is_published = $status_row['is_published'];
+
+
+if ($is_published == 0) {
+    // Include the CSS files for styling
+    echo '
+    <link rel="stylesheet" href="css/survey.css">
+    <link rel="stylesheet" href="css/radio-button.css">
+    <body>
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="e-card text-center" style="background-color: #f8d7da; border-color: #f5c6cb; color: #721c24; padding: 20px; border-radius: 8px;">
+                    <div class="form-title" style="font-size: 24px; font-weight: bold;">Office Satisfaction Survey</div>
+                    <div class="form-container">
+                        <p style="font-size: 18px;">The survey is not published yet.</p>
+                        <p style="font-size: 16px;">You will be redirected to the homepage shortly.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script>
+        setTimeout(function() {
+            window.location.href = "index.php";
+        }, 3000); // Redirect after 3 seconds
+    </script>';
+
+    exit; // Stop further processing
+}
+
 
 // Get the current page from the URL, default to 1
 $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
@@ -27,6 +63,7 @@ $total_pages = ceil($total_questions / $limit);
     <div class="row justify-content-center">
         <form id="surveyForm">
             <input type="hidden" value="<?php echo $survey_id; ?>" name="survey_id" id="survey_id">
+            <input type="hidden" value="<?php echo $email_address; ?>" name="eAddress" id="eAddress">
 
             <div class="e-card">
                 <div class="form-title">Office Satisfaction Survey</div> <!-- OFFICE NAME -->

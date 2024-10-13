@@ -36,7 +36,7 @@ $office_id = $_GET['office'] ?? '';
         const selectedOffice = document.getElementById('officeID').value;
 
         // Redirect to a new URL with the office ID as a parameter
-        window.location.href = 'homepage.php?office=' + selectedOffice;
+        window.location.href = 'form.php?office=' + selectedOffice;
     });
 </script>
 <?php include 'includes/footer.php'; ?>

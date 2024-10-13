@@ -6,12 +6,13 @@ $response = ['status' => 'error', 'message' => 'An error occurred']; // Default 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $survey_id = $_POST['survey_id'];
+    $eAddress = $_POST['eAddress'];
     $answers = $_POST['answer'];
 
     ksort($answers); // Sort answers by keys (question IDs)
 
     // Step 1: Insert into surveyresponses
-    $survrespo = "INSERT INTO surveyresponses (survey_id, user_id, submitted_at) VALUES (?, NULL, NOW())";
+    $survrespo = "INSERT INTO surveyresponses (survey_id, respondent_email, submitted_at) VALUES (?, ?, NOW())";
     $stmt = mysqli_stmt_init($conn);
 
     if (!mysqli_stmt_prepare($stmt, $survrespo)) {
@@ -19,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         respondAndExit($response);
     }
 
-    mysqli_stmt_bind_param($stmt, "i", $survey_id);
+    mysqli_stmt_bind_param($stmt, "is", $survey_id, $eAddress);
     if (!mysqli_stmt_execute($stmt)) {
         $response['message'] = 'Failed to execute statement for surveyresponses';
         respondAndExit($response);
