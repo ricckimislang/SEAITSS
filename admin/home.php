@@ -1,3 +1,5 @@
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 <?php include 'includes/header.php';
 include 'includes/navtop.php';
 
@@ -248,13 +250,66 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                                 echo mysqli_num_rows($surveyresponsesresult);
                                                 ?>
                                             </td>
-                                            <td>
+                                            <td id="open_status_<?php echo $surveyrow['survey_id']; ?>">
                                                 <button
-                                                    class="btn btn-sm btn-<?php echo $surveyrow['end_date'] < date('Y-m-d') ? 'danger' : 'success'; ?>"
-                                                    onclick="changeOpen(<?php echo $surveyrow['survey_id']; ?>, <?php echo $surveyrow['end_date'] < date('Y-m-d') ? 1 : 0; ?>)">
-                                                    <?php echo $surveyrow['end_date'] < date('Y-m-d') ? 'CLOSED' : 'OPEN'; ?>
+                                                    class="btn btn-sm btn-<?php echo $surveyrow['is_complete'] == 1 ? 'danger' : 'success'; ?>"
+                                                    onclick="confirmChangeOpen(<?php echo $surveyrow['survey_id']; ?>, <?php echo $surveyrow['is_complete']; ?>)">
+                                                    <?php echo $surveyrow['is_complete'] == 1 ? 'CLOSED' : 'OPEN'; ?>
                                                 </button>
+
+                                                <script>
+                                                    function confirmChangeOpen(survey_id, current_is_closed) {
+                                                        var confirmOpen = current_is_closed == 0
+                                                            ? 'Are you sure you want to close this survey? Students won\'t be able to view this survey anymore.'
+                                                            : 'Are you sure you want to open this survey?';
+
+                                                        Swal.fire({
+                                                            title: 'Confirmation',
+                                                            text: confirmOpen,
+                                                            icon: 'warning',
+                                                            showCancelButton: true,
+                                                            confirmButtonColor: '#3085d6',
+                                                            cancelButtonColor: '#d33',
+                                                            confirmButtonText: 'Yes, Confirm!'
+                                                        }).then((result) => {
+                                                            if (result.isConfirmed) {
+                                                                changeOpen(survey_id, current_is_closed);
+                                                            }
+                                                        });
+                                                    }
+
+                                                    function changeOpen(survey_id, current_is_closed) {
+                                                        var new_is_closed = current_is_closed ? 0 : 1; // Toggle closure status
+                                                        $.ajax({
+                                                            url: "process/update_open.php",
+                                                            method: "GET",
+                                                            data: {
+                                                                survey_id: survey_id,
+                                                                is_closed: new_is_closed
+                                                            },
+                                                            dataType: "json",
+                                                            success: function (response) {
+                                                                if (response.status === 'success') {
+                                                                    $('#open_status_' + survey_id).html(
+                                                                        `<button class="btn btn-sm btn-${response.is_closed == 1 ? 'danger' : 'success'}" onclick="confirmChangeOpen(${survey_id}, ${response.is_closed})">${response.is_closed == 1 ? 'CLOSED' : 'OPEN'}</button>`
+                                                                    );
+                                                                    Swal.fire(
+                                                                        'Success',
+                                                                        'Closure status updated successfully!',
+                                                                        'success'
+                                                                    );
+                                                                } else {
+                                                                    console.error("Unexpected response:", response);
+                                                                }
+                                                            },
+                                                            error: function (xhr, status, error) {
+                                                                console.error("AJAX Error:", error);
+                                                            }
+                                                        });
+                                                    }
+                                                </script>
                                             </td>
+
                                             <td>
                                                 <button href="#" class="btn btn-sm btn-primary"
                                                     onclick="openEditModal(<?php echo $surveyrow['survey_id']; ?>, '<?php echo addslashes($surveyrow['office']); ?>', '<?php echo addslashes($surveyrow['title']); ?>', '<?php echo addslashes($surveyrow['objective']); ?>', '<?php echo $surveyrow['start_date']; ?>', '<?php echo $surveyrow['end_date']; ?>')"><i
