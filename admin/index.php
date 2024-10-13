@@ -2,7 +2,7 @@
 
 ?>
 
-<link rel="stylesheet" href="../css/index-card.css">
+<link rel="stylesheet" href="../css/index-card-admin.css">
 <div class="container mt-5">
     <div class="row justify-content-center">
         <form id="login-form">

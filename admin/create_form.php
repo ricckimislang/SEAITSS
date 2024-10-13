@@ -41,13 +41,14 @@ $_SESSION['user_id'] = $checkrow['user_id'];
                             </div>
 
 
+                            <!--hide kay anonymouse na siya daan
                             <div class="form-group row radio">
                                 <label class="col-lg-4 col-form-label" for="anonymous">Is Anonymous</label>
                                 <input style="width:20%" label='Yes' type='radio' id="anonymous" name='anonymous'
                                     value='1' required><br>
                                 <input style="width:20%" label='No' type='radio' id="anonymous" name='anonymous'
                                     value='0' required>
-                            </div>
+                            </div>-->
                             <div class="form-group row radio">
                                 <label class="col-lg-4 col-form-label" for="publish">Is Published</label>
                                 <input style="width:20%" label='Yes' type='radio' id="publish" name='publish' value='1'

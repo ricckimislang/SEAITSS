@@ -7,7 +7,6 @@ if (
         $_POST['office'],
         $_POST['survey_title'],
         $_POST['objective'],
-        $_POST['anonymous'],
         $_POST['publish'],
         $_POST['start_date'],
         $_POST['end_date'],
@@ -18,7 +17,7 @@ if (
     $office = $_POST['office'];
     $survey_title = $_POST['survey_title'];
     $objective = $_POST['objective'];
-    $anonymous = $_POST['anonymous'];
+    $anonymous = 1;
     $publish = $_POST['publish'];
     $start_date = $_POST['start_date'];
     $end_date = $_POST['end_date'];

@@ -1,4 +1,7 @@
-<?php include 'includes/header.php'; ?>
+<?php include 'includes/header.php';
+$office_id = $_GET['office'] ?? '';
+
+?>
 <link rel="stylesheet" href="css/index-card.css">
 <div class="container mt-5">
     <div class="row justify-content-center">
@@ -13,23 +16,13 @@
 
                 <!-- Info overlay -->
                 <div class="infotop">
-
+                    <input type="hidden" value="<?php echo $office_id; ?>" name="officeID" id="officeID">
                     <img class="seait-logo" src="assets/image/logo.png" alt="SEAIT Logo"><br>
                     WELCOME TO SEAIT SATISFACTION SURVEY
                     <br>
                     <div class="name">SOUTH EAST ASIAN INSTITUTE OF TECHNOLOGY</div>
                     <br>
-                    <div class="form-groupoffice">
-                        <label for="office">Select Office</label>
-                        <select class="form-controloffice" id="office" name="office"> <!-- Added name attribute -->
-                            <option value="IT" <?php if (isset($_GET['office']) && $_GET['office'] == 'IT')
-                                echo 'selected'; ?>>IT OFFICE</option>
-                            <option value="SAO" <?php if (isset($_GET['office']) && $_GET['office'] == 'SAO')
-                                echo 'selected'; ?>>SAO OFFICE</option>
-                            <option value="EDUC" <?php if (isset($_GET['office']) && $_GET['office'] == 'EDUC')
-                                echo 'selected'; ?>>EDUCATION OFFICE</option>
-                        </select>
-                    </div>
+
                     <button type="button" class="btn btn-next btn-primary" id="proceedButton">Proceed</button>
                     <!-- Removed <a> tag -->
                 </div>
@@ -37,12 +30,13 @@
         </form>
     </div>
 </div>
-
 <script>
     document.getElementById('proceedButton').addEventListener('click', function () {
-        var selectedOffice = document.getElementById('office').value; // Get the selected office value
-        window.location.href = 'homepage.php?office=' + encodeURIComponent(selectedOffice); // Redirect with the selected office in the URL
+        // Get the selected office value from the dropdown
+        const selectedOffice = document.getElementById('officeID').value;
+
+        // Redirect to a new URL with the office ID as a parameter
+        window.location.href = 'homepage.php?office=' + selectedOffice;
     });
 </script>
-
 <?php include 'includes/footer.php'; ?>
