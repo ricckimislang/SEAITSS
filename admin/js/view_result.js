@@ -1,19 +1,22 @@
 $(document).ready(function () {
+  // Initialize DataTable for the CompletedSurveys_table
   $("#CompletedSurveys_table").DataTable();
 });
 
-$(document).ready(function () {
-  $("#surveyResponseTable").DataTable();
-});
-
-// Update the function to accept an array of response IDs
+// Function to open result modal and display the survey response
 function openResultModal(surveyId, responseIds, totalresponses) {
+  
   // Set the survey ID in the modal form
   $("#viewSurveyForm #surveyID").val(surveyId);
   $("#viewSurveyForm #responseID").val(responseIds);
 
   // Clear the previous table data
   $("#surveyResponseTable tbody").empty();
+
+  // Destroy the existing DataTable instance if it exists
+  if ($.fn.DataTable.isDataTable("#surveyResponseTable")) {
+    $("#surveyResponseTable").DataTable().clear().destroy();
+  }
 
   // Prepare a variable to hold total responses and overall satisfaction
   let totalResponses = 0;
@@ -35,7 +38,7 @@ function openResultModal(surveyId, responseIds, totalresponses) {
         const responseData = JSON.parse(data);
 
         // Accumulate total responses and overall satisfaction
-        totalResponses = totalresponses
+        totalResponses = totalresponses;
         overallSatisfaction += responseData.overallSatisfaction;
 
         // Populate DataTable with the fetched questions and responses
@@ -59,6 +62,14 @@ function openResultModal(surveyId, responseIds, totalresponses) {
       updateStarRating(
         Number(overallSatisfaction / responseIds.length).toFixed(2)
       );
+
+      // Re-initialize the DataTable after data is loaded into the table
+      $("#surveyResponseTable").DataTable({
+        // You can add any options here to customize the DataTable (e.g., pagination, searching)
+        searching: true, // Enable searching
+        paging: true,    // Enable pagination
+        info: true       // Show table information
+      });
 
       // Show the modal after data is loaded
       $("#completeSurveyModal").modal("show");
