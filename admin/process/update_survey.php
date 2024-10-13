@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $office = $_POST['office'];
     $title = $_POST['title'];
     $objective = $_POST['objective'];
-    $anonymous = $_POST['anonymous'];
+    $anonymous = 1;
     $publish = $_POST['publish'];
     $start_date = $_POST['start_date'];
     $end_date = $_POST['end_date'];

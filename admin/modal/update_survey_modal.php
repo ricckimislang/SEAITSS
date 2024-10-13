@@ -16,7 +16,7 @@
                     <div class="form-group">
                         <label for="office">Select Office</label>
                         <select class="form-control" id="office" name="office">
-                            <option value="CICT">CICT OFFICE</option>
+                            <option value="IT">IT OFFICE</option>
                             <option value="SAO">SAO OFFICE</option>
                             <option value="EDUC">EDUCATION OFFICE</option>
                         </select>
@@ -32,6 +32,7 @@
                         <textarea class="form-control" id="objective" name="objective" rows="3" required></textarea>
                     </div>
 
+                    <!-- remove anonymous and publish from form 
                     <div class="form-group">
                         <label for="anonymous">Anonymous</label>
                         <select class="form-control" id="anonymous" name="anonymous" required>
@@ -39,6 +40,7 @@
                             <option value="0">No</option>
                         </select>
                     </div>
+                    --->
 
                     <div class="form-group">
                         <label for="publish">Publish</label>
