@@ -19,7 +19,7 @@ if ($stmt->fetch()) {
     // $survey_id already contains the value
 } else {
     // No matching survey_id found for the office
-    $survey_id = 'NO ID';
+    $survey_id = NULL;
 }
 
 $stmt->close();
@@ -34,7 +34,7 @@ $stmt->close();
                         confidentially. We value your privacy, and your input will be used solely for the purpose of
                         improving our services.</p>
                     <div class="form-group">
-                        <input type="text" name="surveyID" id="surveyID" value="<?php echo $survey_id; ?>">
+                        <input type="hidden" name="surveyID" id="surveyID" value="<?php echo $survey_id; ?>">
                         <label for="eAddress">1. Email Address</label>
                         <input type="email" class="form-control" id="eAddress" name="eAddress" required>
                     </div>

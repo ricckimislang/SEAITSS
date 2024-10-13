@@ -4,16 +4,47 @@
 <?php
 $survey_id = $_GET['survey_id'];
 $email_address = $_GET['eAddress'] ?? '';
+if (is_null($survey_id)) {
+    echo '<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>';
+    echo '<script>
+        swal({
+            title: "Please Scan The QR CODE again",
+            text: "Please Scan The QR CODE to take the survey",
+            icon: "error",
+            button: "OK",
+        }).then(function() {
+            window.location.href = "login.php";
+        });
+    </script>';
+    exit;
+}
+
 
 // Check if the survey is published
 $status_query = "SELECT is_published FROM surveys WHERE survey_id = $survey_id";
 $status_result = mysqli_query($conn, $status_query);
+
+if (!$status_result) {
+    echo '<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>';
+    echo '<script>
+        swal({
+            title: "Error",
+            text: "Did you scan? please scan the QR Code again.",
+            icon: "error",
+            button: "OK",
+        }).then(function() {
+            window.location.href = "index.php";
+        });
+    </script>';
+    exit;
+    // Query failed, print the error message
+}
+
 $status_row = mysqli_fetch_assoc($status_result);
 $is_published = $status_row['is_published'];
 
-
 if ($is_published == 0) {
-    // Include the CSS files for styling
+    // Survey is not published, display the message and redirect
     echo '
     <link rel="stylesheet" href="css/survey.css">
     <link rel="stylesheet" href="css/radio-button.css">
@@ -35,8 +66,7 @@ if ($is_published == 0) {
             window.location.href = "index.php";
         }, 3000); // Redirect after 3 seconds
     </script>';
-
-    exit; // Stop further processing
+    exit;
 }
 
 
