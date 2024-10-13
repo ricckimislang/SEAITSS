@@ -3,14 +3,27 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <?php
 
-// Get survey id from database
+// Get survey id from the database
 $query = "SELECT survey_id FROM surveys WHERE office = ? LIMIT 1";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("i", $_GET['office']);
+
+// Bind office as a string, not an integer
+$stmt->bind_param("s", $_GET['office']); // Use "s" for strings
+
 $stmt->execute();
 $stmt->bind_result($survey_id);
-$survey_id = $stmt->fetch();
+
+// Fetch the result and assign the actual survey_id
+if ($stmt->fetch()) {
+    // Successfully fetched survey_id
+    // $survey_id already contains the value
+} else {
+    // No matching survey_id found for the office
+    $survey_id = 'NO ID';
+}
+
 $stmt->close();
+
 ?>
 <div class="container mt-5">
     <div class="row justify-content-center">
@@ -21,7 +34,7 @@ $stmt->close();
                         confidentially. We value your privacy, and your input will be used solely for the purpose of
                         improving our services.</p>
                     <div class="form-group">
-                        <input type="hidden" name="surveyID" id="surveyID" value="<?php echo $survey_id; ?>">
+                        <input type="text" name="surveyID" id="surveyID" value="<?php echo $survey_id; ?>">
                         <label for="eAddress">1. Email Address</label>
                         <input type="email" class="form-control" id="eAddress" name="eAddress" required>
                     </div>

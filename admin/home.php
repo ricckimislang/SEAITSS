@@ -146,7 +146,6 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                         <th>Objective</th>
                                         <th>Start Date</th>
                                         <th>End Date</th>
-                                        <th>Anonymous</th>
                                         <th>Published</th>
                                         <th>Responses</th>
                                         <th>Status</th>
@@ -168,7 +167,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                             <td><?php echo htmlspecialchars($surveyrow['end_date'], ENT_QUOTES, 'UTF-8'); ?>
                                             </td>
                                             <!-- Other table data goes here -->
-                                            <td id="anonymous_status_<?php echo $surveyrow['survey_id']; ?>">
+                                            <!--<td id="anonymous_status_<?php echo $surveyrow['survey_id']; ?>">
                                                 <button
                                                     class="btn btn-sm btn-<?php echo $surveyrow['is_anonymous'] == 1 ? 'success' : 'danger'; ?>"
                                                     onclick="changeAnonymous(<?php echo $surveyrow['survey_id']; ?>, <?php echo $surveyrow['is_anonymous']; ?>)">
@@ -202,6 +201,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                                     }
                                                 </script>
                                             </td>
+                                    -->
 
                                             <td id="published_status_<?php echo $surveyrow['survey_id']; ?>">
                                                 <button

@@ -60,36 +60,39 @@
                         <input type="date" class="form-control" id="end_date" name="end_date" required>
                     </div>
 
-                    <!-- New Section for Dynamic Question Display -->
-                    <div class="form-group">
-                        <!-- Label that will be dynamically updated -->
-                        <label id="questionId" hidden>questionId </label>
-                        <br>
-                        <label id="questionLabel">Question</label> <!-- Dynamic question number label -->
-                    </div>
 
-                    <div class="form-group">
-                        <label for="question_text">Question Text</label>
-                        <textarea class="form-control" id="question_text" name="question_text" rows="3"
-                            required></textarea>
-                    </div>
+                    <?php /*
+           <!-- New Section for Dynamic Question Display -->
+           <div class="form-group">
+               <!-- Label that will be dynamically updated -->
+               <label id="questionId" hidden>questionId </label>
+               <br>
+               <label id="questionLabel">Question</label> <!-- Dynamic question number label -->
+           </div>
 
-                    <div class="form-group">
-                        <label for="question_type">Select Type</label>
-                        <select class="form-control" id="question_type" name="question_type" required>
-                            <option value="input">Input</option>
-                            <option value="rating">Rating</option>
-                        </select>
-                    </div>
+           <div class="form-group">
+               <label for="question_text">Question Text</label>
+               <textarea class="form-control" id="question_text" name="question_text" rows="3"
+                   required></textarea>
+           </div>
+
+           <div class="form-group">
+               <label for="question_type">Select Type</label>
+               <select class="form-control" id="question_type" name="question_type" required>
+                   <option value="input">Input</option>
+                   <option value="rating">Rating</option>
+               </select>
+           </div>
 
 
-                    <!-- Navigation buttons to go between questions -->
-                    <div class="form-group">
-                        <button type="button" class="btn btn-info btn-sm" id="prevQuestionBtn"><i
-                                class="fa fa-arrow-left"></i> Previous</button>
-                        <button type="button" class="btn btn-info btn-sm" id="nextQuestionBtn">Next <i
-                                class="fa fa-arrow-right"></i></button>
-                    </div>
+           <!-- Navigation buttons to go between questions -->
+           <div class="form-group">
+               <button type="button" class="btn btn-info btn-sm" id="prevQuestionBtn"><i
+                       class="fa fa-arrow-left"></i> Previous</button>
+               <button type="button" class="btn btn-info btn-sm" id="nextQuestionBtn">Next <i
+                       class="fa fa-arrow-right"></i></button>
+           </div>
+           */ ?>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
