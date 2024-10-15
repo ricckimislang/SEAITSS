@@ -4,15 +4,6 @@
 include 'includes/header.php';
 include 'includes/navtop.php';
 
-// Error reporting
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-// Database connection check
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
-
 mysqli_set_charset($conn, "utf8");
 
 $username = $_SESSION['username'];
@@ -103,10 +94,10 @@ if ($stmt = mysqli_prepare($conn, $depTable)) {
                                             <td>
                                                 <div class="btn">
                                                     <button type="button" class="btn btn-warning" data-toggle="modal"
-                                                        data-target="#updateDepartmentModal"
-                                                        onclick="updateDepartment('<?php echo $depRow['department_id']; ?>')">
+                                                        onclick="updateDepartmentmodal('<?php echo $depRow['department_id']; ?>', '<?php echo htmlspecialchars($depRow['office_name']); ?>')">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
+
                                                     <button type="button" class="btn btn-danger"
                                                         onclick="deleteDepartment('<?php echo $depRow['department_id']; ?>')">
                                                         <i class="fas fa-trash"></i>
@@ -128,6 +119,17 @@ if ($stmt = mysqli_prepare($conn, $depTable)) {
     <?php include 'includes/footer.php'; ?>
 
     <script>
+        function updateDepartmentmodal(department_id, office_name) {
+            // Set the department name in the input field
+            $('#department_name').val(office_name);
+
+            // You can store the department_id in a hidden field if needed for form submission
+            $('#department_id').val(department_id);
+
+            // Show the modal
+            $('#updateDepartment').modal('show');
+        }
+
         $(document).ready(function () {
             $('#departmentTable').DataTable({
                 "paging": true,
@@ -138,9 +140,6 @@ if ($stmt = mysqli_prepare($conn, $depTable)) {
                 "autoWidth": false,
                 "responsive": true,
             });
-
-            // Load departments into the DataTable
-
 
             // Handle department addition
             $("#addDepartmentForm").submit(function (e) {
