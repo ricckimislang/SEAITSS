@@ -20,6 +20,9 @@ include 'includes/session.php';
             <li class="nav-item active">
                 <a class="nav-link" href="completed_surveys.php">Completed Survey</a>
             </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="departments.php">Departments</a>
+            </li>
 
         </ul>
         <a href="logout.php" class="btn btn-sm btn-outline-secondary">Logout</a>
