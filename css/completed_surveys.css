@@ -15,11 +15,11 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url("../assets/image/bgsur.jpg");
+  background-image: url("../assets/image/bgsur.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  filter: blur(3px);
+  filter: brightness(0.5);
   z-index: -1;
 }
 

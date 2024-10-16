@@ -12,11 +12,11 @@ body::before {
   left: 0; /* Cover the left */
   width: 100%; /* Cover the full width */
   height: 100%; /* Cover the full height */
-  background-image: url("../assets/image/bgsur.jpg"); /* Your background image */
+  background-image: url("../assets/image/bgsur.png"); /* Your background image */
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover; /* Make it cover the area */
-  filter: blur(3px); /* Apply the blur effect */
+  filter: brightness(0.5); /* Apply the blur effect */
   z-index: -1; /* Ensure it stays behind everything else */
 }
 

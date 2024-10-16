@@ -15,11 +15,10 @@ body::before {
   left: 0; /* Cover the left */
   width: 100%; /* Cover the full width */
   height: 100%; /* Cover the full height */
-  background-image: url("../assets/image/bgsur.jpg"); /* Your background image */
+  background-image: url("../assets/image/bgsur.png"); /* Your background image */
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover; /* Make it cover the area */
-  filter: blur(3px); /* Apply the blur effect */
   z-index: -1;
 }
 
@@ -88,4 +87,38 @@ table td {
 
 .modal-header {
   background-color: orange !important;
+}
+
+#sidebarMenu {
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f8f9fa; /* Light background for better readability */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+}
+
+#sidebarMenu .text-center img {
+  border-radius: 50%; /* Rounded image for a modern look */
+  margin-bottom: 15px;
+}
+
+#sidebarMenu .nav-link {
+  font-size: 16px;
+  color: #495057; /* Dark gray text */
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effect */
+}
+
+#sidebarMenu .nav-link.active {
+  background-color: #ff7b00; /* Highlight active link */
+  color: white;
+}
+
+#sidebarMenu .nav-link:hover {
+  background-color: #ff9035; /* Subtle hover background */
+  color: #ffffff; /* Color transition for better interaction */
+}
+
+#sidebarMenu .nav-link span[data-feather] {
+  margin-right: 10px; /* Spacing between icon and text */
 }

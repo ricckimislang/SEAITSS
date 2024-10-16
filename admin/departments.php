@@ -50,136 +50,147 @@ if ($stmt = mysqli_prepare($conn, $depTable)) {
     }
 </style>
 
-<div class="container-fluid mt-5">
-    <div class="row">
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Add Department</div>
-                            <form id="addDepartmentForm">
-                                <div class="form-group">
-                                    <label for="departmentName">Department Name</label>
-                                    <input type="text" class="form-control" id="departmentName" name="departmentName"
-                                        required style="text-transform: uppercase;"
-                                        oninput="this.value = this.value.toUpperCase()">
+<div class="container-fluid d-flex">
+    <?php include 'includes/sidebar.php'; ?>
+    <div class="col">
+        <div class="row">
+            <div class="container-fluid mt-5 d-flex">
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-warning shadow py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Add
+                                        Department
+                                    </div>
+                                    <form id="addDepartmentForm">
+                                        <div class="form-group">
+                                            <label for="departmentName">Department Name</label>
+                                            <input type="text" class="form-control" id="departmentName"
+                                                name="departmentName" required style="text-transform: uppercase;"
+                                                oninput="this.value = this.value.toUpperCase()">
+                                        </div>
+                                        <div class="btn-group">
+                                            <button type="submit" class="btn btn-success">Add Department</button>
+                                        </div>
+                                    </form>
                                 </div>
-                                <div class="btn-group">
-                                    <button type="submit" class="btn btn-success">Add Department</button>
-                                </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-xl-9 col-md-6 mb-4">
-            <div class="card border-left-warning shadow py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Departments</div>
-                            <table id="departmentTable" class="display" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>Department Name</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="departmentBody">
-                                    <?php while ($depRow = mysqli_fetch_assoc($depResult)) { ?>
-                                        <tr>
-                                            <td><?php echo htmlspecialchars($depRow['office_name']); ?></td>
-                                            <td>
-                                                <div class="btn">
-                                                    <button type="button" class="btn btn-warning" data-toggle="modal"
-                                                        onclick="updateDepartmentmodal('<?php echo $depRow['department_id']; ?>', '<?php echo htmlspecialchars($depRow['office_name']); ?>')">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
+                <div class="col-xl-9 col-md-6 mb-4">
+                    <div class="card border-left-warning shadow py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Departments
+                                    </div>
+                                    <table id="departmentTable" class="display" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Department Name</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="departmentBody">
+                                            <?php while ($depRow = mysqli_fetch_assoc($depResult)) { ?>
+                                                <tr>
+                                                    <td><?php echo htmlspecialchars($depRow['office_name']); ?></td>
+                                                    <td>
+                                                        <div class="btn">
+                                                            <button type="button" class="btn btn-warning"
+                                                                data-toggle="modal"
+                                                                onclick="updateDepartmentmodal('<?php echo $depRow['department_id']; ?>', '<?php echo htmlspecialchars($depRow['office_name']); ?>')">
+                                                                <i class="fas fa-edit"></i>
+                                                            </button>
 
-                                                    <button type="button" class="btn btn-danger"
-                                                        onclick="deleteDepartment('<?php echo $depRow['department_id']; ?>')">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    <?php } ?>
-                                </tbody>
-                            </table>
+                                                            <button type="button" class="btn btn-danger"
+                                                                onclick="deleteDepartment('<?php echo $depRow['department_id']; ?>')">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <?php include 'modal/update_department_modal.php'; ?>
-    <?php include 'includes/footer.php'; ?>
+</div>
+<?php include 'modal/update_department_modal.php'; ?>
+<?php include 'includes/footer.php'; ?>
 
-    <script>
-        function updateDepartmentmodal(department_id, office_name) {
-            // Set the department name in the input field
-            $('#department_name').val(office_name);
+<script>
+    function updateDepartmentmodal(department_id, office_name) {
+        // Set the department name in the input field
+        $('#department_name').val(office_name);
 
-            // You can store the department_id in a hidden field if needed for form submission
-            $('#department_id').val(department_id);
+        // You can store the department_id in a hidden field if needed for form submission
+        $('#department_id').val(department_id);
 
-            // Show the modal
-            $('#updateDepartment').modal('show');
-        }
+        // Show the modal
+        $('#updateDepartment').modal('show');
+    }
 
-        $(document).ready(function () {
-            $('#departmentTable').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-            });
+    $(document).ready(function () {
+        $('#departmentTable').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
 
-            // Handle department addition
-            $("#addDepartmentForm").submit(function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "process/add_department.php",
-                    type: "POST",
-                    data: {
-                        departmentName: $("#departmentName").val(),
-                    },
-                    dataType: "json",
-                    success: function (data) {
-                        if (data.status === 'success') {
-                            $.jGrowl("Department added successfully!", {
-                                theme: "alert alert-success",
-                                life: 2000
-                            });
-                            setTimeout(function () {
-                                window.location.href = "departments.php";
-                            })
-                        } else if (data.status === 'duplicate') {
-                            $.jGrowl("Error: Department already exists!", {
-                                theme: "alert alert-danger",
-                                life: 2000
-                            });
-                        } else {
-                            $.jGrowl("Error: Unable to add department.", {
-                                theme: "alert alert-danger",
-                                life: 2000
-                            });
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error("AJAX Error: ", status, error);
-                        $.jGrowl("Error: An unexpected error occurred.", {
+        // Handle department addition
+        $("#addDepartmentForm").submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: "process/add_department.php",
+                type: "POST",
+                data: {
+                    departmentName: $("#departmentName").val(),
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data.status === 'success') {
+                        $.jGrowl("Department added successfully!", {
+                            theme: "alert alert-success",
+                            life: 2000
+                        });
+                        setTimeout(function () {
+                            window.location.href = "departments.php";
+                        })
+                    } else if (data.status === 'duplicate') {
+                        $.jGrowl("Error: Department already exists!", {
+                            theme: "alert alert-danger",
+                            life: 2000
+                        });
+                    } else {
+                        $.jGrowl("Error: Unable to add department.", {
                             theme: "alert alert-danger",
                             life: 2000
                         });
                     }
-                });
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX Error: ", status, error);
+                    $.jGrowl("Error: An unexpected error occurred.", {
+                        theme: "alert alert-danger",
+                        life: 2000
+                    });
+                }
             });
         });
-    </script>
+    });
+</script>

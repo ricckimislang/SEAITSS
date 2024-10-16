@@ -32,298 +32,313 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 
 <link rel="stylesheet" href="../css/home.css">
-<div class="container-fluid mt-5">
-    <div class="row">
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Surveys</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?php echo mysqli_num_rows($surveyresult); ?>
+
+
+
+<div class="container-fluid d-flex">
+    <?php include 'includes/sidebar.php'; ?>
+    <div class="col">
+        <div class="row">
+            <div class="container-fluid mt-5">
+                <div class="row">
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total
+                                            Surveys
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            <?php echo mysqli_num_rows($surveyresult); ?>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-poll fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-success shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Active
+                                            Surveys
+                                        </div>
+                                        <?php
+                                        $activesurveys = "SELECT * FROM surveys WHERE end_date > NOW() OR is_published = 0";
+                                        if ($stmt = mysqli_prepare($conn, $activesurveys)) {
+                                            mysqli_stmt_execute($stmt);
+                                            $activesurveyresult = mysqli_stmt_get_result($stmt);
+                                            mysqli_stmt_close($stmt);
+                                        }
+                                        ?>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            <?php echo mysqli_num_rows($activesurveyresult); ?>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-poll fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-auto">
-                            <i class="fas fa-poll fa-2x text-gray-300"></i>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-info shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Completed
+                                            Surveys</div>
+                                        <?php
+                                        $completeurveys = "SELECT * FROM surveys WHERE end_date < NOW() AND is_published = 1";
+                                        if ($stmt = mysqli_prepare($conn, $completeurveys)) {
+                                            mysqli_stmt_execute($stmt);
+                                            $completeurveyresult = mysqli_stmt_get_result($stmt);
+                                            mysqli_stmt_close($stmt);
+                                        }
+                                        ?>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            <?php echo mysqli_num_rows($completeurveyresult); ?>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-check-square fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Total
+                                            Responses</div>
+                                        <?php
+                                        $surveyresponses = "SELECT COUNT(*) AS total_responses FROM surveyresponses";
+                                        if ($stmt = mysqli_prepare($conn, $surveyresponses)) {
+                                            mysqli_stmt_execute($stmt);
+                                            $surveyresponsesresult = mysqli_stmt_get_result($stmt);
+                                            $surveyresponsesrow = mysqli_fetch_assoc($surveyresponsesresult);
+                                            mysqli_stmt_close($stmt);
+                                        }
+                                        ?>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            <?php echo $surveyresponsesrow['total_responses']; ?>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-users fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-xl-12 col-md-6 mb-4">
+                        <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center w-100">
+                                    <div class="col-12">
+                                        <!-- Table structure -->
+                                        <h2>Survey Table</h2>
+                                        <table id="surveyTable" class="display">
+                                            <thead>
+                                                <tr>
+                                                    <th>Office</th>
+                                                    <th>Title</th>
+                                                    <th>Objective</th>
+                                                    <th>Start Date</th>
+                                                    <th>End Date</th>
+                                                    <th>Published</th>
+                                                    <th>Responses</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
 
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Active Surveys
-                            </div>
-                            <?php
-                            $activesurveys = "SELECT * FROM surveys WHERE end_date > NOW() OR is_published = 0";
-                            if ($stmt = mysqli_prepare($conn, $activesurveys)) {
-                                mysqli_stmt_execute($stmt);
-                                $activesurveyresult = mysqli_stmt_get_result($stmt);
-                                mysqli_stmt_close($stmt);
-                            }
-                            ?>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?php echo mysqli_num_rows($activesurveyresult); ?>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-poll fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Completed Surveys</div>
-                            <?php
-                            $completeurveys = "SELECT * FROM surveys WHERE end_date < NOW() AND is_published = 1";
-                            if ($stmt = mysqli_prepare($conn, $completeurveys)) {
-                                mysqli_stmt_execute($stmt);
-                                $completeurveyresult = mysqli_stmt_get_result($stmt);
-                                mysqli_stmt_close($stmt);
-                            }
-                            ?>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?php echo mysqli_num_rows($completeurveyresult); ?>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-check-square fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
+                                            <tbody>
+                                                <?php while ($surveyrow = mysqli_fetch_assoc($surveyresult)) { ?>
+                                                    <tr>
+                                                        <td><?php echo htmlspecialchars($surveyrow['office'], ENT_QUOTES, 'UTF-8'); ?>
+                                                        </td>
+                                                        <td><?php echo htmlspecialchars($surveyrow['title'], ENT_QUOTES, 'UTF-8'); ?>
+                                                        </td>
+                                                        <td><?php echo htmlspecialchars($surveyrow['objective'], ENT_QUOTES, 'UTF-8'); ?>
+                                                        </td>
+                                                        <td><?php echo htmlspecialchars($surveyrow['start_date'], ENT_QUOTES, 'UTF-8'); ?>
+                                                        </td>
+                                                        <td><?php echo htmlspecialchars($surveyrow['end_date'], ENT_QUOTES, 'UTF-8'); ?>
+                                                        </td>
+                                                        <!-- Other table data goes here -->
+                                                        <!--<td id="anonymous_status_<?php echo $surveyrow['survey_id']; ?>">
+                                        <button
+                                            class="btn btn-sm btn-<?php echo $surveyrow['is_anonymous'] == 1 ? 'success' : 'danger'; ?>"
+                                            onclick="changeAnonymous(<?php echo $surveyrow['survey_id']; ?>, <?php echo $surveyrow['is_anonymous']; ?>)">
+                                            <?php echo $surveyrow['is_anonymous'] == 1 ? 'Anonymous' : 'Not Anonymous'; ?>
+                                        </button>
 
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Total Responses</div>
-                            <?php
-                            $surveyresponses = "SELECT COUNT(*) AS total_responses FROM surveyresponses";
-                            if ($stmt = mysqli_prepare($conn, $surveyresponses)) {
-                                mysqli_stmt_execute($stmt);
-                                $surveyresponsesresult = mysqli_stmt_get_result($stmt);
-                                $surveyresponsesrow = mysqli_fetch_assoc($surveyresponsesresult);
-                                mysqli_stmt_close($stmt);
-                            }
-                            ?>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?php echo $surveyresponsesrow['total_responses']; ?>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-users fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
+                                        <script>
+                                            function changeAnonymous(survey_id, current_is_anonymous) {
+                                                var new_is_anonymous = current_is_anonymous ? 0 : 1;
+                                                $.ajax({
+                                                    url: "process/update_anonymous.php",
+                                                    method: "GET",
+                                                    data: {
+                                                        survey_id: survey_id,
+                                                        is_anonymous: new_is_anonymous
+                                                    },
+                                                    dataType: "json",
+                                                    success: function (response) {
+                                                        if (response.is_anonymous !== undefined) {
+                                                            $('#anonymous_status_' + survey_id).html(
+                                                                `<button class="btn btn-sm btn-${response.is_anonymous == 1 ? 'success' : 'danger'}" onclick="changeAnonymous(${survey_id}, ${response.is_anonymous})">${response.is_anonymous == 1 ? 'Anonymous' : 'Not Anonymous'}</button>`
+                                                            );
+                                                        } else {
+                                                            console.error("Unexpected response:", response);
+                                                        }
+                                                    },
+                                                    error: function (xhr, status, error) {
+                                                        console.error("AJAX Error:", error);
+                                                    }
+                                                });
+                                            }
+                                        </script>
+                                    </td>
+                            -->
 
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xl-12 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center w-100">
-                        <div class="col-12">
-                            <!-- Table structure -->
-                            <h2>Survey Table</h2>
-                            <table id="surveyTable" class="display">
-                                <thead>
-                                    <tr>
-                                        <th>Office</th>
-                                        <th>Title</th>
-                                        <th>Objective</th>
-                                        <th>Start Date</th>
-                                        <th>End Date</th>
-                                        <th>Published</th>
-                                        <th>Responses</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
+                                                        <td id="published_status_<?php echo $surveyrow['survey_id']; ?>">
+                                                            <button
+                                                                class="btn btn-sm btn-<?php echo $surveyrow['is_published'] == 1 ? 'success' : 'danger'; ?>"
+                                                                onclick="changePublished(<?php echo $surveyrow['survey_id']; ?>, <?php echo $surveyrow['is_published']; ?>)">
+                                                                <?php echo $surveyrow['is_published'] == 1 ? 'Published' : 'Not published'; ?>
+                                                            </button>
 
-                                <tbody>
-                                    <?php while ($surveyrow = mysqli_fetch_assoc($surveyresult)) { ?>
-                                        <tr>
-                                            <td><?php echo htmlspecialchars($surveyrow['office'], ENT_QUOTES, 'UTF-8'); ?>
-                                            </td>
-                                            <td><?php echo htmlspecialchars($surveyrow['title'], ENT_QUOTES, 'UTF-8'); ?>
-                                            </td>
-                                            <td><?php echo htmlspecialchars($surveyrow['objective'], ENT_QUOTES, 'UTF-8'); ?>
-                                            </td>
-                                            <td><?php echo htmlspecialchars($surveyrow['start_date'], ENT_QUOTES, 'UTF-8'); ?>
-                                            </td>
-                                            <td><?php echo htmlspecialchars($surveyrow['end_date'], ENT_QUOTES, 'UTF-8'); ?>
-                                            </td>
-                                            <!-- Other table data goes here -->
-                                            <!--<td id="anonymous_status_<?php echo $surveyrow['survey_id']; ?>">
-                                                <button
-                                                    class="btn btn-sm btn-<?php echo $surveyrow['is_anonymous'] == 1 ? 'success' : 'danger'; ?>"
-                                                    onclick="changeAnonymous(<?php echo $surveyrow['survey_id']; ?>, <?php echo $surveyrow['is_anonymous']; ?>)">
-                                                    <?php echo $surveyrow['is_anonymous'] == 1 ? 'Anonymous' : 'Not Anonymous'; ?>
-                                                </button>
-
-                                                <script>
-                                                    function changeAnonymous(survey_id, current_is_anonymous) {
-                                                        var new_is_anonymous = current_is_anonymous ? 0 : 1;
-                                                        $.ajax({
-                                                            url: "process/update_anonymous.php",
-                                                            method: "GET",
-                                                            data: {
-                                                                survey_id: survey_id,
-                                                                is_anonymous: new_is_anonymous
-                                                            },
-                                                            dataType: "json",
-                                                            success: function (response) {
-                                                                if (response.is_anonymous !== undefined) {
-                                                                    $('#anonymous_status_' + survey_id).html(
-                                                                        `<button class="btn btn-sm btn-${response.is_anonymous == 1 ? 'success' : 'danger'}" onclick="changeAnonymous(${survey_id}, ${response.is_anonymous})">${response.is_anonymous == 1 ? 'Anonymous' : 'Not Anonymous'}</button>`
-                                                                    );
-                                                                } else {
-                                                                    console.error("Unexpected response:", response);
+                                                            <script>
+                                                                function changePublished(survey_id, current_is_published) {
+                                                                    var new_is_published = current_is_published ? 0 : 1;
+                                                                    $.ajax({
+                                                                        url: "process/update_publish.php",
+                                                                        method: "GET",
+                                                                        data: {
+                                                                            survey_id: survey_id,
+                                                                            is_published: new_is_published
+                                                                        },
+                                                                        dataType: "json",
+                                                                        success: function (response) {
+                                                                            if (response.is_published !== undefined) {
+                                                                                $('#published_status_' + survey_id).html(
+                                                                                    `<button class="btn btn-sm btn-${response.is_published == 1 ? 'success' : 'danger'}" onclick="changePublished(${survey_id}, ${response.is_published})">${response.is_published == 1 ? 'Published' : 'Not Published'}</button>`
+                                                                                );
+                                                                            } else {
+                                                                                console.error("Unexpected response:", response);
+                                                                            }
+                                                                        },
+                                                                        error: function (xhr, status, error) {
+                                                                            console.error("AJAX Error:", error);
+                                                                        }
+                                                                    });
                                                                 }
-                                                            },
-                                                            error: function (xhr, status, error) {
-                                                                console.error("AJAX Error:", error);
-                                                            }
-                                                        });
-                                                    }
-                                                </script>
-                                            </td>
-                                    -->
+                                                            </script>
+                                                        </td>
+                                                        <td>
+                                                            <?php
+                                                            $surveyresponses = "SELECT * FROM surveyresponses WHERE survey_id = ?";
+                                                            $stmt = $conn->prepare($surveyresponses);
+                                                            $stmt->bind_param("i", $surveyrow['survey_id']);
+                                                            $stmt->execute();
+                                                            $surveyresponsesresult = $stmt->get_result();
+                                                            $stmt->close();
+                                                            echo mysqli_num_rows($surveyresponsesresult);
+                                                            ?>
+                                                        </td>
+                                                        <td id="open_status_<?php echo $surveyrow['survey_id']; ?>">
+                                                            <button
+                                                                class="btn btn-sm btn-<?php echo $surveyrow['is_complete'] == 1 ? 'danger' : 'success'; ?>"
+                                                                onclick="confirmChangeOpen(<?php echo $surveyrow['survey_id']; ?>, <?php echo $surveyrow['is_complete']; ?>)">
+                                                                <?php echo $surveyrow['is_complete'] == 1 ? 'CLOSED' : 'OPEN'; ?>
+                                                            </button>
 
-                                            <td id="published_status_<?php echo $surveyrow['survey_id']; ?>">
-                                                <button
-                                                    class="btn btn-sm btn-<?php echo $surveyrow['is_published'] == 1 ? 'success' : 'danger'; ?>"
-                                                    onclick="changePublished(<?php echo $surveyrow['survey_id']; ?>, <?php echo $surveyrow['is_published']; ?>)">
-                                                    <?php echo $surveyrow['is_published'] == 1 ? 'Published' : 'Not published'; ?>
-                                                </button>
+                                                            <script>
+                                                                function confirmChangeOpen(survey_id, current_is_closed) {
+                                                                    var confirmOpen = current_is_closed == 0
+                                                                        ? 'Are you sure you want to close this survey? Students won\'t be able to view this survey anymore.'
+                                                                        : 'Are you sure you want to open this survey?';
 
-                                                <script>
-                                                    function changePublished(survey_id, current_is_published) {
-                                                        var new_is_published = current_is_published ? 0 : 1;
-                                                        $.ajax({
-                                                            url: "process/update_publish.php",
-                                                            method: "GET",
-                                                            data: {
-                                                                survey_id: survey_id,
-                                                                is_published: new_is_published
-                                                            },
-                                                            dataType: "json",
-                                                            success: function (response) {
-                                                                if (response.is_published !== undefined) {
-                                                                    $('#published_status_' + survey_id).html(
-                                                                        `<button class="btn btn-sm btn-${response.is_published == 1 ? 'success' : 'danger'}" onclick="changePublished(${survey_id}, ${response.is_published})">${response.is_published == 1 ? 'Published' : 'Not Published'}</button>`
-                                                                    );
-                                                                } else {
-                                                                    console.error("Unexpected response:", response);
+                                                                    Swal.fire({
+                                                                        title: 'Confirmation',
+                                                                        text: confirmOpen,
+                                                                        icon: 'warning',
+                                                                        showCancelButton: true,
+                                                                        confirmButtonColor: '#3085d6',
+                                                                        cancelButtonColor: '#d33',
+                                                                        confirmButtonText: 'Yes, Confirm!'
+                                                                    }).then((result) => {
+                                                                        if (result.isConfirmed) {
+                                                                            changeOpen(survey_id, current_is_closed);
+                                                                        }
+                                                                    });
                                                                 }
-                                                            },
-                                                            error: function (xhr, status, error) {
-                                                                console.error("AJAX Error:", error);
-                                                            }
-                                                        });
-                                                    }
-                                                </script>
-                                            </td>
-                                            <td>
-                                                <?php
-                                                $surveyresponses = "SELECT * FROM surveyresponses WHERE survey_id = ?";
-                                                $stmt = $conn->prepare($surveyresponses);
-                                                $stmt->bind_param("i", $surveyrow['survey_id']);
-                                                $stmt->execute();
-                                                $surveyresponsesresult = $stmt->get_result();
-                                                $stmt->close();
-                                                echo mysqli_num_rows($surveyresponsesresult);
-                                                ?>
-                                            </td>
-                                            <td id="open_status_<?php echo $surveyrow['survey_id']; ?>">
-                                                <button
-                                                    class="btn btn-sm btn-<?php echo $surveyrow['is_complete'] == 1 ? 'danger' : 'success'; ?>"
-                                                    onclick="confirmChangeOpen(<?php echo $surveyrow['survey_id']; ?>, <?php echo $surveyrow['is_complete']; ?>)">
-                                                    <?php echo $surveyrow['is_complete'] == 1 ? 'CLOSED' : 'OPEN'; ?>
-                                                </button>
 
-                                                <script>
-                                                    function confirmChangeOpen(survey_id, current_is_closed) {
-                                                        var confirmOpen = current_is_closed == 0
-                                                            ? 'Are you sure you want to close this survey? Students won\'t be able to view this survey anymore.'
-                                                            : 'Are you sure you want to open this survey?';
-
-                                                        Swal.fire({
-                                                            title: 'Confirmation',
-                                                            text: confirmOpen,
-                                                            icon: 'warning',
-                                                            showCancelButton: true,
-                                                            confirmButtonColor: '#3085d6',
-                                                            cancelButtonColor: '#d33',
-                                                            confirmButtonText: 'Yes, Confirm!'
-                                                        }).then((result) => {
-                                                            if (result.isConfirmed) {
-                                                                changeOpen(survey_id, current_is_closed);
-                                                            }
-                                                        });
-                                                    }
-
-                                                    function changeOpen(survey_id, current_is_closed) {
-                                                        var new_is_closed = current_is_closed ? 0 : 1; // Toggle closure status
-                                                        $.ajax({
-                                                            url: "process/update_open.php",
-                                                            method: "GET",
-                                                            data: {
-                                                                survey_id: survey_id,
-                                                                is_closed: new_is_closed
-                                                            },
-                                                            dataType: "json",
-                                                            success: function (response) {
-                                                                if (response.status === 'success') {
-                                                                    $('#open_status_' + survey_id).html(
-                                                                        `<button class="btn btn-sm btn-${response.is_closed == 1 ? 'danger' : 'success'}" onclick="confirmChangeOpen(${survey_id}, ${response.is_closed})">${response.is_closed == 1 ? 'CLOSED' : 'OPEN'}</button>`
-                                                                    );
-                                                                    Swal.fire(
-                                                                        'Success',
-                                                                        'Closure status updated successfully!',
-                                                                        'success'
-                                                                    );
-                                                                } else {
-                                                                    console.error("Unexpected response:", response);
+                                                                function changeOpen(survey_id, current_is_closed) {
+                                                                    var new_is_closed = current_is_closed ? 0 : 1; // Toggle closure status
+                                                                    $.ajax({
+                                                                        url: "process/update_open.php",
+                                                                        method: "GET",
+                                                                        data: {
+                                                                            survey_id: survey_id,
+                                                                            is_closed: new_is_closed
+                                                                        },
+                                                                        dataType: "json",
+                                                                        success: function (response) {
+                                                                            if (response.status === 'success') {
+                                                                                $('#open_status_' + survey_id).html(
+                                                                                    `<button class="btn btn-sm btn-${response.is_closed == 1 ? 'danger' : 'success'}" onclick="confirmChangeOpen(${survey_id}, ${response.is_closed})">${response.is_closed == 1 ? 'CLOSED' : 'OPEN'}</button>`
+                                                                                );
+                                                                                Swal.fire(
+                                                                                    'Success',
+                                                                                    'Closure status updated successfully!',
+                                                                                    'success'
+                                                                                );
+                                                                            } else {
+                                                                                console.error("Unexpected response:", response);
+                                                                            }
+                                                                        },
+                                                                        error: function (xhr, status, error) {
+                                                                            console.error("AJAX Error:", error);
+                                                                        }
+                                                                    });
                                                                 }
-                                                            },
-                                                            error: function (xhr, status, error) {
-                                                                console.error("AJAX Error:", error);
-                                                            }
-                                                        });
-                                                    }
-                                                </script>
-                                            </td>
+                                                            </script>
+                                                        </td>
 
-                                            <td>
-                                                <button href="#" class="btn btn-sm btn-primary"
-                                                    onclick="openEditModal(<?php echo $surveyrow['survey_id']; ?>, '<?php echo addslashes($surveyrow['office']); ?>', '<?php echo addslashes($surveyrow['title']); ?>', '<?php echo addslashes($surveyrow['objective']); ?>', '<?php echo $surveyrow['start_date']; ?>', '<?php echo $surveyrow['end_date']; ?>')"><i
-                                                        class="fas fa-edit"></i></button>
+                                                        <td>
+                                                            <button href="#" class="btn btn-sm btn-primary"
+                                                                onclick="openEditModal(<?php echo $surveyrow['survey_id']; ?>, '<?php echo addslashes($surveyrow['office']); ?>', '<?php echo addslashes($surveyrow['title']); ?>', '<?php echo addslashes($surveyrow['objective']); ?>', '<?php echo $surveyrow['start_date']; ?>', '<?php echo $surveyrow['end_date']; ?>')"><i
+                                                                    class="fas fa-edit"></i></button>
 
-                                                <button class="btn btn-sm btn-danger deleteSurveyBtn"
-                                                    data-survey-id="<?php echo $surveyrow['survey_id']; ?>">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    <?php } ?>
-                                </tbody>
-                            </table>
+                                                            <button class="btn btn-sm btn-danger deleteSurveyBtn"
+                                                                data-survey-id="<?php echo $surveyrow['survey_id']; ?>">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -331,6 +346,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
         </div>
     </div>
 </div>
+
 
 <?php include 'modal/update_survey_modal.php'; ?>
 
