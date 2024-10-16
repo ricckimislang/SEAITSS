@@ -11,9 +11,10 @@
             <div class="modal-body">
                 <form id="updateDepartmentForm">
                     <div class="form-group">
-                        <label for="department_name">Department Name</label>
-                        <input type="text" class="form-control" id="department_name" name="department_name" required>
-                        <input type="hidden" class="form-control" id="department_id" name="department_id">
+                        <label for="department_update_name">Department Name</label>
+                        <input type="text" class="form-control" id="department_update_name" name="department_update_name"
+                            required style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase()">
+                        <input type="text" class="form-control" id="department_update_id" name="department_update_id">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

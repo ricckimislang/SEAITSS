@@ -2,9 +2,15 @@
 include '../includes/dbconn.php';
 
 if (isset($_POST['departmentName'])) {
-    $departmentName = $_POST['departmentName'];
+    // Trim and sanitize the department name
+    $departmentName = trim($_POST['departmentName']);
 
-    // Check if the department already exists
+    if (empty($departmentName)) {
+        echo json_encode(['status' => 'error', 'message' => 'Department name cannot be empty']);
+        exit();
+    }
+
+    // Check if the department already exists (case-insensitive)
     $checkQuery = "SELECT * FROM department WHERE office_name = ?";
     $checkStmt = $conn->prepare($checkQuery);
     $checkStmt->bind_param("s", $departmentName);
@@ -14,6 +20,7 @@ if (isset($_POST['departmentName'])) {
     if ($checkResult->num_rows > 0) {
         // Department already exists, return an error
         echo json_encode(['status' => 'duplicate', 'message' => 'Department already exists']);
+        exit();
     } else {
         // If no duplicates, insert the new department
         $query = "INSERT INTO department (office_name, created_at) VALUES (?, NOW())";

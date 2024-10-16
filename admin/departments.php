@@ -1,5 +1,6 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
+
 <?php
 include 'includes/header.php';
 include 'includes/navtop.php';
@@ -124,23 +125,35 @@ if ($stmt = mysqli_prepare($conn, $depTable)) {
         </div>
     </div>
 </div>
-
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="deleteForm">
+                <input type="text" id="department_delete_id" name="department_delete_id">
+                <div class="modal-body">
+                    Are you sure you want to delete this department?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger" id="confirmDelete">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
+
 <?php include 'modal/update_department_modal.php'; ?>
 <?php include 'includes/footer.php'; ?>
 
 <script>
-    function updateDepartmentmodal(department_id, office_name) {
-        // Set the department name in the input field
-        $('#department_name').val(office_name);
-
-        // You can store the department_id in a hidden field if needed for form submission
-        $('#department_id').val(department_id);
-
-        // Show the modal
-        $('#updateDepartment').modal('show');
-    }
-
     $(document).ready(function () {
         $('#departmentTable').DataTable({
             "paging": true,
@@ -151,46 +164,148 @@ if ($stmt = mysqli_prepare($conn, $depTable)) {
             "autoWidth": false,
             "responsive": true,
         });
+    });
+</script>
+<script>
+    // Handle department addition
+    $("#addDepartmentForm").submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "process/add_department.php",
+            type: "POST",
+            data: {
+                departmentName: $("#departmentName").val(),
+            },
+            dataType: "json",
+            success: function (data) {
+                if (data.status === 'success') {
+                    $.jGrowl("Department added successfully!", {
+                        theme: "alert alert-success",
+                        life: 2000
+                    });
+                    setTimeout(function () {
+                        window.location.href = "departments.php";
+                    }, 2000); // Notice the comma goes after the function, not inside it.
 
-        // Handle department addition
-        $("#addDepartmentForm").submit(function (e) {
-            e.preventDefault();
-            $.ajax({
-                url: "process/add_department.php",
-                type: "POST",
-                data: {
-                    departmentName: $("#departmentName").val(),
-                },
-                dataType: "json",
-                success: function (data) {
-                    if (data.status === 'success') {
-                        $.jGrowl("Department added successfully!", {
-                            theme: "alert alert-success",
-                            life: 2000
-                        });
-                        setTimeout(function () {
-                            window.location.href = "departments.php";
-                        })
-                    } else if (data.status === 'duplicate') {
-                        $.jGrowl("Error: Department already exists!", {
-                            theme: "alert alert-danger",
-                            life: 2000
-                        });
-                    } else {
-                        $.jGrowl("Error: Unable to add department.", {
-                            theme: "alert alert-danger",
-                            life: 2000
-                        });
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error("AJAX Error: ", status, error);
-                    $.jGrowl("Error: An unexpected error occurred.", {
-                        theme: "alert alert-danger",
+                } else if (data.status === 'duplicate') {
+                    $.jGrowl("Error: Department already exists!", {
+                        theme: "alert alert-success",
+                        life: 2000
+                    });
+                    setTimeout(function () {
+                        window.location.href = "departments.php";
+                    }, 2000); // Notice the comma goes after the function, not inside it.
+                    $("button[type='submit']").attr("disabled", false);
+                } else {
+                    $.jGrowl("Error: Unable to add department.", {
+                        theme: "alert alert-success",
+                        life: 2000
+                    });
+                    // Enable the button again if there is an error
+                    $("button[type='submit']").attr("disabled", false);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX Error: ", status, error);
+                $.jGrowl("Error: An unexpected error occurred.", {
+                    theme: "alert alert-success",
+                    life: 2000
+                });
+                // Enable the button again in case of AJAX error
+                $("button[type='submit']").attr("disabled", false);
+            }
+        });
+    });
+
+</script>
+<script>
+    // Handle department update modal opening
+    function updateDepartmentmodal(departmentId, departmentName) {
+        $('#department_update_id').val(departmentId);
+        $('#department_update_name').val(departmentName);
+        $('#updateDepartment').modal('show');
+    };
+    // Handle department update
+    $("#updateDepartmentForm").submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "process/update_department.php",
+            type: "POST",
+            data: {
+                department_update_name: $("#department_update_name").val(),
+                department_update_id: $("#department_update_id").val(),
+            },
+            dataType: "json",
+            success: function (data) {
+                if (data.status === 'success') {
+                    $.jGrowl("Department updated successfully!", {
+                        theme: "alert alert-success",
+                        life: 2000
+                    });
+                    setTimeout(function () {
+                        window.location.href = "departments.php";
+                    }, 2000)
+                } else if (data.status === 'duplicate') {
+                    $.jGrowl("Error: Department already exists!", {
+                        theme: "alert alert-success",
+                        life: 2000
+                    });
+                } else {
+                    $.jGrowl("Error: Unable to update department.", {
+                        theme: "alert alert-success",
                         life: 2000
                     });
                 }
-            });
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX Error: ", status, error);
+                $.jGrowl("Error: An unexpected error occurred.", {
+                    theme: "alert alert-danger",
+                    life: 2000
+                });
+            }
+        });
+    });
+</script>
+<script>
+    function deleteDepartment(departmentId) {
+        $('#department_delete_id').val(departmentId);
+        $('#deleteModal').modal('show');
+    }
+    $("#deleteForm").submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "process/delete_department.php",
+            type: "POST",
+            data: {
+                department_delete_id: $("#department_delete_id").val(),
+            },
+            dataType: "json",
+            success: function (data) {
+                if (data.status === 'success') {
+                    $.jGrowl("Department deleted successfully!", {
+                        theme: "alert alert-success",
+                        life: 1000
+                    });
+                    setTimeout(function () {
+                        window.location.href = "departments.php";
+                    }, 1000);
+                }
+                else {
+                    $.jGrowl("Error: Unable to delete department.", {
+                        theme: "alert alert-success",
+                        life: 1000
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX Error: ", status, error);
+                $.jGrowl("Error: An unexpected error occurred.", {
+                    theme: "alert alert-success",
+                    life: 2000
+                });
+            }
+
         });
     });
 </script>
