@@ -31,6 +31,7 @@ body::before {
   height: auto;
   z-index: 10; /* Ensure the card is on top */
   min-width: 30vw;
+  width: 50vw;
 }
 
 .background-image {
@@ -101,4 +102,37 @@ label {
 .buttons {
   margin-top: 100px !important;
   float: right;
+}
+#sidebarMenu {
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f8f9fa; /* Light background for better readability */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+}
+
+#sidebarMenu .text-center img {
+  border-radius: 50%; /* Rounded image for a modern look */
+  margin-bottom: 15px;
+}
+
+#sidebarMenu .nav-link {
+  font-size: 16px;
+  color: #495057; /* Dark gray text */
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effect */
+}
+
+#sidebarMenu .nav-link.active {
+  background-color: #ff7b00; /* Highlight active link */
+  color: white;
+}
+
+#sidebarMenu .nav-link:hover {
+  background-color: #ff9035; /* Subtle hover background */
+  color: #ffffff; /* Color transition for better interaction */
+}
+
+#sidebarMenu .nav-link span[data-feather] {
+  margin-right: 10px; /* Spacing between icon and text */
 }
