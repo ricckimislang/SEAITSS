@@ -27,7 +27,7 @@
                     <label for="office">&nbsp;Password</label>
                     <input type="password" class="form-controloffice" id="password" name="password">
                     <br>
-                    <button type="submit" class="btn btn-next btn-primary">Login</button>
+                    <button type="submit" class="btn btn-login btn-primary">Login</button>
                 </div>
 
             </div>
