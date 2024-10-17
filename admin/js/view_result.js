@@ -68,17 +68,21 @@ function openResultModal(surveyId, responseIds, totalresponses) {
 
       // Re-initialize the DataTable after data is loaded into the table
       $("#surveyResponseTable").DataTable({
+        pageLength: 5,
         // You can add any options here to customize the DataTable (e.g., pagination, searching)
         searching: true, // Enable searching
         paging: true, // Enable pagination
         info: true, // Show table information
+        lengthChange: false, // Disable the option to change number of rows per page
       });
       // Re-initialize the DataTable after data is loaded into the table
       $("#questionResponseTable").DataTable({
+        pageLength: 5,
         // You can add any options here to customize the DataTable (e.g., pagination, searching)
         searching: true, // Enable searching
         paging: true, // Enable pagination
         info: true, // Show table information
+        lengthChange: false,
       });
 
       // Show the modal after data is loaded
@@ -87,7 +91,69 @@ function openResultModal(surveyId, responseIds, totalresponses) {
     .catch(() => {
       alert("Failed to load survey response data. Please try again.");
     });
+
+  function fetchAllQuestions(surveyId) {
+    // Make an AJAX request to fetch all questions for the survey
+    $.ajax({
+      url: "process/fetch_average_questions.php", // Adjust the URL to your backend script
+      type: "GET",
+      data: { survey_id: surveyId }, // Send the survey ID as a parameter
+      success: function (data) {
+        const questionsData = JSON.parse(data); // Parse the JSON response from the server
+
+        // Loop through the questions and populate the table
+        questionsData.forEach(function (question) {
+          const averageRating = question.average_rating
+            ? question.average_rating.toFixed(2)
+            : "N/A"; // Handle cases with no rating
+          $("#questionResponseTable tbody").append(`
+              <tr>
+                <td>${question.question_text}</td>
+                <td>${averageRating}</td>
+              </tr>
+            `);
+        });
+      },
+      error: function (error) {
+        console.error("Error fetching questions: ", error);
+      },
+    });
+  }
+
+  fetchAllQuestions(surveyId);
+
+  function fetchTotalScores(surveyId) {
+    $.ajax({
+      url: "process/fetch_total_score_gained.php", // URL to the PHP script
+      type: "GET",
+      data: { survey_id: surveyId }, // Send the survey ID as a parameter
+      success: function (data) {
+        const scoresData = JSON.parse(data); // Parse the JSON response from the server
+
+        if (scoresData.total_score_gained && scoresData.total_possible_score) {
+          // Display the total score gained and total possible score
+          $("#totalScoreGained").text(
+            ` ${scoresData.total_score_gained}`
+          );
+          $("#totalPossibleScore").text(
+            ` ${scoresData.total_possible_score}`
+          );
+        } else {
+          // Handle case when scores are not available
+          $("#totalScoreGained").text("N/A");
+          $("#totalPossibleScore").text("N/A");
+        }
+      },
+      error: function (error) {
+        console.error("Error fetching total scores: ", error);
+      },
+    });
+  }
+
+  // Example of calling the function when the document is ready or when you want to fetch the scores
+  fetchTotalScores(surveyId);
 }
+// AJAX function to fetch the total score gained for each question in the survey
 
 function updateStarRating(rating) {
   // Clear existing star ratings
