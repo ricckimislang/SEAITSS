@@ -281,7 +281,8 @@
   /**
    * Initiate Datatables
    */
-  const datatables = select('#surveyTable', true)
+document.addEventListener('DOMContentLoaded', function() {
+  const datatables = select('#surveyTable', true);
   datatables.forEach(datatable => {
     new simpleDatatables.DataTable(datatable, {
       perPageSelect: [5, 10, 15, ["All", -1]],
@@ -300,7 +301,8 @@
         }
       ]
     });
-  })
+  });
+});
 
   /**
    * Autoresize echart charts

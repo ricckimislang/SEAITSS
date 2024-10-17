@@ -561,6 +561,9 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
 
   </main><!-- End #main -->
 
+
+  <!-- modal -->
+  <?php include 'modal/update_survey_modal.php'; ?>
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
     <div class="copyright">
@@ -590,6 +593,10 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
 
   <!-- Template Main JS File -->
   <script src="../js/main.js"></script>
+
+
+
+
 
 </body>
 
