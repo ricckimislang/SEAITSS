@@ -209,7 +209,8 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                         </td>
 
                         <td id="open_status_<?php echo $surveyrow['survey_id']; ?>">
-                          <button
+                          <button data-survey-id="<?php echo $surveyrow['survey_id']; ?>" data-bs-toggle="tooltip"
+                            data-bs-placement="top" data-bs-original-title="Open/Close"
                             class="btn btn-sm btn-<?php echo $surveyrow['is_complete'] == 1 ? 'danger' : 'success'; ?>"
                             onclick="confirmChangeOpen(<?php echo $surveyrow['survey_id']; ?>, <?php echo $surveyrow['is_complete']; ?>)">
                             <?php echo $surveyrow['is_complete'] == 1 ? 'CLOSED' : 'OPEN'; ?>
@@ -269,7 +270,8 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                         </td>
 
                         <td id="published_status_<?php echo $surveyrow['survey_id']; ?>">
-                          <button
+                          <button data-survey-id="<?php echo $surveyrow['survey_id']; ?>" data-bs-toggle="tooltip"
+                            data-bs-placement="top" data-bs-original-title="publish/unpublish"
                             class="btn btn-sm btn-<?php echo $surveyrow['is_published'] == 1 ? 'success' : 'danger'; ?>"
                             onclick="changePublished(<?php echo $surveyrow['survey_id']; ?>, <?php echo $surveyrow['is_published']; ?>)">
                             <?php echo $surveyrow['is_published'] == 1 ? 'Published' : 'Not published'; ?>
@@ -304,13 +306,14 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                         </td>
 
                         <td>
-                          <button href="#" class="btn btn-sm btn-primary"
+                          <button href="#" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-original-title="Edit"
                             onclick="openEditModal(<?php echo $surveyrow['survey_id']; ?>, '<?php echo addslashes($surveyrow['office']); ?>', '<?php echo addslashes($surveyrow['title']); ?>', '<?php echo addslashes($surveyrow['objective']); ?>', '<?php echo $surveyrow['start_date']; ?>', '<?php echo $surveyrow['end_date']; ?>')"><i
-                              class="bi bi-tools" data-bs-toggle="tooltip" data-bs-placement="top"
-                              data-bs-original-title="Edit"></i></button>
+                              class="bi bi-tools"></i></button>
 
                           <button class="btn btn-sm btn-danger deleteSurveyBtn"
-                            data-survey-id="<?php echo $surveyrow['survey_id']; ?>">
+                            data-survey-id="<?php echo $surveyrow['survey_id']; ?>" data-bs-toggle="tooltip"
+                            data-bs-placement="top" data-bs-original-title="Delete">
                             <i class="bi bi-trash"></i>
                           </button>
                         </td>
