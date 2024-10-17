@@ -179,7 +179,8 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                       <th scope="col">End Date</th>
                       <th scope="col">Responses</th>
                       <th scope="col">Status</th>
-                      <th scope="col">Action</th>
+                      <th scope="col-2">Action</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
