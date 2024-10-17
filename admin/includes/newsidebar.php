@@ -2,7 +2,7 @@
 
     <ul class="sidebar-nav" id="sidebar-nav">
 
-        <li class="nav-item">
+        <li class="nav-item link-nav">
             <a class="nav-link " href="index.html">
                 <i class="bi bi-grid"></i>
                 <span>Dashboard</span>

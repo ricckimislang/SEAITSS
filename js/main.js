@@ -281,7 +281,7 @@
   /**
    * Initiate Datatables
    */
-  const datatables = select('.datatable', true)
+  const datatables = select('#surveyTable', true)
   datatables.forEach(datatable => {
     new simpleDatatables.DataTable(datatable, {
       perPageSelect: [5, 10, 15, ["All", -1]],
