@@ -13,7 +13,7 @@ if (is_null($survey_id)) {
             icon: "error",
             button: "OK",
         }).then(function() {
-            window.location.href = "login.php";
+            window.location.href = "index.php";
         });
     </script>';
     exit;

@@ -11,10 +11,14 @@ function openResultModal(surveyId, responseIds, totalresponses) {
 
   // Clear the previous table data
   $("#surveyResponseTable tbody").empty();
+  $("#questionResponseTable tbody").empty();
 
   // Destroy the existing DataTable instance if it exists
   if ($.fn.DataTable.isDataTable("#surveyResponseTable")) {
     $("#surveyResponseTable").DataTable().clear().destroy();
+  }
+  if ($.fn.DataTable.isDataTable("#questionResponseTable")) {
+    $("#questionResponseTable").DataTable().clear().destroy();
   }
 
   // Prepare a variable to hold total responses and overall satisfaction
@@ -64,6 +68,13 @@ function openResultModal(surveyId, responseIds, totalresponses) {
 
       // Re-initialize the DataTable after data is loaded into the table
       $("#surveyResponseTable").DataTable({
+        // You can add any options here to customize the DataTable (e.g., pagination, searching)
+        searching: true, // Enable searching
+        paging: true, // Enable pagination
+        info: true, // Show table information
+      });
+      // Re-initialize the DataTable after data is loaded into the table
+      $("#questionResponseTable").DataTable({
         // You can add any options here to customize the DataTable (e.g., pagination, searching)
         searching: true, // Enable searching
         paging: true, // Enable pagination

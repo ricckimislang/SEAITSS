@@ -1,6 +1,6 @@
 <div class="modal fade" id="updateSurveyModal" tabindex="-1" role="dialog" aria-labelledby="updateSurveyModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="updateSurveyModalLabel">Update Survey</h5>
@@ -15,10 +15,16 @@
                     <input type="hidden" name="survey_id" id="survey_id"> <!-- row id -->
                     <div class="form-group">
                         <label for="office">Select Office</label>
-                        <select class="form-control" id="office" name="office">
-                            <option value="IT">IT OFFICE</option>
-                            <option value="SAO">SAO OFFICE</option>
-                            <option value="EDUC">EDUCATION OFFICE</option>
+                        <?php
+                        $query1 = "SELECT * FROM department";
+                        $result1 = mysqli_query($conn, $query1);
+                        ?>
+                        <select class="form-control" id="office">
+                            <?php
+                            while ($row1 = mysqli_fetch_assoc($result1)) {
+                                echo "<option value='" . $row1['office_name'] . "'>" . $row1['office_name'] . "</option>";
+                            }
+                            ?>
                         </select>
                     </div>
 
@@ -62,37 +68,37 @@
 
 
                     <?php /*
-      <!-- New Section for Dynamic Question Display -->
-      <div class="form-group">
-          <!-- Label that will be dynamically updated -->
-          <label id="questionId" hidden>questionId </label>
-          <br>
-          <label id="questionLabel">Question</label> <!-- Dynamic question number label -->
-      </div>
+<!-- New Section for Dynamic Question Display -->
+<div class="form-group">
+<!-- Label that will be dynamically updated -->
+<label id="questionId" hidden>questionId </label>
+<br>
+<label id="questionLabel">Question</label> <!-- Dynamic question number label -->
+</div>
 
-      <div class="form-group">
-          <label for="question_text">Question Text</label>
-          <textarea class="form-control" id="question_text" name="question_text" rows="3"
-              required></textarea>
-      </div>
+<div class="form-group">
+<label for="question_text">Question Text</label>
+<textarea class="form-control" id="question_text" name="question_text" rows="3"
+required></textarea>
+</div>
 
-      <div class="form-group">
-          <label for="question_type">Select Type</label>
-          <select class="form-control" id="question_type" name="question_type" required>
-              <option value="input">Input</option>
-              <option value="rating">Rating</option>
-          </select>
-      </div>
+<div class="form-group">
+<label for="question_type">Select Type</label>
+<select class="form-control" id="question_type" name="question_type" required>
+<option value="input">Input</option>
+<option value="rating">Rating</option>
+</select>
+</div>
 
 
-      <!-- Navigation buttons to go between questions -->
-      <div class="form-group">
-          <button type="button" class="btn btn-info btn-sm" id="prevQuestionBtn"><i
-                  class="fa fa-arrow-left"></i> Previous</button>
-          <button type="button" class="btn btn-info btn-sm" id="nextQuestionBtn">Next <i
-                  class="fa fa-arrow-right"></i></button>
-      </div>
-      */ ?>
+<!-- Navigation buttons to go between questions -->
+<div class="form-group">
+<button type="button" class="btn btn-info btn-sm" id="prevQuestionBtn"><i
+class="fa fa-arrow-left"></i> Previous</button>
+<button type="button" class="btn btn-info btn-sm" id="nextQuestionBtn">Next <i
+class="fa fa-arrow-right"></i></button>
+</div>
+*/ ?>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

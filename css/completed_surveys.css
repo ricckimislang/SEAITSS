@@ -54,6 +54,7 @@ body::before {
 .table td {
   text-align: left;
   padding: 8px;
+  font-size: 12px;
 }
 
 .table thead {

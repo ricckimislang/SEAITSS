@@ -1,6 +1,6 @@
 <div class="modal fade" id="completeSurveyModal" tabindex="-1" role="dialog" aria-labelledby="completeSurveyModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="completeSurveyModalLabel">Survey Results</h5>
@@ -23,19 +23,38 @@
                         <i class="fas fa-star" data-star="5"></i>
                     </p>
 
-                    <div class="table-responsive">
-                        <table class="table table-bordered" id="surveyResponseTable" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Question</th>
-                                    <th>Feedback</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
+                    <div class="row">
 
+                    <div class="col">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="questionResponseTable" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Question</th>
+                                            <th>Average Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="surveyResponseTable" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Question</th>
+                                            <th>Feedback</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
