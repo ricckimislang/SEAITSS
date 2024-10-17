@@ -12,7 +12,6 @@ $office_id = $_GET['office'] ?? '';
                 </div>
                 <div class="wave"></div>
                 <div class="wave"></div>
-
                 <div class="infotop">
                     <input type="hidden" value="<?php echo $office_id; ?>" name="officeID" id="officeID">
                     <img class="seait-logo" src="assets/image/logo.png" alt="SEAIT Logo"><br>
