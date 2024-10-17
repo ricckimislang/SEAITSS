@@ -25,10 +25,16 @@ $_SESSION['user_id'] = $checkrow['user_id'];
                                     <input type="text" id="user_id" value="<?php echo $_SESSION['user_id']; ?>" hidden>
                                     <label class="col-lg-4 col-form-label" for="office">Select Office</label>
                                     <div class="col-lg-8">
+                                        <?php
+                                        $query1 = "SELECT * FROM department";
+                                        $result1 = mysqli_query($conn, $query1);
+                                        ?>
                                         <select class="form-control" id="office">
-                                            <option value="IT">IT OFFICE</option>
-                                            <option value="SAO">SAO OFFICE</option>
-                                            <option value="EDUC">EDUCATION OFFICE</option>
+                                            <?php
+                                            while ($row1 = mysqli_fetch_assoc($result1)) {
+                                                echo "<option value='" . $row1['office_name'] . "'>" . $row1['office_name'] . "</option>";
+                                            }
+                                            ?>
                                         </select>
                                     </div>
                                 </div>

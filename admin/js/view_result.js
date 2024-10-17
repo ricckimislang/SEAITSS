@@ -5,7 +5,6 @@ $(document).ready(function () {
 
 // Function to open result modal and display the survey response
 function openResultModal(surveyId, responseIds, totalresponses) {
-  
   // Set the survey ID in the modal form
   $("#viewSurveyForm #surveyID").val(surveyId);
   $("#viewSurveyForm #responseID").val(responseIds);
@@ -67,8 +66,8 @@ function openResultModal(surveyId, responseIds, totalresponses) {
       $("#surveyResponseTable").DataTable({
         // You can add any options here to customize the DataTable (e.g., pagination, searching)
         searching: true, // Enable searching
-        paging: true,    // Enable pagination
-        info: true       // Show table information
+        paging: true, // Enable pagination
+        info: true, // Show table information
       });
 
       // Show the modal after data is loaded
