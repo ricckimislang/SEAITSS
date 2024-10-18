@@ -1,8 +1,6 @@
 <?php
 include 'includes/newheader.php';
 
-
-
 //survey table query
 $surveytable = "SELECT * FROM surveys";
 
