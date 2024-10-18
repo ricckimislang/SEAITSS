@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate required fields
     if (empty($_POST['survey_id']) || empty($_POST['office']) || empty($_POST['title']) || empty($_POST['objective']) || empty($_POST['publish']) || empty($_POST['start_date']) || empty($_POST['end_date'])) {
         echo json_encode(['status' => 'error', 'message' => 'All fields are required.']);
-        exit;
+        exit();
     }
 
     // Retrieve survey details from the POST request

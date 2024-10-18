@@ -17,7 +17,7 @@ function openEditModal(surveyId, office, title, objective, startDate, endDate) {
   $("#updateSurveyForm #objective").val(objective);
   $("#updateSurveyForm #start_date").val(startDate);
   $("#updateSurveyForm #end_date").val(endDate);
-
+  console.log(surveyId, office, title, objective, startDate, endDate);
   // Show the modal
   $("#updateSurveyModal").modal("show");
 }

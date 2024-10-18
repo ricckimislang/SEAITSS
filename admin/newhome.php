@@ -149,6 +149,8 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
               </div>
             </div>
           </div>
+          <!-- modal -->
+          <?php include 'modal/update_survey_modal.php'; ?>
           <?php include 'modal/create_survey_modal.php'; ?>
           <!-- Survey Table -->
           <div class="col-12">
@@ -309,15 +311,17 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                         <td>
                           <button href="#" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
                             data-bs-original-title="Edit"
-                            onclick="openEditModal(<?php echo $surveyrow['survey_id']; ?>, '<?php echo addslashes($surveyrow['office']); ?>', '<?php echo addslashes($surveyrow['title']); ?>', '<?php echo addslashes($surveyrow['objective']); ?>', '<?php echo $surveyrow['start_date']; ?>', '<?php echo $surveyrow['end_date']; ?>')"><i
-                              class="bi bi-tools"></i></button>
-
+                            onclick="openEditModal(<?php echo $surveyrow['survey_id']; ?>, '<?php echo addslashes($surveyrow['office']); ?>', '<?php echo addslashes($surveyrow['title']); ?>', '<?php echo addslashes($surveyrow['objective']); ?>','<?php echo $surveyrow['start_date']; ?>', '<?php echo $surveyrow['end_date']; ?>')">
+                            <i class="bi bi-tools"></i>
+                          </button>
                           <button class="btn btn-sm btn-danger deleteSurveyBtn"
                             data-survey-id="<?php echo $surveyrow['survey_id']; ?>" data-bs-toggle="tooltip"
                             data-bs-placement="top" data-bs-original-title="Delete">
                             <i class="bi bi-trash"></i>
                           </button>
                         </td>
+                        
+
                       </tr>
                     <?php } ?>
                   </tbody>
@@ -585,15 +589,13 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
   <script src="js/fetch_question.js"></script>
   <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
   <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../assets/vendor/chart.js/chart.umd.js"></script>
   <script src="../assets/vendor/echarts/echarts.min.js"></script>
   <script src="../assets/vendor/quill/quill.js"></script>
-  <script src="../assets/vendor/simple-datatables/simple-datatables.js"></script>
   <script src="../assets/vendor/tinymce/tinymce.min.js"></script>
   <script src="../assets/vendor/php-email-form/validate.js"></script>
 
-  <!-- Template Main JS File -->
   <script src="../js/main.js"></script>
+  <!-- Template Main JS File -->
 
 
 

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    
+
 <?php session_start();
 include_once 'includes/dbconn.php';
 ?>
@@ -28,11 +28,24 @@ include_once 'includes/dbconn.php';
     <link href="../assets/vendor/quill/quill.snow.css" rel="stylesheet">
     <link href="../assets/vendor/quill/quill.bubble.css" rel="stylesheet">
     <link href="../assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-    <link href="../assets/vendor/simple-datatables/style.css" rel="stylesheet">
+    <!-- Include jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+
+    <!-- Include DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+    <!-- Include DataTables JS -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+
 
     <!-- Template Main CSS File -->
     <link href="../css/style.css" rel="stylesheet">
 
 </head>
+
+<style>
+    .dataTables_filter input {
+        margin-bottom: 10px;
+    }
+</style>
