@@ -2,7 +2,8 @@
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 <?php
-function isActive($page) {
+function isActive($page)
+{
     global $current_page;
     return ($current_page == $page) ? 'active' : '';
 }
@@ -17,7 +18,8 @@ function isActive($page) {
                 <li class="nav-item">
                     <a class="nav-link <?php echo isActive('home.php'); ?>" href="home.php">
                         <span data-feather="home"></span>
-                        Dashboard <?php if(isActive('home.php')) echo '<span class="sr-only">(current)</span>'; ?>
+                        Dashboard <?php if (isActive('home.php'))
+                            echo '<span class="sr-only">(current)</span>'; ?>
                     </a>
                 </li>
                 <li class="nav-item">
