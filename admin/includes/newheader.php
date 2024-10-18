@@ -9,7 +9,7 @@ include_once 'includes/dbconn.php';
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Dashboard - NiceAdmin Bootstrap Template</title>
+    <title>SEAITSS</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -36,11 +36,15 @@ include_once 'includes/dbconn.php';
 
     <!-- Include DataTables JS -->
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-
+    <!-- Include SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Include jGrowl -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.7/jquery.jgrowl.min.js"></script>
 
 
     <!-- Template Main CSS File -->
     <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/jgrowl.min.css" rel="stylesheet">
 
 </head>
 

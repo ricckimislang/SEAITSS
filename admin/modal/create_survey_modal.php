@@ -26,8 +26,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="title">Survey Title</label>
-                        <input type="text" class="form-control" id="title" name="title" required>
+                        <label for="survey_title">Survey Title</label>
+                        <input type="text" class="form-control" id="survey_title" name="survey_title" required>
                     </div>
 
                     <div class="form-group">
@@ -52,12 +52,13 @@
                         <label for="end_date">End Date</label>
                         <input type="date" class="form-control" id="end_date" name="end_date" required>
                     </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success" id="createSurveyBtn">Create Survey</button>
+                    </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-success" id="createSurveyBtn">Create Survey</button>
-            </div>
+
         </div>
     </div>
 </div>

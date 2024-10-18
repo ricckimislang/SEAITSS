@@ -127,8 +127,7 @@ $_SESSION['user_id'] = $checkrow['user_id'];
 <?php include 'includes/footer.php'; ?>
 
 <script>
-    $(document).ready(function () {
-
+ 
         /*
         let questions = [];
         let questionCount = 1;
@@ -243,7 +242,7 @@ $_SESSION['user_id'] = $checkrow['user_id'];
                     office: $("#office").val(),
                     survey_title: $("#survey_title").val(),
                     objective: $("#objective").val(),
-                    publish: $("input[name='publish']:checked").val(),
+                    publish: $("#publish").val(),
                     start_date: $("#start_date").val(),
                     end_date: $("#end_date").val(),
                     //questions: JSON.stringify(questions)  // Send questions as a JSON array
@@ -273,7 +272,5 @@ $_SESSION['user_id'] = $checkrow['user_id'];
             });
         });
 
-        // Initially hide the Back button since we're on the first question
-        $("#back-question").hide();
-    });
+     
 </script>

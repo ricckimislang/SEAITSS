@@ -4,9 +4,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="updateSurveyModalLabel">Update Survey</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                <a type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" style="color: red;">&times;</span>
-                </button>
+                </a>
             </div>
             <div class="modal-body">
                 <form id="updateSurveyForm">

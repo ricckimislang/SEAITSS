@@ -43,6 +43,53 @@ $("#updateSurveyBtn").on("click", function (event) {
   });
 });
 
+// Submit form handling Create
+$("#createSurveyForm").on("submit", function (event) {
+  event.preventDefault();
+
+  // Use AJAX to send form data to your PHP create survey script
+  $.ajax({
+    url: "../process/create_surveyV2.php",
+    type: "POST",
+    data: {
+      office: $("#office").val(),
+      survey_title: $("#survey_title").val(), // Changed to match the input ID
+      objective: $("#objective").val(),
+      publish: $("#publish").val(), // Changed to select value directly
+      start_date: $("#start_date").val(),
+      end_date: $("#end_date").val(),
+      // questions: JSON.stringify(questions)  // Send questions as a JSON array if needed
+    },
+    success: function (data) {
+      if (data.status === "success") {
+        $("#createSurveyModal").modal("hide");
+        $.jGrowl("Survey created successfully!", {
+          theme: "alert alert-success",
+          life: 2000000,
+        });
+      } else if (data.status === "duplicate") {
+        $.jGrowl("Error: Survey already exists in this Office!", {
+          theme: "alert alert-danger",
+          life: 2000,
+        });
+      } else {
+        $.jGrowl("Error: Unable to create survey.", {
+          theme: "alert alert-danger",
+          life: 2000,
+        });
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      // Handle errors if AJAX call fails
+      console.error("AJAX Error: ", textStatus, errorThrown);
+      $.jGrowl("Error: Unable to create survey due to a server error.", {
+        theme: "alert alert-danger",
+        life: 2000,
+      });
+    },
+  });
+});
+
 // Declare variables only once
 let currentQuestionIndex = 0;
 let questions = []; // Will hold the fetched questions

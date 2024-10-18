@@ -1,5 +1,4 @@
 <?php
-include 'includes/session.php';
 ?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="home.php">SEAIT Survey System</a>

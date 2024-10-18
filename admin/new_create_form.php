@@ -23,6 +23,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
 ?>
 
 <link rel="stylesheet" href="../css/newhome.css">
+<link rel="stylesheet" href="../css/new_create_form.css">
 
 <body>
     <!-- ======= Header ======= -->
@@ -56,19 +57,11 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                     <!-- Survey Table -->
                     <div class="col-12">
                         <div class="card recent-sales overflow-auto">
-                            <div class="filter">
+                            <div class="filter" style="margin-right: 20px;">
                                 <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#createSurveyModal">Add</button>
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                    <li class="dropdown-header text-start">
-                                        <h6>Filter</h6>
-                                    </li>
-
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
-                                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                                </ul>
+                                    data-bs-target="#createSurveyModal" style="font-size: 1.1em;"><i
+                                        class="bi bi-plus-circle-fill"></i>
+                                    Add</button>
                             </div>
 
                             <div class="card-body">
@@ -82,7 +75,6 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                             <th scope="col">Objective</th>
                                             <th scope="col">Start Date</th>
                                             <th scope="col">End Date</th>
-                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -121,16 +113,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
 
-    <!-- Vendor JS Files -->
-    <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
-    <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="../assets/vendor/chart.js/chart.umd.js"></script>
-    <script src="../assets/vendor/echarts/echarts.min.js"></script>
-    <script src="../assets/vendor/quill/quill.js"></script>
-    <script src="../assets/vendor/simple-datatables/simple-datatables.js"></script>
-    <script src="../assets/vendor/tinymce/tinymce.min.js"></script>
-    <script src="../assets/vendor/php-email-form/validate.js"></script>
-
+    <?php include 'includes/footer.php'; ?>
     <!-- Template Main JS File -->
     <script src="../js/main.js"></script>
     <script src="js/fetch_question.js"></script>

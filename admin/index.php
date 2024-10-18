@@ -51,7 +51,7 @@
                 success: function (data) {
                     console.log(data); // This will print the response to the browser's console
                     if (data == '1') {
-                        window.location.href = 'home.php';
+                        window.location.href = 'newhome.php';
                     } else {
                         alert('Invalid username or password');
                     }
