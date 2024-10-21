@@ -36,11 +36,14 @@ $surveys = $result->fetch_all(MYSQLI_ASSOC);
                             <?php foreach ($surveys as $survey): ?> <!-- Loop through each survey -->
                                 <li class="list-group-item transparent-card">
                                     <h3><?php echo htmlspecialchars($survey['title']); ?></h3>
+                                    <div class="divider"></div>
                                     <p><?php echo htmlspecialchars($survey['objective']); ?></p>
                                     <!-- Redirect based on the is_anonymous field -->
-                                    <a href="<?php echo $survey['is_anonymous'] == 1 ? 'survey.php?survey_id=' . $survey['survey_id'] : 'form.php'; ?>"
-                                        class="float-right btn btn-primary">
-                                        Take Survey
+                                    <a class="pushable float-right"
+                                        href="<?php echo $survey['is_anonymous'] == 1 ? 'survey.php?survey_id=' . $survey['survey_id'] : 'form.php'; ?>">
+                                        <span class="shadow"></span>
+                                        <span class="edge"></span>
+                                        <span class="front"> Take Survey </span>
                                     </a>
                                 </li>
                             <?php endforeach; ?>
