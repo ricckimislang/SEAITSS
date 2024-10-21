@@ -37,6 +37,7 @@ $surveys = $result->fetch_all(MYSQLI_ASSOC);
                                 <li class="list-group-item transparent-card">
                                     <h3><?php echo htmlspecialchars($survey['title']); ?></h3>
                                     <div class="divider"></div>
+                                    <br>
                                     <p><?php echo htmlspecialchars($survey['objective']); ?></p>
                                     <!-- Redirect based on the is_anonymous field -->
                                     <a class="pushable float-right"
