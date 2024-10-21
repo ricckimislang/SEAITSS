@@ -1,3 +1,47 @@
-.list-group{
-    gap: 10px;
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+
+.list-group {
+  gap: 10px;
+}
+.list-group-item h3,
+a {
+  font-family: "Nunito", sans-serif;
+  font-weight: bold;
+}
+
+.list-group-item p {
+  font-size: 0.8em;
+}
+.e-card {
+  width: 100% !important;
+}
+.survey-list {
+  max-height: 500px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  ::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+  }
+}
+.text-center {
+  padding: 20px;
+  font-family: "Nunito", sans-serif;
+  font-weight: bold;
+}
+
+.transparent-card {
+  max-width: 320px;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 20px 20px 30px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgb(0, 0, 0);
+}
+
+@media (max-width: 768px) {
+  .survey-list {
+    max-height: 550px;
+  }
 }

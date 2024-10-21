@@ -77,6 +77,9 @@ $("#createSurveyForm").on("submit", function (event) {
           theme: "alert alert-success",
           life: 2000,
         });
+        setTimeout(function () {
+          window.location.href = "new_create_form.php";
+        }, 2000);
       } else if (data.status === "duplicate") {
         $.jGrowl("Error: Survey already exists in this Office!", {
           theme: "alert alert-danger",

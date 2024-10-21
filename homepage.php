@@ -27,19 +27,19 @@ $surveys = $result->fetch_all(MYSQLI_ASSOC);
             <div class="e-card playing">
                 <div class="background-image" style="background-image: url(assets/image/seait.jpg)">
                 </div>
-                <div class="survey-list" style="margin: 20px; margin-bottom: 30px;">
-                    <h2 class="text-center" style="color:white;">Available Surveys</h2>
+                <h2 class="text-center" style="color: white;">Available Surveys</h2>
+                <div class="survey-list" style="margin: 20px; margin-bottom: 30px; overflow-y: auto;">
                     <ul class="list-group">
                         <?php if (empty($surveys)): ?>
                             <h1 class="text-center" style="color:white;">No surveys available today.</h1>
                         <?php else: ?>
                             <?php foreach ($surveys as $survey): ?> <!-- Loop through each survey -->
                                 <li class="list-group-item transparent-card">
-                                    <h5><?php echo htmlspecialchars($survey['title']); ?></h5>
+                                    <h3><?php echo htmlspecialchars($survey['title']); ?></h3>
                                     <p><?php echo htmlspecialchars($survey['objective']); ?></p>
                                     <!-- Redirect based on the is_anonymous field -->
                                     <a href="<?php echo $survey['is_anonymous'] == 1 ? 'survey.php?survey_id=' . $survey['survey_id'] : 'form.php'; ?>"
-                                        class="btn btn-primary">
+                                        class="float-right btn btn-primary">
                                         Take Survey
                                     </a>
                                 </li>

@@ -590,7 +590,63 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
     <script src="js/fetch_question.js"></script>
     <!-- Template Main JS File -->
     <?php include 'includes/footer.php'; ?>
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '.deleteSurveyBtn', function () {
+                var surveyId = $(this).data('survey-id');
+                var button = $(this);
 
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        button.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>'); // Show loading spinner
+
+                        $.ajax({
+                            url: 'process/delete_survey.php',
+                            type: 'POST',
+                            data: { survey_id: surveyId },
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response.status === 'success') {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        'Your survey has been deleted.',
+                                        'success'
+                                    );
+                                    location.reload();
+                                    $('#surveyTable').DataTable().row(button.parents('tr')).remove().draw();
+                                } else {
+                                    Swal.fire(
+                                        'Error!',
+                                        'Error deleting survey: ' + response.message,
+                                        'error'
+                                    );
+                                }
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                console.log("AJAX Error:", textStatus, errorThrown);
+                                Swal.fire(
+                                    'Error!',
+                                    'An error occurred while trying to delete the survey. Check console for details.',
+                                    'error'
+                                );
+                            },
+                            complete: function () {
+                                button.prop('disabled', false).html('<i class="fas fa-trash"></i>'); // Reset button
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -32,9 +32,8 @@ body::before {
   z-index: 10; /* Ensure the card is on top */
 }
 .background-image {
-  background-size: cover;
   position: absolute;
-  object-fit: cover;
+  background-size: cover;
   height: 100%;
   width: 100%;
   z-index: -1;
