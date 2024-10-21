@@ -5,12 +5,12 @@ include 'includes/dbconn.php';
 $office_id = $_GET['office'] ?? '';
 
 // Prepare the query to fetch surveys
-$query = "SELECT * FROM surveys WHERE is_published = 1 AND office = '$office_id'";
+$query = "SELECT * FROM surveys WHERE is_published = 1";
 
 // Execute the query
 $result = $conn->query($query);
 
-// Check for errors
+// Check for errorss
 if ($result === false) {
     die("Error: " . $conn->error);
 }
@@ -20,6 +20,7 @@ $surveys = $result->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <link rel="stylesheet" href="css/index-card.css">
+<link rel="stylesheet" href="css/homepage.css">
 <div class="container mt-5">
     <div class="row justify-content-center">
         <form>

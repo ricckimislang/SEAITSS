@@ -29,6 +29,12 @@ function isActive($page)
             </a>
         </li><!-- End Dashboard Nav -->
         <li class="nav-item">
+            <a class="nav-link <?php echo isActive('new_department.php'); ?>" href="new_department.php">
+                <i class="bi bi-check2-square"></i>
+                <span>Departments</span>
+            </a>
+        </li><!-- End Dashboard Nav -->
+        <li class="nav-item">
             <a class="nav-link <?php echo isActive('logout.php'); ?>" href="logout.php">
                 <i class="bi bi-box-arrow-right"></i>
                 <span>Sign Out</span>

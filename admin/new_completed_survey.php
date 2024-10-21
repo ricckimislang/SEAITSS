@@ -21,9 +21,17 @@ $result = mysqli_stmt_get_result($stmt);
 $response_ids = [];
 
 ?>
-
+<!-- Include Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="../css/newhome.css">
 <link rel="stylesheet" href="../css/new_create_form.css">
+<style>
+    .breadcrumb {
+        background-color: transparent;
+    }
+</style>
 
 <body>
     <!-- ======= Header ======= -->
@@ -57,17 +65,10 @@ $response_ids = [];
                     <!-- Survey Table -->
                     <div class="col-12">
                         <div class="card recent-sales overflow-auto">
-                            <div class="filter" style="margin-right: 20px;">
-                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#createSurveyModal" style="font-size: 1.1em;"><i
-                                        class="bi bi-plus-circle-fill"></i>
-                                    Add</button>
-                            </div>
-
                             <div class="card-body">
                                 <h5 class="card-title">Survey Table</h5>
 
-                                <table id="CompletedSurveys_table" class="display">
+                                <table id="CompletedSurveys_table" class="datatable display">
                                     <thead class="thead-dark">
                                         <tr>
                                             <th>Office</th>
@@ -130,7 +131,7 @@ $response_ids = [];
 
 
     <!-- modal -->
-    <?php include 'modal/create_survey_modal.php'; ?>
+    <?php include 'modal/display_survey_result_modal.php'; ?>
 
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
@@ -140,7 +141,7 @@ $response_ids = [];
 
     <!-- Template Main JS File -->
     <script src="../js/main.js"></script>
-    <script src="js/fetch_question.js"></script>
+    <script src="js/view_result.js"></script>
 
 
 

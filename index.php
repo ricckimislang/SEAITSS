@@ -4,12 +4,66 @@ $office_id = $_GET['office'] ?? '';
 <link rel="stylesheet" href="css/index-card.css">
 <script src="js/html5-qrcode.min.js"></script>
 
+<style>
+    #qr-reader {
+        width: 250px;
+        height: 250px;
+        border: 2px solid #007bff;
+        border-radius: 30px;
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f9f9f9;
+        margin: auto;
+        overflow: hidden;
+    }
+
+    .btn-next {
+        margin-top: 10px;
+        width: 200px;
+    }
+
+    .infotop {
+        text-align: center;
+        color: #fff;
+        padding: 20px;
+    }
+
+    .disclaimer {
+        border-radius: 10px;
+
+        text-align: center;
+    }
+
+    .disclaimer h3 {
+        font-size: 22px;
+    }
+
+    .disclaimer p {
+        font-size: 14px;
+    }
+
+    #proceedButton {
+        display: none;
+    }
+
+    .container {
+        height: 1500px !important;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+    }
+</style>
+
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <form id="officeForm"> <!-- Give the form an ID -->
+        <form id="officeForm">
             <div class="e-card playing">
-                <div class="background-image" style="background-image: url(assets/image/seait.jpg)">
-                </div>
+                <div class="background-image" style="background-image: url(assets/image/seait.jpg)"></div>
                 <div class="wave"></div>
                 <div class="wave"></div>
                 <div class="infotop">
@@ -20,11 +74,23 @@ $office_id = $_GET['office'] ?? '';
                     <div class="name">SOUTH EAST ASIAN INSTITUTE OF TECHNOLOGY</div>
                     <br>
 
-                    <button type="button" class="btn btn-next btn-primary" id="startScanButton">Start Scanning</button>
-                    <button type="button" class="btn btn-next btn-primary" id="proceedButton">Proceed</button>
+                    <div class="disclaimer">
+                        <h3>Disclaimer</h3>
+                        <p>
+                            Please note that by scanning this QR code, you agree to participate in the SEAIT
+                            satisfaction survey. Your responses will remain confidential.
+                        </p>
+                    </div>
+
+                    <!-- QR Code Scanner -->
+                    <div id="qr-reader"></div>
+                    <div id="qr-reader-results"></div>
+
+                    <!-- Proceed Button (hidden until QR code is scanned) -->
+                    <div class="button-container">
+                        <button type="button" class="btn btn-next btn-primary" id="proceedButton">Proceed</button>
+                    </div>
                 </div>
-                <div id="qr-reader" style="width: 300px; display: none;"></div>
-                <div id="qr-reader-results"></div>
             </div>
         </form>
     </div>
@@ -34,33 +100,55 @@ $office_id = $_GET['office'] ?? '';
     const qrCodeReader = new Html5Qrcode("qr-reader");
     let scannedQRCode = '';
 
-    document.getElementById('startScanButton').addEventListener('click', function () {
-        // Show the QR reader div
-        document.getElementById('qr-reader').style.display = 'block';
+    async function requestCameraPermission() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            stream.getTracks().forEach(track => track.stop());
+            return true;
+        } catch (error) {
+            //console.error("Error requesting camera permission:", error);
+            return false;
+        }
+    }
 
-        // Start scanning
+    async function initializeScanner() {
+        const permissionGranted = await requestCameraPermission();
+        if (!permissionGranted) {
+            document.getElementById('qr-reader-results').innerText = "Camera permission denied. Please allow access to the camera to scan the QR code.";
+            return;
+        }
+
+        document.getElementById('qr-reader').style.display = 'block';
+        //document.getElementById('qr-reader-results').innerText = "Initializing scanner...";
+
         qrCodeReader.start(
             { facingMode: "environment" },
-            {
-                fps: 10,
-                qrbox: 250
-            },
+            { fps: 10, qrbox: 220 },
             (decodedText, decodedResult) => {
                 scannedQRCode = decodedText;
                 document.getElementById('qr-reader-results').innerText = "Scanned QR Code: " + scannedQRCode;
-                qrCodeReader.stop(); // Stop scanning after a successful scan
+                qrCodeReader.stop();
+                document.getElementById('qr-reader').style.display = 'none'; // Hide the QR reader div
+                document.getElementById('proceedButton').style.display = 'block'; // Show the Proceed button
             },
             (errorMessage) => {
-                // Optional: handle errors
+                //console.error("QR Code scanning error:", errorMessage);
+                //document.getElementById('qr-reader-results').innerText = "Error scanning QR code. Please try again.";
             }
         ).catch(err => {
-            console.error(err);
+            //console.error("Failed to start scanner:", err);
+            document.getElementById('qr-reader-results').innerText = "Failed to start scanner. Please ensure your device has a working camera.";
         });
-    });
+    }
+
+    initializeScanner(); // Automatically start scanning when the page loads
 
     document.getElementById('proceedButton').addEventListener('click', function () {
-        const selectedOffice = document.getElementById('officeID').value;
-        window.location.href = 'form.php?office=' + selectedOffice + '&scannedQRCode=' + encodeURIComponent(scannedQRCode);
+        window.location.href = 'homepage.php?office=' + '&scannedQRCode=' + encodeURIComponent(scannedQRCode);
     });
 </script>
+<script>
+
+</script>
+
 <?php include 'includes/footer.php'; ?>

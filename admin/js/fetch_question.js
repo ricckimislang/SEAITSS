@@ -8,6 +8,16 @@ $(document).ready(function () {
     info: true, // Show table information
   });
 });
+$(document).ready(function () {
+  $("#CompletedSurveys_table").DataTable({
+    paging: true, // Enable pagination
+    searching: true, // Enable search functionality
+    pageLength: 10, // Show 10 rows per page
+    lengthChange: true, // Disable the option to change number of rows per page
+    ordering: true, // Enable column sorting
+    info: true, // Show table information
+  });
+});
 
 function openEditModal(surveyId, office, title, objective, startDate, endDate) {
   // Set the values in the modal form
@@ -65,7 +75,7 @@ $("#createSurveyForm").on("submit", function (event) {
         $("#createSurveyModal").modal("hide");
         $.jGrowl("Survey created successfully!", {
           theme: "alert alert-success",
-          life: 2000000,
+          life: 2000,
         });
       } else if (data.status === "duplicate") {
         $.jGrowl("Error: Survey already exists in this Office!", {
