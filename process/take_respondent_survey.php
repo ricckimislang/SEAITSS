@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ksort($answers); // Sort answers by keys (question IDs)
 
     // Step 1: Insert into surveyresponses
-    $survrespo = "INSERT INTO surveyresponses (survey_id, respondent_email, submitted_at) VALUES (?, ?, NOW())";
+    $survrespo = "INSERT INTO surveyresponses (survey_id, student_id, submitted_at) VALUES (?, ?, NOW())";
     $stmt = mysqli_stmt_init($conn);
 
     if (!mysqli_stmt_prepare($stmt, $survrespo)) {
