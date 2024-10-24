@@ -32,7 +32,7 @@ body::before {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #dbdbdb;
+  background-color: #ffffff;
 }
 .background-image {
   background-size: cover;
@@ -42,28 +42,12 @@ body::before {
   width: 100%;
   z-index: -1;
 }
-.wave {
-  position: absolute;
-  width: 90vw;
-  height: 180vh;
-  opacity: 0.6;
-  left: 0;
-  top: 0;
-  margin-left: -35%;
-  margin-top: -0%;
-  background: linear-gradient(744deg, #2fbb1d, #56da61 60%, #29971f);
-  z-index: 1; /* Ensure waves appear above the video */
-}
 
 .form-container {
   padding: 3rem 3rem 0 3rem !important;
   height: 100% !important;
   overflow-y: auto;
-}
-
-.icon {
-  margin-top: -1em;
-  padding-bottom: 1em;
+  background-color: transparent;
 }
 
 .seait-logo {
@@ -77,16 +61,8 @@ body::before {
   justify-content: space-evenly;
   align-items: center;
 }
-.infotop {
-  text-align: center;
-  font-size: 20px;
-  position: absolute;
-  top: 10.6em;
-  left: 0;
-  right: 0;
-  color: rgb(255, 255, 255);
-  font-weight: 600;
-  z-index: 2; /* Content appears above the video and waves */
+.form-check input[type="radio"] {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
 .form-controloffice {
@@ -175,4 +151,11 @@ label {
 
 input[type="text"] {
   margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .e-card {
+    width: auto;
+    margin: 0 10px;
+  }
 }
