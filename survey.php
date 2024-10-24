@@ -152,8 +152,8 @@ $total_pages = ceil($total_questions / $limit);
         let currentSurveyId = $('#survey_id').val();
         let storedSurveyId = localStorage.getItem('survey_id');
         if (storedSurveyId !== currentSurveyId) {
-            localStorage.clear(); // Clear all previous data
             localStorage.setItem('survey_id', currentSurveyId); // Set current survey ID in storage
+            localStorage.clear(); // Clear all previous data
         }
 
         // Load existing answers from localStorage if available

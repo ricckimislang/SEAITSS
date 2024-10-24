@@ -19,7 +19,7 @@ if (is_null($scanQR)) {
 }
 
 // Prepare the query to fetch surveys
-$query = "SELECT * FROM surveys WHERE is_published = 1";
+$query = "SELECT * FROM surveys WHERE is_published = 1 AND is_complete = 0";
 
 // Execute the query
 $result = $conn->query($query);
