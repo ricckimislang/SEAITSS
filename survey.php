@@ -233,6 +233,7 @@ $total_pages = ceil($total_questions / $limit);
                 }
 
                 // Append answers to the form data
+                let scannedQRC = $('#scannedQR').val();
                 let formData = $(this).serializeArray();
                 $.each(answers, function (questionId, answer) {
                     formData.push({ name: `answer[${questionId}]`, value: answer });
@@ -242,7 +243,10 @@ $total_pages = ceil($total_questions / $limit);
                 $.ajax({
                     url: 'process/take_respondent_survey.php',
                     type: 'POST',
-                    data: formData,
+                    data: {
+                        formData: formData,
+                        scannedQRC: scannedQRC
+                    },
                     success: function (data) {
                         let response = JSON.parse(data);
                         if (response.status === 'success') {
