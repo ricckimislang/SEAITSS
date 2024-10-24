@@ -6,7 +6,7 @@ $response = ['status' => 'error', 'message' => 'An error occurred']; // Default 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $survey_id = $_POST['survey_id'];
-    $eAddress = $_POST['eAddress'];
+    $scannedQRCode = $_POST['scannedQRCode'];
     $answers = $_POST['answer'];
 
     ksort($answers); // Sort answers by keys (question IDs)

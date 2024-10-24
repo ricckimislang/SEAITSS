@@ -2,7 +2,21 @@
 include 'includes/header.php';
 include 'includes/dbconn.php';
 
-$office_id = $_GET['office'] ?? '';
+$scanQR = $_GET['scannedQRCode'] ?? null;
+if (is_null($scanQR)) {
+    echo '<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>';
+    echo '<script>
+        swal({
+            title: "Please Scan The QR CODE again",
+            text: "Please Scan The QR CODE to take the survey",
+            icon: "error",
+            button: "OK",
+        }).then(function() {
+            window.location.href = "index.php";
+        });
+    </script>';
+    exit;
+}
 
 // Prepare the query to fetch surveys
 $query = "SELECT * FROM surveys WHERE is_published = 1";
@@ -41,7 +55,7 @@ $surveys = $result->fetch_all(MYSQLI_ASSOC);
                                     <p><?php echo htmlspecialchars($survey['objective']); ?></p>
                                     <!-- Redirect based on the is_anonymous field -->
                                     <a class="pushable float-right"
-                                        href="<?php echo $survey['is_anonymous'] == 1 ? 'survey.php?survey_id=' . $survey['survey_id'] : 'form.php'; ?>">
+                                        href="<?php echo $survey['is_anonymous'] == 1 ? 'survey.php?scannedQRCode=' . $scanQR . '&survey_id=' . $survey['survey_id'] : 'form.php'; ?>">
                                         <span class="shadow"></span>
                                         <span class="edge"></span>
                                         <span class="front"> Take Survey </span>

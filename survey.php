@@ -2,8 +2,8 @@
 <?php include 'includes/dbconn.php'; ?>
 
 <?php
-$survey_id = $_GET['survey_id'];
-$email_address = $_GET['eAddress'] ?? '';
+$survey_id = $_GET['survey_id'] ?? null;
+$scanQR = $_GET['scannedQRCode'] ?? '';
 if (is_null($survey_id)) {
     echo '<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>';
     echo '<script>
@@ -93,7 +93,7 @@ $total_pages = ceil($total_questions / $limit);
     <div class="row justify-content-center">
         <form id="surveyForm">
             <input type="hidden" value="<?php echo $survey_id; ?>" name="survey_id" id="survey_id">
-            <input type="hidden" value="<?php echo $email_address; ?>" name="eAddress" id="eAddress">
+            <input type="hidden" value="<?php echo $scanQR; ?>" name="scannedQR" id="scannedQR">
 
             <div class="e-card">
                 <div class="form-title">Office Satisfaction Survey</div> <!-- OFFICE NAME -->

@@ -144,7 +144,7 @@ $office_id = $_GET['office'] ?? '';
     initializeScanner(); // Automatically start scanning when the page loads
 
     document.getElementById('proceedButton').addEventListener('click', function () {
-        window.location.href = 'homepage.php?office=' + '&scannedQRCode=' + encodeURIComponent(scannedQRCode);
+        window.location.href = 'homepage.php?scannedQRCode=' + encodeURIComponent(scannedQRCode);
     });
 </script>
 <script>
