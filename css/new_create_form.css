@@ -2,3 +2,6 @@ table.dataTable.no-footer
 {
     border-bottom: none !important;
 }
+.fas.fa-star.filled {
+    color: gold;
+  }

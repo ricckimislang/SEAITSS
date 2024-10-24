@@ -4,7 +4,9 @@ include '../includes/dbconn.php';
 $response = [
     'totalResponses' => 0,
     'overallSatisfaction' => 0,
-    'questions' => [] // For the input-type questions only
+    'survey_questions' => [], // For the input-type survey questions
+    'complain_questions' => [], // For the input-type complaint questions
+    'question' => []
 ];
 
 if (isset($_GET['survey_id']) && isset($_GET['response_id'])) {
@@ -58,8 +60,16 @@ if (isset($_GET['survey_id']) && isset($_GET['response_id'])) {
             }
 
             // Only add input-type questions for the table
-            if ($questionData['type'] === 'input') {
-                $response['questions'][] = [
+            if ($questionData['type'] === 'input' && $questionId === 10) {
+                $response['survey_questions'][] = [
+                    'number' => $questionId,
+                    'description' => $questionData['text'], // Get question text
+                    'response' => $responseText // User's response
+                ];
+            }
+            // Only add input-type questions for the table
+            if ($questionData['type'] === 'input' && $questionId === 11) {
+                $response['complain_questions'][] = [
                     'number' => $questionId,
                     'description' => $questionData['text'], // Get question text
                     'response' => $responseText // User's response

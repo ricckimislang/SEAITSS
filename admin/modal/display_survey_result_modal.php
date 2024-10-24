@@ -1,6 +1,6 @@
 <div class="modal fade" id="completeSurveyModal" role="dialog" aria-labelledby="completeSurveyModalLabel" tabindex="-1"
   aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="completeSurveyModalLabel">Survey Results</h5>
@@ -50,7 +50,21 @@
                   <thead>
                     <tr>
                       <th>Question</th>
-                      <th>Feedback</th>
+                      <th>Recommendation</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="col">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="complainTable" style="width:100%">
+                  <thead>
+                    <tr>
+                      <th>Question</th>
+                      <th>Complaints</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -67,4 +81,4 @@
       </div>
     </div>
   </div>
-</div><!-- End Large Modal-->
+</div><!-- End Extra Large Modal-->

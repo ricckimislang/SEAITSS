@@ -254,9 +254,11 @@ $total_pages = ceil($total_questions / $limit);
                             }, 2000);
                         } else {
                             $.jGrowl(response.message, { theme: "alert alert-danger", life: 3000 });
+                            localStorage.clear();
                         }
                     },
                     error: function () {
+                        localStorage.clear();
                         $.jGrowl('An unexpected error occurred. Please try again.', { theme: "alert alert-danger", life: 4000 });
                     }
                 });

@@ -12,13 +12,17 @@ function openResultModal(surveyId, responseIds, totalresponses) {
   // Clear the previous table data
   $("#surveyResponseTable tbody").empty();
   $("#questionResponseTable tbody").empty();
+  $("#complainTable tbody").empty();
 
   // Destroy the existing DataTable instance if it exists
+  if ($.fn.DataTable.isDataTable("#questionResponseTable")) {
+    $("#questionResponseTable").DataTable().clear().destroy();
+  }
   if ($.fn.DataTable.isDataTable("#surveyResponseTable")) {
     $("#surveyResponseTable").DataTable().clear().destroy();
   }
-  if ($.fn.DataTable.isDataTable("#questionResponseTable")) {
-    $("#questionResponseTable").DataTable().clear().destroy();
+  if ($.fn.DataTable.isDataTable("#complainTable")) {
+    $("#complainTable").DataTable().clear().destroy();
   }
 
   // Prepare a variable to hold total responses and overall satisfaction
@@ -44,14 +48,24 @@ function openResultModal(surveyId, responseIds, totalresponses) {
         totalResponses = totalresponses;
         overallSatisfaction += responseData.overallSatisfaction;
 
-        // Populate DataTable with the fetched questions and responses
-        responseData.questions.forEach(function (question) {
+        // Loop through the survey questions and populate the "Survey Response Table"
+        responseData.survey_questions.forEach(function (question) {
           $("#surveyResponseTable tbody").append(`
-            <tr>
-              <td>${question.description}</td>
-              <td>${question.response}</td>
-            </tr>
-          `);
+        <tr>
+          <td>${question.description}</td>
+          <td>${question.response}</td>
+        </tr>
+      `);
+        });
+
+        // Loop through the complain questions and populate the "Complain Table"
+        responseData.complain_questions.forEach(function (question) {
+          $("#complainTable tbody").append(`
+        <tr>
+          <td>${question.description}</td>
+          <td>${question.response}</td>
+        </tr>
+      `);
         });
       });
 
@@ -77,6 +91,16 @@ function openResultModal(surveyId, responseIds, totalresponses) {
       });
       // Re-initialize the DataTable after data is loaded into the table
       $("#questionResponseTable").DataTable({
+        pageLength: 5,
+        // You can add any options here to customize the DataTable (e.g., pagination, searching)
+        searching: true, // Enable searching
+        paging: true, // Enable pagination
+        info: true, // Show table information
+        lengthChange: false,
+      });
+
+      // Re-initialize the DataTable after data is loaded into the table
+      $("#complainTable").DataTable({
         pageLength: 5,
         // You can add any options here to customize the DataTable (e.g., pagination, searching)
         searching: true, // Enable searching
@@ -132,12 +156,8 @@ function openResultModal(surveyId, responseIds, totalresponses) {
 
         if (scoresData.total_score_gained && scoresData.total_possible_score) {
           // Display the total score gained and total possible score
-          $("#totalScoreGained").text(
-            ` ${scoresData.total_score_gained}`
-          );
-          $("#totalPossibleScore").text(
-            ` ${scoresData.total_possible_score}`
-          );
+          $("#totalScoreGained").text(` ${scoresData.total_score_gained}`);
+          $("#totalPossibleScore").text(` ${scoresData.total_possible_score}`);
         } else {
           // Handle case when scores are not available
           $("#totalScoreGained").text("N/A");
@@ -157,12 +177,17 @@ function openResultModal(surveyId, responseIds, totalresponses) {
 
 function updateStarRating(rating) {
   // Clear existing star ratings
-  $(".fas.fa-star").removeClass("filled"); // Assuming "filled" is a CSS class to fill the star
+  $(".fas.fa-star").removeClass("filled half-filled"); // Assuming "filled" and "half-filled" are CSS classes to fill the star
 
-  // Fill stars based on the rating
+  // Round down to nearest whole number for star filling
+  let fullStars = Math.floor(rating);
+
+  // Loop through stars and apply the 'filled' class to the correct ones
   for (let i = 1; i <= 5; i++) {
-    if (i <= rating) {
+    if (i <= fullStars) {
       $(`.fas.fa-star[data-star='${i}']`).addClass("filled");
+    } else if (i === fullStars + 1 && rating % 1 !== 0) {
+      $(`.fas.fa-star[data-star='${i}']`).addClass("half-filled");
     }
   }
 }

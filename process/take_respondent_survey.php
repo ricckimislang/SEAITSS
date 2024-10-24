@@ -6,7 +6,7 @@ $response = ['status' => 'error', 'message' => 'An error occurred']; // Default 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $survey_id = $_POST['survey_id'];
-    $scannedQRCode = $_POST['scannedQRCode'];
+    $scannedQRCode = $_POST['scannedQR'];
     $answers = $_POST['answer'];
 
     ksort($answers); // Sort answers by keys (question IDs)
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         respondAndExit($response);
     }
 
-    mysqli_stmt_bind_param($stmt, "is", $survey_id, $eAddress);
+    mysqli_stmt_bind_param($stmt, "is", $survey_id, $scannedQRCode);
     if (!mysqli_stmt_execute($stmt)) {
         $response['message'] = 'Failed to execute statement for surveyresponses';
         respondAndExit($response);
