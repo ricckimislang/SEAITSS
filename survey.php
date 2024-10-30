@@ -152,8 +152,8 @@ $total_pages = ceil($total_questions / $limit);
         let currentSurveyId = $('#survey_id').val();
         let storedSurveyId = localStorage.getItem('survey_id');
         if (storedSurveyId !== currentSurveyId) {
-            localStorage.setItem('survey_id', currentSurveyId); // Set current survey ID in storage
             localStorage.clear(); // Clear all previous data
+            localStorage.setItem('survey_id', currentSurveyId); // Set current survey ID in storage
         }
 
         // Load existing answers from localStorage if available
@@ -233,7 +233,6 @@ $total_pages = ceil($total_questions / $limit);
                 }
 
                 // Append answers to the form data
-                let scannedQRC = $('#scannedQR').val();
                 let formData = $(this).serializeArray();
                 $.each(answers, function (questionId, answer) {
                     formData.push({ name: `answer[${questionId}]`, value: answer });
@@ -243,10 +242,7 @@ $total_pages = ceil($total_questions / $limit);
                 $.ajax({
                     url: 'process/take_respondent_survey.php',
                     type: 'POST',
-                    data: {
-                        formData: formData,
-                        scannedQRC: scannedQRC
-                    },
+                    data: formData,
                     success: function (data) {
                         let response = JSON.parse(data);
                         if (response.status === 'success') {

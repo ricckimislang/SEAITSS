@@ -24,7 +24,7 @@ $query = "SELECT * FROM surveys WHERE is_published = 1 AND is_complete = 0";
 // Execute the query
 $result = $conn->query($query);
 
-// Check for errorss
+// Check for errors
 if ($result === false) {
     die("Error: " . $conn->error);
 }
@@ -39,8 +39,7 @@ $surveys = $result->fetch_all(MYSQLI_ASSOC);
     <div class="row justify-content-center">
         <form>
             <div class="e-card playing">
-                <div class="background-image" style="background-image: url(assets/image/seait.jpg)">
-                </div>
+                <div class="background-image" style="background-image: url(assets/image/seait.jpg)"></div>
                 <h2 class="text-center" style="color: white;">Available Surveys</h2>
                 <div class="survey-list" style="margin: 20px; margin-bottom: 30px; overflow-y: auto;">
                     <ul class="list-group">
@@ -52,14 +51,46 @@ $surveys = $result->fetch_all(MYSQLI_ASSOC);
                                     <h3><?php echo htmlspecialchars($survey['title']); ?></h3>
                                     <div class="divider"></div>
                                     <br>
-                                    <p><?php echo htmlspecialchars($survey['objective']); ?></p>
-                                    <!-- Redirect based on the is_anonymous field -->
-                                    <a class="pushable float-right"
-                                        href="<?php echo $survey['is_anonymous'] == 1 ? 'survey.php?scannedQRCode=' . $scanQR . '&survey_id=' . $survey['survey_id'] : 'form.php'; ?>">
-                                        <span class="shadow"></span>
-                                        <span class="edge"></span>
-                                        <span class="front"> Take Survey </span>
-                                    </a>
+
+                                    <?php
+                                    $survey_id = $survey['survey_id']; // Use your survey ID variable
+                                    $qrcode = $_GET['scannedQRCode'] ?? null;
+
+
+                                    // Query to check if the respondent has taken the survey within the last week
+                                    $response_check_query = "SELECT COUNT(*) as count FROM surveyresponses 
+                                                              WHERE student_id = ? AND survey_id = ? 
+                                                              AND submitted_at >= NOW() - INTERVAL 7 DAY";
+
+                                    $stmt = mysqli_stmt_init($conn);
+                                    if (!mysqli_stmt_prepare($stmt, $response_check_query)) {
+                                        echo 'Error preparing statement';
+                                        exit;
+                                    }
+
+                                    mysqli_stmt_bind_param($stmt, "si", $qrcode, $survey_id); // Use $mac here
+                                    mysqli_stmt_execute($stmt);
+                                    $result = mysqli_stmt_get_result($stmt);
+                                    $response_count = mysqli_fetch_assoc($result)['count'];
+
+                                    // Check if the respondent has already taken the survey
+                                    if ($response_count > 0) {
+                                        // Respondent has taken the survey within the week
+                                        echo '<p>You have already completed this survey in the past week.</p>';
+                                        // Hide the objective since the survey is already taken
+                                    } else {
+                                        // Respondent can take the survey
+                                        echo '<p>' . htmlspecialchars($survey['objective']) . '</p>'; // Show the objective
+                                        ?>
+                                        <a class="pushable float-right"
+                                            href="<?php echo $survey['is_anonymous'] == 1 ? 'survey.php?scannedQRCode=' . $scanQR . '&survey_id=' . $survey['survey_id'] : 'form.php'; ?>">
+                                            <span class="shadow"></span>
+                                            <span class="edge"></span>
+                                            <span class="front"> Take Survey </span>
+                                        </a>
+                                        <?php
+                                    }
+                                    ?>
                                 </li>
                             <?php endforeach; ?>
                         <?php endif; ?>
