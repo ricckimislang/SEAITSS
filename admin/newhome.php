@@ -19,8 +19,8 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
     <!-- ======= Header ======= -->
     <header id="header" class="header fixed-top d-flex align-items-center">
         <div class="d-flex align-items-center justify-content-between">
-            <a href="index.html" class="logo d-flex align-items-center">
-                <img src="assets/img/logo.png" alt="">
+            <a href="newhome.php" class="logo d-flex align-items-center">
+                <img src="../assets/image/logo.png" alt="logo">
                 <span class="d-none d-lg-block">SEAITSS</span>
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -217,9 +217,9 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
 
                                                     <script>
                                                         function confirmChangeOpen(survey_id, current_is_closed) {
-                                                            var confirmOpen = current_is_closed == 0
-                                                                ? 'Are you sure you want to close this survey? Students won\'t be able to view this survey anymore.'
-                                                                : 'Are you sure you want to open this survey?';
+                                                            var confirmOpen = current_is_closed == 0 ?
+                                                                'Are you sure you want to close this survey? Students won\'t be able to view this survey anymore.' :
+                                                                'Are you sure you want to open this survey?';
 
                                                             Swal.fire({
                                                                 title: 'Confirmation',
@@ -246,7 +246,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                                                     is_closed: new_is_closed
                                                                 },
                                                                 dataType: "json",
-                                                                success: function (response) {
+                                                                success: function(response) {
                                                                     if (response.status === 'success') {
                                                                         $('#open_status_' + survey_id).html(
                                                                             `<button class="btn btn-sm btn-${response.is_closed == 1 ? 'danger' : 'success'}" onclick="confirmChangeOpen(${survey_id}, ${response.is_closed})">${response.is_closed == 1 ? 'CLOSED' : 'OPEN'}</button>`
@@ -260,7 +260,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                                                         console.error("Unexpected response:", response);
                                                                     }
                                                                 },
-                                                                error: function (xhr, status, error) {
+                                                                error: function(xhr, status, error) {
                                                                     console.error("AJAX Error:", error);
                                                                 }
                                                             });
@@ -288,7 +288,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                                                     is_published: new_is_published
                                                                 },
                                                                 dataType: "json",
-                                                                success: function (response) {
+                                                                success: function(response) {
                                                                     if (response.is_published !== undefined) {
                                                                         $('#published_status_' + survey_id).html(
                                                                             `<button class="btn btn-sm btn-${response.is_published == 1 ? 'success' : 'danger'}" onclick="changePublished(${survey_id}, ${response.is_published})">${response.is_published == 1 ? 'Published' : 'Not Published'}</button>`
@@ -297,7 +297,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                                                         console.error("Unexpected response:", response);
                                                                     }
                                                                 },
-                                                                error: function (xhr, status, error) {
+                                                                error: function(xhr, status, error) {
                                                                     console.error("AJAX Error:", error);
                                                                 }
                                                             });
@@ -330,7 +330,9 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                         </div>
                     </div>
                 </div>
-            </div><!-- End Left side columns -->
+            </div>
+
+            <?php /* <!-- End Left side columns -->
             <div class="row">
                 <!-- Right side columns -->
                 <div class="col-lg-4">
@@ -440,42 +442,42 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                         radar: {
                                             // shape: 'circle',
                                             indicator: [{
-                                                name: 'Sales',
-                                                max: 6500
-                                            },
-                                            {
-                                                name: 'Administration',
-                                                max: 16000
-                                            },
-                                            {
-                                                name: 'Information Technology',
-                                                max: 30000
-                                            },
-                                            {
-                                                name: 'Customer Support',
-                                                max: 38000
-                                            },
-                                            {
-                                                name: 'Development',
-                                                max: 52000
-                                            },
-                                            {
-                                                name: 'Marketing',
-                                                max: 25000
-                                            }
+                                                    name: 'Sales',
+                                                    max: 6500
+                                                },
+                                                {
+                                                    name: 'Administration',
+                                                    max: 16000
+                                                },
+                                                {
+                                                    name: 'Information Technology',
+                                                    max: 30000
+                                                },
+                                                {
+                                                    name: 'Customer Support',
+                                                    max: 38000
+                                                },
+                                                {
+                                                    name: 'Development',
+                                                    max: 52000
+                                                },
+                                                {
+                                                    name: 'Marketing',
+                                                    max: 25000
+                                                }
                                             ]
                                         },
                                         series: [{
                                             name: 'Budget vs spending',
                                             type: 'radar',
                                             data: [{
-                                                value: [4200, 3000, 20000, 35000, 50000, 18000],
-                                                name: 'Allocated Budget'
-                                            },
-                                            {
-                                                value: [5000, 14000, 28000, 26000, 42000, 21000],
-                                                name: 'Actual Spending'
-                                            }
+                                                    value: [4200, 3000, 20000, 35000, 50000, 18000],
+                                                    name: 'Allocated Budget'
+                                                },
+                                                {
+                                                    value: [5000, 14000, 28000, 26000, 42000, 21000],
+                                                    name: 'Actual Spending'
+                                                }
                                             ]
                                         }]
                                     });
@@ -536,25 +538,25 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                                 show: false
                                             },
                                             data: [{
-                                                value: 1048,
-                                                name: 'Search Engine'
-                                            },
-                                            {
-                                                value: 735,
-                                                name: 'Direct'
-                                            },
-                                            {
-                                                value: 580,
-                                                name: 'Email'
-                                            },
-                                            {
-                                                value: 484,
-                                                name: 'Union Ads'
-                                            },
-                                            {
-                                                value: 300,
-                                                name: 'Video Ads'
-                                            }
+                                                    value: 1048,
+                                                    name: 'Search Engine'
+                                                },
+                                                {
+                                                    value: 735,
+                                                    name: 'Direct'
+                                                },
+                                                {
+                                                    value: 580,
+                                                    name: 'Email'
+                                                },
+                                                {
+                                                    value: 484,
+                                                    name: 'Union Ads'
+                                                },
+                                                {
+                                                    value: 300,
+                                                    name: 'Video Ads'
+                                                }
                                             ]
                                         }]
                                     });
@@ -564,8 +566,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                         </div>
                     </div><!-- End Website Traffic -->
                 </div>
-            </div>
-            </div>
+            </div>  */ ?>
 
 
 
@@ -591,8 +592,8 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
     <!-- Template Main JS File -->
     <?php include 'includes/footer.php'; ?>
     <script>
-        $(document).ready(function () {
-            $(document).on('click', '.deleteSurveyBtn', function () {
+        $(document).ready(function() {
+            $(document).on('click', '.deleteSurveyBtn', function() {
                 var surveyId = $(this).data('survey-id');
                 var button = $(this);
 
@@ -611,9 +612,11 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                         $.ajax({
                             url: 'process/delete_survey.php',
                             type: 'POST',
-                            data: { survey_id: surveyId },
+                            data: {
+                                survey_id: surveyId
+                            },
                             dataType: 'json',
-                            success: function (response) {
+                            success: function(response) {
                                 if (response.status === 'success') {
                                     Swal.fire(
                                         'Deleted!',
@@ -630,7 +633,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                     );
                                 }
                             },
-                            error: function (jqXHR, textStatus, errorThrown) {
+                            error: function(jqXHR, textStatus, errorThrown) {
                                 console.log("AJAX Error:", textStatus, errorThrown);
                                 Swal.fire(
                                     'Error!',
@@ -638,7 +641,7 @@ if ($stmt = mysqli_prepare($conn, $surveytable)) {
                                     'error'
                                 );
                             },
-                            complete: function () {
+                            complete: function() {
                                 button.prop('disabled', false).html('<i class="fas fa-trash"></i>'); // Reset button
                             }
                         });

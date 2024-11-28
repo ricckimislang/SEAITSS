@@ -102,7 +102,9 @@ $office_id = $_GET['office'] ?? '';
 
     async function requestCameraPermission() {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: true
+            });
             stream.getTracks().forEach(track => track.stop());
             return true;
         } catch (error) {
@@ -121,9 +123,12 @@ $office_id = $_GET['office'] ?? '';
         document.getElementById('qr-reader').style.display = 'block';
         //document.getElementById('qr-reader-results').innerText = "Initializing scanner...";
 
-        qrCodeReader.start(
-            { facingMode: "environment" },
-            { fps: 10, qrbox: 220 },
+        qrCodeReader.start({
+                facingMode: "environment"
+            }, {
+                fps: 10,
+                qrbox: 220
+            },
             (decodedText, decodedResult) => {
                 scannedQRCode = decodedText;
                 document.getElementById('qr-reader-results').innerText = "Scanned QR Code: " + scannedQRCode;
@@ -143,7 +148,7 @@ $office_id = $_GET['office'] ?? '';
 
     initializeScanner(); // Automatically start scanning when the page loads
 
-    document.getElementById('proceedButton').addEventListener('click', function () {
+    document.getElementById('proceedButton').addEventListener('click', function() {
         window.location.href = 'homepage.php?scannedQRCode=' + encodeURIComponent(scannedQRCode);
     });
 </script>
