@@ -60,7 +60,7 @@ if (isset($_GET['survey_id']) && isset($_GET['response_id'])) {
             }
 
             // Only add input-type questions for the table
-            if ($questionData['type'] === 'input' && $questionId === 10) {
+            if ($questionData['type'] === 'recommendation') {
                 $response['survey_questions'][] = [
                     'number' => $questionId,
                     'description' => $questionData['text'], // Get question text
@@ -68,7 +68,7 @@ if (isset($_GET['survey_id']) && isset($_GET['response_id'])) {
                 ];
             }
             // Only add input-type questions for the table
-            if ($questionData['type'] === 'input' && $questionId === 11) {
+            if ($questionData['type'] === 'complaint') {
                 $response['complain_questions'][] = [
                     'number' => $questionId,
                     'description' => $questionData['text'], // Get question text

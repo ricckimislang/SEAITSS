@@ -5,104 +5,193 @@ header('Content-Type: application/json');
 
 if (
     isset(
-    $_POST['office'],
-    $_POST['survey_title'],
-    $_POST['objective'],
-    $_POST['publish'],
-    $_POST['start_date'],
-    $_POST['end_date']
-)
+        $_POST['office'],
+        $_POST['survey_title'],
+        $_POST['objective'],
+        $_POST['publish'],
+        $_POST['start_date'],
+        $_POST['end_date']
+    )
 ) {
     // Assign variables
     $office = $_POST['office'];
     $survey_title = $_POST['survey_title'];
     $objective = $_POST['objective'];
-    $anonymous = 1; // Hardcoded since anonymous is not selectable anymore
+    $anonymous = 1;
     $publish = $_POST['publish'];
     $start_date = $_POST['start_date'];
     $end_date = $_POST['end_date'];
     $creator = $_SESSION['user_id'];
 
-    // Anti-duplicate check: Check if a survey with the same title and office already exists
-    $duplicate_check_sql = "SELECT survey_id FROM surveys WHERE office = ? LIMIT 1";
-    $stmt_duplicate = mysqli_stmt_init($conn);
+    // Step 1: Get department_id using office name
+    $dept_query = "SELECT department_id FROM department WHERE office_name = ?";
+    $stmt_dept = mysqli_stmt_init($conn);
 
-    if (mysqli_stmt_prepare($stmt_duplicate, $duplicate_check_sql)) {
-        mysqli_stmt_bind_param($stmt_duplicate, "s", $office);
-        mysqli_stmt_execute($stmt_duplicate);
-        mysqli_stmt_store_result($stmt_duplicate);
-
-        if (mysqli_stmt_num_rows($stmt_duplicate) > 0) {
-            // If a duplicate is found
-            echo json_encode(['status' => 'duplicate', 'message' => 'Survey already exists in this office']);
-            mysqli_stmt_close($stmt_duplicate);
-            exit; // Exit after sending the duplicate response
-        }
-        mysqli_stmt_close($stmt_duplicate); // This should only be called if no duplicate is found
-
-    } else {
-        echo 'SQL error: Failed to prepare duplicate check statement';
+    if (!mysqli_stmt_prepare($stmt_dept, $dept_query)) {
+        echo json_encode(['status' => 'error', 'message' => 'Department query preparation failed']);
+        exit;
     }
 
-    // Prepare SQL statement to insert survey
-    $sql = "INSERT INTO surveys (office, title, objective, is_anonymous, is_published, start_date, end_date, created_by, created_at) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+    mysqli_stmt_bind_param($stmt_dept, "s", $office);
+    mysqli_stmt_execute($stmt_dept);
+    $dept_result = mysqli_stmt_get_result($stmt_dept);
 
-    $stmt = mysqli_stmt_init($conn);
+    if (mysqli_num_rows($dept_result) == 0) {
+        echo json_encode(['status' => 'error', 'message' => 'Department not found']);
+        exit;
+    }
 
-    if (mysqli_stmt_prepare($stmt, $sql)) {
-        // Bind parameters and execute the survey insert query
-        mysqli_stmt_bind_param($stmt, "ssssssss", $office, $survey_title, $objective, $anonymous, $publish, $start_date, $end_date, $creator);
-        mysqli_stmt_execute($stmt);
+    $dept_row = mysqli_fetch_assoc($dept_result);
+    $department_id = $dept_row['department_id'];
+    mysqli_stmt_close($stmt_dept);
 
-        // Get the last inserted survey ID
-        $survey_id = mysqli_insert_id($conn);
+    // Step 2: Check if survey already exists for this office
+    $survey_check_query = "SELECT survey_id FROM surveys WHERE office = ? AND title = ?";
+    $stmt_survey_check = mysqli_stmt_init($conn);
 
-        // Predefined questions
-        $predefined_questions = [
-            ["1. How satisfied are you with the quality of services provided by this office/department?", "rating"],
-            ["2. How effectively does the office/department handle your requests or concerns?", "rating"],
-            ["3. How would you rate the professionalism and courtesy of the staff in this office/department?", "rating"],
-            ["4. How easy is it to access the services or assistance you need from this office/department?", "rating"],
-            ["5. How satisfied are you with the communication between you and the staff in this office/department?", "rating"],
-            ["6. How would you rate the timeliness of the responses you receive from this office/department?", "rating"],
-            ["7. How well does this office/department provide the necessary resources or information you require?", "rating"],
-            ["8. How satisfied are you with the clarity and transparency of the processes in this office/department?", "rating"],
-            ["9. How well does this office/department support your needs or objectives?", "rating"],
-            ["10. What suggestions do you have for improving the department's programs and services?", "input"],
-            ["11. Do you have complaints or concerns about this office/department? Enter None if none.", "input"],
-        ];
+    if (!mysqli_stmt_prepare($stmt_survey_check, $survey_check_query)) {
+        echo json_encode(['status' => 'error', 'message' => 'Survey check query preparation failed']);
+        exit;
+    }
 
-        // Insert the questions into the 'surveyquestions' table
-        $sql_question = "INSERT INTO surveyquestions (survey_id, question_text, question_type, created_at) VALUES (?, ?, ?, NOW())";
-        $stmt_question = mysqli_stmt_init($conn);
+    mysqli_stmt_bind_param($stmt_survey_check, "ss", $office, $survey_title);
+    mysqli_stmt_execute($stmt_survey_check);
+    mysqli_stmt_store_result($stmt_survey_check);
 
-        if (mysqli_stmt_prepare($stmt_question, $sql_question)) {
-            // Loop through the predefined questions and insert each one
-            foreach ($predefined_questions as $question) {
-                $question_text = $question[0];
-                $question_type = $question[1];
+    if (mysqli_stmt_num_rows($stmt_survey_check) > 0) {
+        echo json_encode(['status' => 'error', 'message' => 'Survey already exists for this office']);
+        mysqli_stmt_close($stmt_survey_check);
+        exit;
+    }
+    mysqli_stmt_close($stmt_survey_check);
 
-                // Bind and execute each question insert
-                mysqli_stmt_bind_param($stmt_question, "iss", $survey_id, $question_text, $question_type);
-                mysqli_stmt_execute($stmt_question);
+    // Step 3: Insert survey
+    $survey_insert_query = "INSERT INTO surveys 
+        (office, title, objective, is_anonymous, is_published, start_date, end_date, created_by, created_at) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+
+    $stmt_survey = mysqli_stmt_init($conn);
+
+    if (!mysqli_stmt_prepare($stmt_survey, $survey_insert_query)) {
+        echo json_encode(['status' => 'error', 'message' => 'Survey insert query preparation failed']);
+        exit;
+    }
+
+    mysqli_stmt_bind_param(
+        $stmt_survey,
+        "ssssssss",
+        $office,
+        $survey_title,
+        $objective,
+        $anonymous,
+        $publish,
+        $start_date,
+        $end_date,
+        $creator
+    );
+
+    if (!mysqli_stmt_execute($stmt_survey)) {
+        echo json_encode(['status' => 'error', 'message' => 'Failed to insert survey']);
+        exit;
+    }
+
+    $survey_id = mysqli_insert_id($conn);
+    mysqli_stmt_close($stmt_survey);
+
+    // Step 4: Retrieve and insert questions for the department
+    $questions_query = "SELECT question_text, question_type FROM questions WHERE department_id = ?";
+    $stmt_questions = mysqli_stmt_init($conn);
+
+    if (!mysqli_stmt_prepare($stmt_questions, $questions_query)) {
+        echo json_encode(['status' => 'error', 'message' => 'Questions query preparation failed']);
+        exit;
+    }
+
+    mysqli_stmt_bind_param($stmt_questions, "i", $department_id);
+    mysqli_stmt_execute($stmt_questions);
+    $questions_result = mysqli_stmt_get_result($stmt_questions);
+
+    // Check if there are any questions
+    if (mysqli_num_rows($questions_result) == 0) {
+        // Optionally delete the survey if no questions are found
+        $delete_survey_query = "DELETE FROM surveys WHERE survey_id = ?";
+        $stmt_delete = mysqli_stmt_init($conn);
+
+        if (mysqli_stmt_prepare($stmt_delete, $delete_survey_query)) {
+            mysqli_stmt_bind_param($stmt_delete, "i", $survey_id);
+            mysqli_stmt_execute($stmt_delete);
+            mysqli_stmt_close($stmt_delete);
+        }
+
+        echo json_encode(['status' => 'error', 'message' => 'No questions found for this department']);
+        exit;
+    }
+
+    // Insert questions into surveyquestions
+    $question_insert_query = "INSERT INTO surveyquestions 
+        (survey_id, question_text, question_type, created_at) 
+        VALUES (?, ?, ?, NOW())";
+
+    $stmt_survey_questions = mysqli_stmt_init($conn);
+
+    if (!mysqli_stmt_prepare($stmt_survey_questions, $question_insert_query)) {
+        echo json_encode(['status' => 'error', 'message' => 'Survey questions insert query preparation failed']);
+        exit;
+    }
+
+    // Start transaction
+    mysqli_begin_transaction($conn);
+
+    try {
+        // Insert each question
+        while ($question_row = mysqli_fetch_assoc($questions_result)) {
+            mysqli_stmt_bind_param(
+                $stmt_survey_questions,
+                "iss",
+                $survey_id,
+                $question_row['question_text'],
+                $question_row['question_type']
+            );
+
+            if (!mysqli_stmt_execute($stmt_survey_questions)) {
+                throw new Exception('Failed to insert a question');
             }
-            mysqli_stmt_close($stmt_question);
-            echo json_encode(['status' => 'success', 'message' => 'Survey Successfully added']);
-        } else {
-            echo json_encode(['status' => 'error', 'message' => 'Failed to prepare question statement']);
-            echo 'SQL error: Failed to prepare question statement';
         }
 
-        mysqli_stmt_close($stmt);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Failed to prepare survey statement']);
+        // Commit transaction
+        mysqli_commit($conn);
+
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Survey and questions successfully added',
+            'survey_id' => $survey_id
+        ]);
+    } catch (Exception $e) {
+        // Rollback transaction
+        mysqli_rollback($conn);
+
+        // Delete the survey if questions insertion fails
+        $delete_survey_query = "DELETE FROM surveys WHERE survey_id = ?";
+        $stmt_delete = mysqli_stmt_init($conn);
+
+        if (mysqli_stmt_prepare($stmt_delete, $delete_survey_query)) {
+            mysqli_stmt_bind_param($stmt_delete, "i", $survey_id);
+            mysqli_stmt_execute($stmt_delete);
+            mysqli_stmt_close($stmt_delete);
+        }
+
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Failed to add survey questions: ' . $e->getMessage()
+        ]);
     }
+
+    // Close statements
+    mysqli_stmt_close($stmt_questions);
+    mysqli_stmt_close($stmt_survey_questions);
 } else {
     echo json_encode(['status' => 'error', 'message' => 'Missing required fields']);
-    echo 'Error: Missing required fields';
 }
 
 // Close database connection
 mysqli_close($conn);
-?>

@@ -23,11 +23,18 @@ function isActive($page)
             </a>
         </li><!-- End Dashboard Nav -->
         <li class="nav-item">
+            <a class="nav-link <?php echo isActive('create_questionnaire.php'); ?>" href="create_questionnaire.php">
+                <i class="bi bi-check2-square"></i>
+                <span>Create Questionnaire</span>
+            </a>
+        </li><!-- End Dashboard Nav -->
+        <li class="nav-item">
             <a class="nav-link <?php echo isActive('new_completed_survey.php'); ?>" href="new_completed_survey.php">
                 <i class="bi bi-check2-square"></i>
                 <span>Completed Survey</span>
             </a>
         </li><!-- End Dashboard Nav -->
+
         <li class="nav-item">
             <a class="nav-link <?php echo isActive('new_department.php'); ?>" href="new_department.php">
                 <i class="bi bi-check2-square"></i>
