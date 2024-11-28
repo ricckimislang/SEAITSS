@@ -53,7 +53,7 @@ $surveys = $result->fetch_all(MYSQLI_ASSOC);
                                     <br>
 
                                     <?php
-                                    $survey_id = $survey['survey_id']; // Use your survey ID variable
+                                    $survey_id = $survey['survey_id']; // Use your survey ID variable 
                                     $qrcode = $_GET['scannedQRCode'] ?? null;
 
 
