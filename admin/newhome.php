@@ -1,7 +1,11 @@
 <?php
 include 'includes/newheader.php';
 
-//survey table query
+if (!$conn) {
+    die("Database connection failed: " . mysqli_connect_error());
+}
+
+// Survey table query
 $surveytable = "SELECT * FROM surveys";
 
 if ($stmt = mysqli_prepare($conn, $surveytable)) {

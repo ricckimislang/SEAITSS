@@ -46,8 +46,7 @@ $is_published = $status_row['is_published'];
 if ($is_published == 0) {
     // Survey is not published, display the message and redirect
     echo '
-    <link rel="stylesheet" href="css/survey.css">
-    <link rel="stylesheet" href="css/radio-button.css">
+<link rel="stylesheet" href="css/survey-form.css">
     <body>
         <div class="container mt-5">
             <div class="row justify-content-center">
@@ -87,18 +86,20 @@ $total_questions = $total_row['total'];
 $total_pages = ceil($total_questions / $limit);
 ?>
 
-<link rel="stylesheet" href="css/survey.css">
-<link rel="stylesheet" href="css/radio-button.css">
+<link rel="stylesheet" href="css/survey-form.css">
 <div class="container mt-5">
     <div class="row justify-content-center">
         <form id="surveyForm">
-            <input type="hidden" value="<?php echo $survey_id; ?>" name="survey_id" id="survey_id">
-            <input type="hidden" value="<?php echo $scanQR; ?>" name="scannedQR" id="scannedQR">
-
             <div class="e-card">
-                <div class="form-title">Office Satisfaction Survey</div> <!-- OFFICE NAME -->
-                <div class="form-container">
-                    <?php while ($row = mysqli_fetch_assoc($result)) {
+                <div class="content-container">
+                    <div class="header-section">
+                        <img src="assets/image/logo.png" alt="SEAIT Logo" class="seait-logo">
+                        <h2>Office Satisfaction Survey</h2>
+                    </div>
+                    <input type="hidden" value="<?php echo $survey_id; ?>" name="survey_id" id="survey_id">
+                    <input type="hidden" value="<?php echo $scanQR; ?>" name="scannedQR" id="scannedQR">
+                    <div class="form-container">
+                        <?php while ($row = mysqli_fetch_assoc($result)) {
                         $question_text = $row['question_text'];
                         $question_id = $row['question_id'];
                         $question_type = $row['question_type']; ?>
@@ -107,7 +108,7 @@ $total_pages = ceil($total_questions / $limit);
                             <label for="question_<?php echo $question_id; ?>"><?php echo $question_text; ?></label>
 
                             <?php
-                            if ($question_type == 'input') {
+                            if ($question_type == 'recommendation' || $question_type == 'complaint' ) {
                                 // Show a text input
                                 echo "<input type='text' class='form-control' id='question_$question_id' name='answer[$question_id]' required>";
                             } elseif ($question_type == 'rating') {
@@ -135,6 +136,8 @@ $total_pages = ceil($total_questions / $limit);
                         <?php else: ?>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         <?php endif; ?>
+                    </div>
+                        </div>
                     </div>
                 </div>
             </div>

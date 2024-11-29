@@ -1,7 +1,7 @@
 <?php
 include '../includes/dbconn.php';
 
-if (isset($_POST['department_delete_id'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['department_delete_id'])) {
     $departmentId = $_POST['department_delete_id'];
 
     if (empty($departmentId)) {

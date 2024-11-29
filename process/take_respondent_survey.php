@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $question_type = $row['question_type'];
 
         // Insert answer into responsedetails
-        if ($question_type == 'input') {
+        if ($question_type == 'recommendation' || $question_type == 'complaint') {
             $insertDetail = "INSERT INTO responsedetails (response_id, question_id, response_text) VALUES (?, ?, ?)";
             $param_type = "iis";  // response_id (integer), question_id (integer), response_text (string)
         } elseif ($question_type == 'rating') {

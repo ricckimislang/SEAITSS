@@ -10,10 +10,9 @@ $checkrow = mysqli_fetch_assoc($checkresult);
 $_SESSION['user_id'] = $checkrow['user_id'];
 
 
-
-// Query to fetch surveys
-$query = "SELECT * FROM surveys WHERE is_complete = '1'";
-$stmt = mysqli_prepare($conn, $query);
+//survey table query
+$surveytable = "SELECT * FROM surveys WHERE is_complete = '1'";
+$stmt = mysqli_prepare($conn, $surveytable);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 

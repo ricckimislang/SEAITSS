@@ -212,13 +212,13 @@ $_SESSION['user_id'] = $checkrow['user_id'];
 
                 // AJAX request
                 $.ajax({
-                    url: 'process/insert_questionnaire.php', // Change this to your PHP file
+                    url: 'process/insert_questionnaire.php',
                     type: 'POST',
                     data: formData,
                     dataType: 'json',
                     success: function(response) {
                         if (response.status === 'success') {
-                            // Display success message
+                            // Success scenario
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Success!',
@@ -226,12 +226,55 @@ $_SESSION['user_id'] = $checkrow['user_id'];
                                 timer: 2000,
                                 timerProgressBar: true,
                                 onClose: () => {
-                                    // Optionally redirect or refresh
-                                    window.location.href = response.redirectUrl;
+                                    location.reload();
+                                }
+                            });
+                            location.reload();
+                        } else if (response.status === 'confirm') {
+                            // Confirmation for overwrite
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Existing Questionnaire',
+                                text: response.message,
+                                showCancelButton: true,
+                                confirmButtonText: 'Overwrite',
+                                cancelButtonText: 'Cancel'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    // Resend form with overwrite flag
+                                    const overwriteData = formData + '&overwrite=1';
+
+                                    $.ajax({
+                                        url: 'process/insert_questionnaire.php',
+                                        type: 'POST',
+                                        data: overwriteData,
+                                        dataType: 'json',
+                                        success: function(overwriteResponse) {
+                                            if (overwriteResponse.status === 'success') {
+                                                Swal.fire({
+                                                    icon: 'success',
+                                                    title: 'Success!',
+                                                    text: overwriteResponse.message,
+                                                    timer: 2000,
+                                                    timerProgressBar: true,
+                                                    onClose: () => {
+                                                        location.reload();
+                                                    }
+                                                });
+                                                location.reload();
+                                            } else {
+                                                Swal.fire({
+                                                    icon: 'error',
+                                                    title: 'Oops...',
+                                                    text: overwriteResponse.message,
+                                                });
+                                            }
+                                        }
+                                    });
                                 }
                             });
                         } else {
-                            // Display error message
+                            // Error scenario
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Oops...',

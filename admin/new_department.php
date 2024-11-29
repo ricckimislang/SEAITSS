@@ -1,9 +1,13 @@
 <?php
 include 'includes/newheader.php';
 
-
 mysqli_set_charset($conn, "utf8");
 
+if (!isset($_SESSION['username'])) {
+    // Handle the error, e.g., redirect to login
+    header("Location: login.php");
+    exit();
+}
 $username = $_SESSION['username'];
 $check = "SELECT * FROM users WHERE username = ?";
 $stmt = mysqli_prepare($conn, $check);
@@ -13,13 +17,12 @@ $checkresult = mysqli_stmt_get_result($stmt);
 $checkrow = mysqli_fetch_assoc($checkresult);
 $_SESSION['user_id'] = $checkrow['user_id'];
 
-//survey table query
+// Survey table query
 $depTable = "SELECT * FROM department";
 
 if ($stmt = mysqli_prepare($conn, $depTable)) {
     mysqli_stmt_execute($stmt);
     $depResult = mysqli_stmt_get_result($stmt);
-
     mysqli_stmt_close($stmt);
 } else {
     echo "Failed to prepare statement: " . mysqli_error($conn);
@@ -50,7 +53,7 @@ if ($stmt = mysqli_prepare($conn, $depTable)) {
         <?php include 'includes/new-nav-top.php'; ?>
     </header><!-- End Header -->
     <!-- ======= Sidebar ======= -->
-    <?php include 'includes/newsidebar.php'; ?>
+    <?php include ('includes/newsidebar.php'); ?>
     <main id="main" class="main">
         <div class="pagetitle">
             <h1>Dashboard</h1>
@@ -67,57 +70,63 @@ if ($stmt = mysqli_prepare($conn, $depTable)) {
                 <!-- Left side columns -->
                 <div class="row">
 
-                    <!-- department table -->
+                    <!-- Department Table -->
                     <div class="col-9">
-                        <div class="card recent-sales overflow-auto">
+                        <div class="card recent-sales">
                             <div class="card-body">
-                                <h5 class="card-title">Survey Table</h5>
-                                <table id="departmentTable" class="datatable display">
-                                    <thead>
-                                        <tr>
-                                            <th>Department Name</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="departmentBody">
-                                        <?php while ($depRow = mysqli_fetch_assoc($depResult)) { ?>
+                                <h5 class="card-title">Department Management</h5>
+                                <div class="table-responsive">
+                                    <table id="departmentTable" class="datatable display">
+                                        <thead>
                                             <tr>
-                                                <td><?php echo htmlspecialchars($depRow['office_name']); ?></td>
-                                                <td>
-                                                    <div class="btn">
-                                                        <button type="button" class="btn btn-warning" data-toggle="modal"
-                                                            onclick="updateDepartmentmodal('<?php echo $depRow['department_id']; ?>', '<?php echo htmlspecialchars($depRow['office_name']); ?>')">
-                                                            <i class="fas fa-edit"></i>
-                                                        </button>
-
-                                                        <button type="button" class="btn btn-danger"
-                                                            onclick="deleteDepartment('<?php echo $depRow['department_id']; ?>')">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
-                                                    </div>
-                                                </td>
+                                                <th>Department Name</th>
+                                                <th>Action</th>
                                             </tr>
-                                        <?php } ?>
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody id="departmentBody">
+                                            <?php while ($depRow = mysqli_fetch_assoc($depResult)) { ?>
+                                                <tr>
+                                                    <td><?php echo htmlspecialchars($depRow['office_name']); ?></td>
+                                                    <td>
+                                                        <div class="btn-group">
+                                                             <?php /* <button type="button" class="btn btn-warning me-2" data-toggle="modal"
+                                                                onclick="updateDepartmentmodal('<?php echo $depRow['department_id']; ?>', '<?php echo htmlspecialchars($depRow['office_name']); ?>')">
+                                                                <i class="fas fa-edit"></i> Edit
+                                                            </button> */ ?>
+
+                                                            <button type="button" class="btn btn-danger"
+                                                                onclick="deleteDepartment('<?php echo $depRow['department_id']; ?>')">
+                                                                <i class="fas fa-trash"></i> Delete
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <!-- add card body -->
+                    <!-- Add Department Card -->
                     <div class="col-3">
-                        <div class="card recent-sales overflow-auto">
+                        <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Add Department</h5>
+                                <h5 class="card-title">Add New Department</h5>
                                 <form id="addDepartmentForm">
                                     <div class="form-group">
-                                        <label for="departmentName">Department Name</label>
+                                        <label for="departmentName">
+                                            <i class="fas fa-building me-2"></i>Department Name
+                                        </label>
                                         <input type="text" class="form-control" id="departmentName"
-                                            name="departmentName" required style="text-transform: uppercase;"
+                                            name="departmentName" required 
+                                            placeholder="Enter department name"
+                                            style="text-transform: uppercase;"
                                             oninput="this.value = this.value.toUpperCase()">
                                     </div>
-                                    <div class="btn-group">
-                                        <button type="submit" class="btn btn-success">Add Department</button>
-                                    </div>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-plus me-2"></i>Add Department
+                                    </button>
                                 </form>
                             </div>
                         </div>
@@ -225,7 +234,7 @@ if ($stmt = mysqli_prepare($conn, $depTable)) {
 
     </script>
     <script>
-        // Handle department update modal opening
+        /* Handle department update modal opening
         function updateDepartmentmodal(departmentId, departmentName) {
             $('#department_update_id').val(departmentId);
             $('#department_update_name').val(departmentName);
@@ -249,7 +258,7 @@ if ($stmt = mysqli_prepare($conn, $depTable)) {
                             life: 2000
                         });
                         setTimeout(function () {
-                            window.location.href = "departments.php";
+                            window.location.href = "new_department.php";
                         }, 2000)
                     } else if (data.status === 'duplicate') {
                         $.jGrowl("Error: Department already exists!", {
@@ -266,12 +275,12 @@ if ($stmt = mysqli_prepare($conn, $depTable)) {
                 error: function (xhr, status, error) {
                     console.error("AJAX Error: ", status, error);
                     $.jGrowl("Error: An unexpected error occurred.", {
-                        theme: "alert alert-danger",
+                        theme: "alert-danger",
                         life: 2000
                     });
                 }
             });
-        });
+        }); */
     </script>
     <script>
         function deleteDepartment(departmentId) {
@@ -294,7 +303,7 @@ if ($stmt = mysqli_prepare($conn, $depTable)) {
                             life: 1000
                         });
                         setTimeout(function () {
-                            window.location.href = "departments.php";
+                            window.location.href = "new_department.php";
                         }, 1000);
                     }
                     else {

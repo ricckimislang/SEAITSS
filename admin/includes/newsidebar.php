@@ -48,5 +48,4 @@ function isActive($page)
             </a>
         </li><!-- End Dashboard Nav -->
     </ul>
-
 </aside><!-- End Sidebar-->

@@ -46,7 +46,7 @@ if (
     mysqli_stmt_close($stmt_dept);
 
     // Step 2: Check if survey already exists for this office
-    $survey_check_query = "SELECT survey_id FROM surveys WHERE office = ? AND title = ?";
+    $survey_check_query = "SELECT survey_id FROM surveys WHERE office = ?";
     $stmt_survey_check = mysqli_stmt_init($conn);
 
     if (!mysqli_stmt_prepare($stmt_survey_check, $survey_check_query)) {
@@ -54,7 +54,7 @@ if (
         exit;
     }
 
-    mysqli_stmt_bind_param($stmt_survey_check, "ss", $office, $survey_title);
+    mysqli_stmt_bind_param($stmt_survey_check, "s", $office);
     mysqli_stmt_execute($stmt_survey_check);
     mysqli_stmt_store_result($stmt_survey_check);
 

@@ -2,102 +2,96 @@
 include 'includes/header.php';
 include 'includes/dbconn.php';
 
-$scanQR = $_GET['scannedQRCode'] ?? null;
-if (is_null($scanQR)) {
-    echo '<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>';
-    echo '<script>
-        swal({
-            title: "Please Scan The QR CODE again",
-            text: "Please Scan The QR CODE to take the survey",
-            icon: "error",
-            button: "OK",
-        }).then(function() {
-            window.location.href = "index.php";
-        });
-    </script>';
+// Improved error handling and security
+$scanQR = filter_input(INPUT_GET, 'scannedQRCode');
+if (!$scanQR) {
+    displayError("Please Scan The QR CODE", "Please Scan The QR CODE to take the survey");
     exit;
 }
 
-// Prepare the query to fetch surveys
-$query = "SELECT * FROM surveys WHERE is_published = 1 AND is_complete = 0";
+// Improved database query with prepared statement
+$query = "SELECT s.*, 
+          (SELECT COUNT(*) FROM surveyresponses 
+           WHERE survey_id = s.survey_id 
+           AND student_id = ? 
+           AND submitted_at >= NOW() - INTERVAL 7 DAY) as has_responded
+          FROM surveys s 
+          WHERE is_published = 1 AND is_complete = 0";
 
-// Execute the query
-$result = $conn->query($query);
+$stmt = $conn->prepare($query);
+$stmt->bind_param("s", $scanQR);
+$stmt->execute();
+$result = $stmt->get_result();
 
-// Check for errors
-if ($result === false) {
-    die("Error: " . $conn->error);
+if (!$result) {
+    displayError("Database Error", "Unable to fetch surveys. Please try again later.");
+    exit;
 }
 
-// Fetch all published surveys
 $surveys = $result->fetch_all(MYSQLI_ASSOC);
+
+function displayError($title, $message) {
+    echo '<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>';
+    echo "<script>
+        swal({
+            title: '" . htmlspecialchars($title) . "',
+            text: '" . htmlspecialchars($message) . "',
+            icon: 'error',
+            button: 'OK',
+        }).then(function() {
+            window.location.href = 'index.php';
+        });
+    </script>";
+}
 ?>
 
 <link rel="stylesheet" href="css/index-card.css">
 <link rel="stylesheet" href="css/homepage.css">
+
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <form>
+        <div class="col-12 col-md-8 col-lg-6">
             <div class="e-card playing">
                 <div class="background-image" style="background-image: url(assets/image/seait.jpg)"></div>
-                <h2 class="text-center" style="color: white;">Available Surveys</h2>
-                <div class="survey-list" style="margin: 20px; margin-bottom: 30px; overflow-y: auto;">
-                    <ul class="list-group">
-                        <?php if (empty($surveys)): ?>
-                            <h1 class="text-center" style="color:white;">No surveys available today.</h1>
-                        <?php else: ?>
-                            <?php foreach ($surveys as $survey): ?> <!-- Loop through each survey -->
-                                <li class="list-group-item transparent-card">
-                                    <h3><?php echo htmlspecialchars($survey['title']); ?></h3>
-                                    <div class="divider"></div>
-                                    <br>
-
-                                    <?php
-                                    $survey_id = $survey['survey_id']; // Use your survey ID variable 
-                                    $qrcode = $_GET['scannedQRCode'] ?? null;
-
-
-                                    // Query to check if the respondent has taken the survey within the last week
-                                    $response_check_query = "SELECT COUNT(*) as count FROM surveyresponses 
-                                                              WHERE student_id = ? AND survey_id = ? 
-                                                              AND submitted_at >= NOW() - INTERVAL 7 DAY";
-
-                                    $stmt = mysqli_stmt_init($conn);
-                                    if (!mysqli_stmt_prepare($stmt, $response_check_query)) {
-                                        echo 'Error preparing statement';
-                                        exit;
-                                    }
-
-                                    mysqli_stmt_bind_param($stmt, "si", $qrcode, $survey_id); // Use $mac here
-                                    mysqli_stmt_execute($stmt);
-                                    $result = mysqli_stmt_get_result($stmt);
-                                    $response_count = mysqli_fetch_assoc($result)['count'];
-
-                                    // Check if the respondent has already taken the survey
-                                    if ($response_count > 0) {
-                                        // Respondent has taken the survey within the week
-                                        echo '<p>You have already completed this survey in the past week.</p>';
-                                        // Hide the objective since the survey is already taken
-                                    } else {
-                                        // Respondent can take the survey
-                                        echo '<p>' . htmlspecialchars($survey['objective']) . '</p>'; // Show the objective
-                                        ?>
-                                        <a class="pushable float-right"
-                                            href="<?php echo $survey['is_anonymous'] == 1 ? 'survey.php?scannedQRCode=' . $scanQR . '&survey_id=' . $survey['survey_id'] : 'form.php'; ?>">
-                                            <span class="shadow"></span>
-                                            <span class="edge"></span>
-                                            <span class="front"> Take Survey </span>
-                                        </a>
-                                        <?php
-                                    }
-                                    ?>
-                                </li>
+                <h2 class="mt-3 text-white text-center">Available Surveys</h2>
+                
+                <div class="survey-list">
+                    <?php if (empty($surveys)): ?>
+                        <div class="no-surveys">
+                            <h3>No surveys available today.</h3>
+                            <p>Please check back later for new surveys.</p>
+                        </div>
+                    <?php else: ?>
+                        <div class="survey-grid">
+                            <?php foreach ($surveys as $survey): ?>
+                                <div class="survey-card <?php echo $survey['has_responded'] ? 'completed' : ''; ?>">
+                                    <div class="survey-header">
+                                        <h3><?php echo htmlspecialchars($survey['title']); ?></h3>
+                                        <?php if ($survey['has_responded']): ?>
+                                            <span class="status-badge">Completed</span>
+                                        <?php endif; ?>
+                                    </div>
+                                    
+                                    <div class="survey-content">
+                                        <p><?php echo htmlspecialchars($survey['objective']); ?></p>
+                                        
+                                        <?php if (!$survey['has_responded']): ?>
+                                            <a class="pushable " href="<?php 
+                                                echo "form.php?scannedQRCode=" . urlencode($scanQR) . "&survey_id=" . $survey['survey_id']
+                                            ?>"style="text-decoration: none; color: inherit;"> 
+                                                <span class="shadow"></span>
+                                                <span class="edge"></span>
+                                                <span class="front">Take Survey</span>
+                                            </a>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
                             <?php endforeach; ?>
-                        <?php endif; ?>
-                    </ul>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 

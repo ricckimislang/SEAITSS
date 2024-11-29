@@ -1,7 +1,7 @@
 <?php
 include '../includes/dbconn.php';
 
-if (isset($_POST['departmentName'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['departmentName'])) {
     // Trim and sanitize the department name
     $departmentName = trim($_POST['departmentName']);
 

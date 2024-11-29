@@ -6,8 +6,9 @@ $office_id = $_GET['office'] ?? '';
 
 <style>
     #qr-reader {
-        width: 250px;
-        height: 250px;
+        width: 100% !important;
+        height: auto;
+        min-height: 320px;
         border: 2px solid #007bff;
         border-radius: 30px;
         margin-top: 20px;
@@ -56,6 +57,58 @@ $office_id = $_GET['office'] ?? '';
         display: flex;
         justify-content: center;
         margin-top: 10px;
+    }
+
+    @media screen and (max-width: 425px) {
+        .container {
+            padding: 5px;
+            height: auto !important;
+        }
+
+        #qr-reader {
+            width: 100% !important;
+            min-height: 180px;
+            margin: 5px auto;
+            border-width: 1px;
+            border-radius: 15px;
+        }
+
+        #qr-reader-results {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .disclaimer {
+            margin: 5px 0;
+            padding: 5px;
+        }
+
+        .disclaimer h3 {
+            font-size: 15px;
+            margin-bottom: 3px;
+        }
+
+        .disclaimer p {
+            font-size: 11px;
+            line-height: 1.3;
+            margin-bottom: 3px;
+            padding: 0 5px;
+        }
+
+        .button-container {
+            margin-top: 5px;
+        }
+
+        .btn-next {
+            margin-top: 1rem;
+            width: 130px;
+            height: 35px;
+            font-size: 14px;
+        }
+
+        br {
+            display: none;
+        }
     }
 </style>
 
@@ -127,7 +180,10 @@ $office_id = $_GET['office'] ?? '';
                 facingMode: "environment"
             }, {
                 fps: 10,
-                qrbox: 220
+                qrbox: {
+                    width: 280,
+                    height: 280
+                }
             },
             (decodedText, decodedResult) => {
                 scannedQRCode = decodedText;
@@ -151,9 +207,6 @@ $office_id = $_GET['office'] ?? '';
     document.getElementById('proceedButton').addEventListener('click', function() {
         window.location.href = 'homepage.php?scannedQRCode=' + encodeURIComponent(scannedQRCode);
     });
-</script>
-<script>
-
 </script>
 
 <?php include 'includes/footer.php'; ?>

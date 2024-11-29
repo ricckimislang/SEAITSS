@@ -1,6 +1,9 @@
 <?php
 include 'includes/newheader.php';
 
+if (!$conn) {
+    die("Database connection failed: " . mysqli_connect_error());
+}
 mysqli_set_charset($conn, "utf8");
 
 $username = $_SESSION['username'];

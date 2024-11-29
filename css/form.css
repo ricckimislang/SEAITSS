@@ -1,147 +1,212 @@
 body {
-    margin: 0; /* Remove default body margin */
-    height: 100vh; /* Full height of the viewport */
-    overflow: hidden; /* Prevent scrolling */
-    position: relative; /* Position for the pseudo-element */
-  }
-  
-  body::before {
-    content: ""; /* Create a pseudo-element */
-    position: fixed; /* Fix the element to the viewport */
-    top: 0; /* Cover the top */
-    left: 0; /* Cover the left */
-    width: 100%; /* Cover the full width */
-    height: 100%; /* Cover the full height */
-    background-image: url("../assets/image/bgsur.png"); /* Your background image */
+    margin: 0;
+    height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../assets/image/bgsur.png");
     background-repeat: no-repeat;
     background-position: center;
-    background-size: cover; /* Make it cover the area */
-    filter: brightness(0.5); /* Apply the blur effect */
-    z-index: -1; /* Ensure it stays behind everything else */
-  }
-  
-  .e-card {
-    margin: 10px auto;
-    box-shadow: 0px 8px 28px -9px rgba(0, 0, 0, 0.45);
-    position: relative;
-    width: 30vw;
-    height: 80vh;
-    border-radius: 16px;
-    overflow: hidden;
-    z-index: 10; /* Ensure the card is on top */
-  }
-  .background-image {
     background-size: cover;
-    position: absolute;
-    object-fit: cover;
-    height: 100%;
-    width: 100%;
+    filter: brightness(0.5);
     z-index: -1;
-  }
-  .wave {
-    position: absolute;
-    width: 90vw;
-    height: 180vh;
-    opacity: 0.6;
-    left: 0;
-    top: 0;
-    margin-left: -35%;
-    margin-top: -0%;
-    background: linear-gradient(744deg, #2fbb1d, #56da61 60%, #29971f);
-    z-index: 1; /* Ensure waves appear above the video */
-  }
-  
-  .icon {
-    margin-top: -1em;
-    padding-bottom: 1em;
-  }
-  
-  .seait-logo {
-    height: auto;
-    width: 5em;
-    margin-top: -1em;
-    padding-bottom: 1em;
-  }
-  
-  .infotop {
-    text-align: center;
-    font-size: 20px;
-    position: absolute;
-    top: 10.6em;
-    left: 0;
-    right: 0;
-    color: rgb(255, 255, 255);
-    font-weight: 600;
-    z-index: 2; /* Content appears above the video and waves */
-  }
-  .form-container{
-    height: 100% !important;
-  }
-  .form-controloffice {
-    height: calc(1.5em + 0.75rem + 2px);
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #495057;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  }
-  
-  .name {
-    font-size: 10px;
-    font-weight: 100;
+}
+
+.e-card {
+    margin: 20px auto;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
     position: relative;
-    top: 1em;
-    text-transform: uppercase;
-  }
-  
-  
-  
-.instruction{
-  font-size: 15px;
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: 600;
-  text-align: justify;
+    width: 90%;
+    max-width: 800px;
+    min-height: 600px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    animation: fadeIn 0.5s ease-out;
 }
 
-/* For WebKit browsers */
-::-webkit-scrollbar {
-    width: 12px; /* width of the scrollbar */
-    height: 12px; /* height of the scrollbar */
+.content-container {
+    padding: 40px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
 }
 
-::-webkit-scrollbar-track {
-    background: #f1f1f1; /* background of the track */
+.header-section {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-::-webkit-scrollbar-thumb {
-    background: #888; /* color of the scrollbar thumb */
-    border-radius: 10px; /* roundness of the scrollbar thumb */
+.seait-logo {
+    width: 120px;
+    height: auto;
+    margin-bottom: 20px;
+    animation: scaleIn 0.5s ease-out;
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background: #555; /* color of the scrollbar thumb on hover */
+.header-section h2 {
+    color: #2f3640;
+    font-size: 28px;
+    margin: 0;
+    font-weight: 600;
 }
 
-/* For Firefox */
-* {
-    scrollbar-width: thin; /* "auto" or "thin" */
-    scrollbar-color: #888 #f1f1f1; /* thumb and track color */
-}
-/* form.css */
-
-/* Style for focused input fields */
-.form-control:focus {
-  border-color: #007bff; /* Change border color to primary */
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add shadow effect */
-  outline: none; /* Remove default outline */
+.instruction-section {
+    flex-grow: 1;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
-/* Style for radio buttons */
-.form-check-input {
-  margin-right: 8px; /* Space between radio and label */
+.instruction-section h3 {
+    color: #2f3640;
+    font-size: 22px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.instruction-points {
+    display: grid;
+    gap: 20px;
+}
+
+.point {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.point:hover {
+    transform: translateX(10px);
+}
+
+.point i {
+    font-size: 24px;
+    color: #27ae60;
+    min-width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(39, 174, 96, 0.1);
+    border-radius: 50%;
+}
+
+.point p {
+    margin: 0;
+    font-size: 16px;
+    color: #2f3640;
+    line-height: 1.5;
+}
+
+.action-section {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.proceed-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 30px;
+    background: #27ae60;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    font-size: 18px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+}
+
+.proceed-btn:hover {
+    background: #219a52;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(39, 174, 96, 0.4);
+    color: white;
+}
+
+.proceed-btn i {
+    transition: transform 0.3s ease;
+}
+
+.proceed-btn:hover i {
+    transform: translateX(5px);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .e-card {
+        width: 95%;
+        margin: 10px auto;
+    }
+
+    .content-container {
+        padding: 20px;
+    }
+
+    .header-section h2 {
+        font-size: 24px;
+    }
+
+    .instruction-section h3 {
+        font-size: 20px;
+    }
+
+    .point {
+        padding: 12px;
+    }
+
+    .point i {
+        font-size: 20px;
+        min-width: 35px;
+        height: 35px;
+    }
+
+    .point p {
+        font-size: 14px;
+    }
+
+    .proceed-btn {
+        padding: 12px 25px;
+        font-size: 16px;
+    }
 }
